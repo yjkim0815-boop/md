@@ -10,7 +10,7 @@
 >
 > **작성 시각 기준**: 2026-07-14 ~ 2026-07-16 작업 세션
 > **브랜치**: `feature/WORK-16665` (develop 기준)
-> **관련 저장소**: `j-ha-web` (원본), `j-ha-web-api` (이관본, Bitbucket `sectanine/ha-web-api.git`)
+> **관련 저장소**: `ha_web` (원본), `ha-web-api` (이관본, Bitbucket `sectanine/ha-web-api.git`)
 
 ---
 
@@ -30,7 +30,7 @@
 12. [빌드 / 배포 절차](#12-빌드--배포-절차)
 13. [개발 환경 세팅 (Windows)](#13-개발-환경-세팅-windows)
 14. [Git 이력 / 사고 및 복구](#14-git-이력--사고-및-복구)
-15. [저장소 이관 (j-ha-web → j-ha-web-api)](#15-저장소-이관-j-ha-web--j-ha-web-api)
+15. [저장소 이관 (ha_web → ha-web-api)](#15-저장소-이관-ha_web--ha-web-api)
 16. [잔여 검증 항목 (TODO)](#16-잔여-검증-항목-todo)
 17. [민감정보 / 보안 주의](#17-민감정보--보안-주의)
 18. [새 채팅 시작 시 참고 체크리스트](#18-새-채팅-시작-시-참고-체크리스트)
@@ -47,7 +47,7 @@
 - **패키징**: `war` (외장 Tomcat 배포)
 - **주요 도메인**: 회원(가입/인증/탈퇴/휴면), 카드, 포인트, 쿠폰, 이벤트, 제휴(alliance), 매장(store), 설문(survey), 기부(donation), 고객센터, 라이브방송(live), 브랜드회원
 - **Maven groupId/artifactId**: `com.spc:ha-web`, version `0.0.1-SNAPSHOT`
-- **기본 작업 디렉터리**: `D:\200_DEV\230_WORKSPACE\happypointcard\j-ha-web`
+- **기본 작업 디렉터리**: `ha_web` (워크스페이스 루트 하위 — 당시 작업 위치. 아래 셸 명령의 `D:\...` 절대경로는 실제 실행 기록이라 원문 보존)
 - **git 기본 브랜치**: `master` (PR 대상), 개발은 `develop`
 - **git 사용자**: dominic (dominic.kim@spc.co.kr)
 
@@ -229,7 +229,7 @@ src/main/java/com/spc/hpc
 17. **app-web 호스트 무시 요청** → ROOT.xml docBase를 빈 폴더로 지정하거나 제거.
 18. **"왜 git에 수정내역이 안올라오지?"** → 브랜치 전환/리셋으로 워킹트리 원복됨을 발견. 작업물은 dangling 커밋 `dd`(7f5640c7)에 보존됨을 확인 → 복구.
 19. **"feature/WORK-16665 브랜치 생성하고 커밋 (푸시 금지)"** → develop 기준 브랜치 생성 + cherry-pick 커밋.
-20. **"j-ha-web-api 저장소로 소스 이관"** → git archive로 이관 + 브랜치 커밋 (푸시 금지).
+20. **"ha-web-api 저장소로 소스 이관"** → git archive로 이관 + 브랜치 커밋 (푸시 금지).
 21. **본 아카이브 작성**.
 
 ---
@@ -470,7 +470,7 @@ SiteMesh 3.0.1은 javax 기반이며 공식 jakarta 릴리스가 없어, Apache 
 
 ### Windows 수동 변환 (Maven 없이, JDK만)
 ```powershell
-cd "D:\200_DEV\230_WORKSPACE\happypointcard\j-ha-web"
+cd "D:\200_DEV\230_WORKSPACE\happypointcard\ha_web"
 Invoke-WebRequest "https://repo1.maven.org/maven2/org/sitemesh/sitemesh/3.0.1/sitemesh-3.0.1.jar" -OutFile "$env:TEMP\sitemesh-3.0.1.jar"
 Invoke-WebRequest "https://repo1.maven.org/maven2/org/apache/tomcat/jakartaee-migration/1.0.9/jakartaee-migration-1.0.9-shaded.jar" -OutFile "$env:TEMP\jakartaee-migration.jar"
 java -jar "$env:TEMP\jakartaee-migration.jar" "$env:TEMP\sitemesh-3.0.1.jar" "ext-libs\org\sitemesh\sitemesh\3.0.1-jakarta\sitemesh-3.0.1-jakarta.jar"
@@ -486,7 +486,7 @@ java -jar "$env:TEMP\jakartaee-migration.jar" "$env:TEMP\sitemesh-3.0.1.jar" "ex
 
 ### 12.1 빌드 (Windows, JDK 21 + Maven 3.9.x)
 ```powershell
-cd "D:\200_DEV\230_WORKSPACE\happypointcard\j-ha-web"
+cd "D:\200_DEV\230_WORKSPACE\happypointcard\ha_web"
 mvn clean package -P dev
 # 결과: target\ha-web.war
 ```
@@ -538,11 +538,11 @@ tail -f /app/server/web-tomcat-10.1.57/logs/catalina.out
 
 ---
 
-## 15. 저장소 이관 (j-ha-web → j-ha-web-api)
+## 15. 저장소 이관 (ha_web → ha-web-api)
 
-- **대상**: `D:\200_DEV\230_WORKSPACE\happypointcard\j-ha-web-api`
+- **대상**: `ha-web-api` (워크스페이스 루트 하위)
 - **대상 원격**: `https://bitbucket.org/sectanine/ha-web-api.git` (origin, master, 초기 상태 README만)
-- **방법**: 원본에서 `git archive --format=tar HEAD | (cd ../j-ha-web-api && tar -xf -)` 로 tracked 소스만 복사 (`.git`·`target/` 제외).
+- **방법**: 원본에서 `git archive --format=tar HEAD | (cd ../ha-web-api && tar -xf -)` 로 tracked 소스만 복사 (`.git`·`target/` 제외).
 - 대상에서 `feature/WORK-16665` 브랜치 생성 → `git add -A` → 커밋 `b60d1ea` (2062 files). **푸시는 사용자가 직접**.
 - 대상의 기존 `README.md`(Initial commit)는 유지됨.
 
@@ -582,7 +582,7 @@ tail -f /app/server/web-tomcat-10.1.57/logs/catalina.out
 새 채팅(새 계정 포함)에서 이 프로젝트를 다룰 때:
 
 1. **현재 상태**: 이 프로젝트는 이미 **Spring 6 / Java 21 / Jakarta / Tomcat 10.1** 로 마이그레이션 완료(빌드·기동 성공). 원복하지 말 것.
-2. **브랜치**: 작업물은 `feature/WORK-16665` 에 있음 (원본 `j-ha-web`, 이관본 `j-ha-web-api`).
+2. **브랜치**: 작업물은 `feature/WORK-16665` 에 있음 (원본 `ha_web`, 이관본 `ha-web-api`).
 3. **빌드**: `mvn clean package -P dev` (JDK 21 필수). 산출물 `target/ha-web.war`.
 4. **SiteMesh**: `ext-libs`의 `sitemesh:3.0.1-jakarta` 커밋본 사용. 없으면 11절대로 재생성.
 5. **javax 유지 대상 혼동 금지**: `javax.crypto/sql/naming/net.ssl`(JSE), `javax.annotation.Nonnull/Nullable`(JSR-305)는 jakarta로 바꾸면 안 됨.

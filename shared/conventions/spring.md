@@ -57,7 +57,7 @@ try {
 - Security 6: `SecurityFilterChain` @Bean 방식(어댑터 없음), `requestMatchers`
 - 인터셉터: `HandlerInterceptor` 직접 구현(Adapter 제거됨)
 - 멀티파트: `StandardServletMultipartResolver`
-- 자세한 마이그레이션 이력: [j-ha-web-api 아카이브](../../projects/j-ha-web-api/ARCHIVE-WORK-16665-spring-upgrade.md)
+- 자세한 마이그레이션 이력: [ha-web-api 아카이브](../../projects/ha-web-api/ARCHIVE-WORK-16665-spring-upgrade.md)
 
 ## 테스트
 - 서비스 단위테스트 우선, 컨트롤러는 MockMvc/슬라이스 테스트

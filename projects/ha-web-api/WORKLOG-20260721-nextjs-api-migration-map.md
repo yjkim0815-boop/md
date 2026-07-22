@@ -1,6 +1,6 @@
 ---
 문서유형: WORKLOG
-프로젝트: j-ha-web-api
+프로젝트: ha-web-api
 이슈키: --
 작성일: 2026-07-21
 최종수정: 2026-07-21
@@ -11,7 +11,7 @@
 
 # 🔀 Next.js 이관 매핑 — 페이지 URL ↔ API 인벤토리
 
-> **목표**: 이 프로젝트(Spring MVC + JSP)의 서버렌더링 페이지(ModelAndView)를 프론트 `D:\200_DEV\230_WORKSPACE\happypointcard\happypoint-web2`(Next.js)로 이관.
+> **목표**: 이 프로젝트(Spring MVC + JSP)의 서버렌더링 페이지(ModelAndView)를 프론트 `happypoint-web2`(워크스페이스 루트 하위, Next.js)로 이관.
 > 이관하려면 각 페이지가 뷰에 넣던 Model 데이터를 **JSON API로 노출**해야 한다. 이 문서는 페이지별로 (a) 현재 URL, (b) 넣던 데이터, (c) 매칭되는 기존 `/api`, (d) 신규로 만들어야 할 API 를 정리한다.
 
 ## 아키텍처 현황 (분리 기준)

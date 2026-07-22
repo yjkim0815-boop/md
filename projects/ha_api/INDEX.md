@@ -1,0 +1,76 @@
+---
+문서유형: INDEX
+프로젝트: ha_api
+작성일: 2026-07-22
+최종수정: 2026-07-22
+작성자: dominic
+상태: 진행중
+요약: 해피포인트 하이브리드 앱 API 서버 (앱 웹뷰 + REST API). Java8/Spring5.2/JSP(SiteMesh3)/MyBatis WAR — 외장 Tomcat 운영 레거시 모놀리식
+---
+
+# 📇 ha_api 문서 인덱스
+
+## 프로젝트 정체성 (중요)
+- **이 프로젝트 = 해피포인트 "앱" 백엔드 API 서버** (하이브리드 앱: 앱 내 웹뷰 JSP 페이지 + REST API를 한 서버에서 처리).
+- ⚠️ **홈페이지 백엔드(`ha_web` / `ha-web-api`)와 혼동 금지.** 이쪽은 **앱**용이다.
+  - `ha_web` = 기존 홈페이지(레거시), `ha-web-api` = 신규 홈페이지 리뉴얼(Java21/Spring6) → [ha-web-api INDEX](../ha-web-api/INDEX.md)
+- 정식 스택은 **레거시 Java 8 / Spring 5.2 / Spring MVC + JSP + MyBatis** (WAR + 외장 Tomcat). Boot/JPA 아님.
+
+## 프로젝트 개요
+- **워크스페이스 폴더**: `ha-api` (KB 기준 `../../../ha-api`)
+- **Bitbucket remote**: `bitbucket.org/sectanine/ha_api.git`
+- **주요 브랜치**: `develop`(기본 작업), `master`(기본/PR 대상), `qa`, `release` + 원격 `deploy`, `dev-*`
+- **스택**: Java 8 / Spring 5.2.5 / Spring Cloud(Finchley) / Spring Security / Spring MVC + **JSP + SiteMesh 3** / **MyBatis 3.5.4** / WAR 패키징
+- **뷰/템플릿**: JSP + SiteMesh3 웹뷰(앱 내 표시). JSP 화면 약 532개.
+- **배포**: Docker (`registry.unvus.com`, prefix `spc`) — WAR finalName은 프로파일별 `ha-api` / `ha-api-dev` / `ha-api-stage` / `ha-api-prod`.
+- **서버 URL**: DEV `https://dev-napi.happypointcard.com/`, STAGE `https://stg-napi.happypointcard.com/`
+
+## 아키텍처 (com.spc.hpc)
+- **`api.controller`**: `page/`(JSP 웹뷰) · `api/` · `rest/`(REST API)로 3분화. 컨트롤러 약 145개.
+- **`api.services`**: 도메인별 서비스 **43개** — 앱 기능 전반.
+  - 결제/포인트: `happypay` · `point` · `pointstation` · `coupon` · `stamp`
+  - 콘텐츠/커머스: `happymarket` · `happylive` · `brand` · `store` · `event` · `banner` · `square`
+  - 사용자/인증: `user` · `auth` · `cert` · `agree` · `my` · `employee`
+  - 외부연동: `finnq` · `interpark` · `alliance` · `partners` · `external` · `chatbot` · `dynamo`(AWS) · `yapbeacon`
+- **`common`**: vo / util / service / interceptor 공통 모듈. `dao` 별도 패키지.
+- **규모**: Java 파일 약 649개 · MyBatis Mapper XML 111개.
+
+## DB / 데이터소스 (JNDI)
+- `jdbc/ha` — **Oracle** (메인)
+- `jdbc/cms` — **MySQL** (CMS)
+- `jdbc/ahop` — ahope 계열 (`services/ahope`, `mybatis/ahope`)
+- MyBatis mapper 네임스페이스: `mybatis/default` · `mybatis/cms` · `mybatis/ahope` · `mybatis/gis`
+
+## 프로파일 / 포트 (server.port)
+| 프로파일 | active | 포트 | 비고 |
+|----------|--------|------|------|
+| local | dev | 7742 | 로컬 |
+| dev | dev | 9200 | 개발 |
+| stage / stagep | stage | 9200 | 스테이징 |
+| prod | prod | — | 운영 |
+
+## 외부 라이브러리 (ext-libs, 수동 install)
+Maven 중앙에 없어 `ext-libs/`에 두고 `mvn install:install-file` 수행 (README 참조):
+- `okname-2.2.3.jar` (KCB 실명인증), `thunder-mail-1.0.0.jar`, `ojdbc8-12.2.0.1.jar`(Oracle)
+
+## 문서 목록
+| 문서 | 유형 | 상태 | 요약 |
+|------|------|------|------|
+| (없음) | | | 작업 발생 시 `templates/`로 ARCHIVE/WORKLOG 추가 |
+
+## 현재 상태 / 핵심 메모
+- 2026-07-22 최초 등록. 코드 **가벼운 구조 파악** 완료(스택·도메인·DB·프로파일). 진행 중 작업 이슈는 아직 없음.
+- 대형 레거시 모놀리식: Spring XML 설정(`context-*.xml`, `dispatcher-config.xml`) + JSP + MyBatis, **Java 8 고정**.
+- 특정 기능 작업 시 `services/<도메인>` + 대응 `mybatis/**/<도메인>` mapper를 **짝으로** 확인.
+- ⚠️ 앱(this) vs 홈페이지(`ha_web*`) 프로젝트 구분 주의.
+
+## ECC 적용 메모 (참조: [ecc-reference.md](../../shared/ecc-reference.md))
+- Spring **MVC + JSP + MyBatis**이며 Boot/JPA 아님 → ECC의 Boot/JPA 예시는 **개념만** 차용.
+- 유효: `java-coding-standards`(단 Java **8** — record/var/switch식 등 Java17+ 문법은 불가), `springboot-patterns`(계층·예외·필터 개념), `springboot-security`(체크리스트), `security-review`.
+- SQL 인젝션 방지는 MyBatis `#{}` 파라미터 바인딩으로 대응.
+
+## 참고 (공통 문서)
+- [공유 지식 베이스 README](../../README.md)
+- [ECC 참조](../../shared/ecc-reference.md) · [서버 환경](../../shared/server-env.md) · [코드 컨벤션](../../shared/conventions/README.md)
+</content>
+</invoke>
