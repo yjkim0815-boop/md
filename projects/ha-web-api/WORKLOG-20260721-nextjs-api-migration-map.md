@@ -14,6 +14,21 @@
 > **목표**: 이 프로젝트(Spring MVC + JSP)의 서버렌더링 페이지(ModelAndView)를 프론트 `happypoint-web2`(워크스페이스 루트 하위, Next.js)로 이관.
 > 이관하려면 각 페이지가 뷰에 넣던 Model 데이터를 **JSON API로 노출**해야 한다. 이 문서는 페이지별로 (a) 현재 URL, (b) 넣던 데이터, (c) 매칭되는 기존 `/api`, (d) 신규로 만들어야 할 API 를 정리한다.
 
+## 🔒 API 인터페이스(계약) 생성 표준 (2026-07-22 확정)
+프론트(happypoint-web2)에서 쓸 URL을 주면 → 스프링 컨트롤러/서비스/mapper 분석 → **TS 계약 파일**(`happypoint-web2/interface/<도메인>/<화면>.ts`) 생성. 모든 계약은 아래 3원칙 강제:
+1. **서버사이드 렌더 기본** — RSC `page.tsx`에서 API 조회·렌더, 상호작용만 client.
+2. **타임아웃 10초 + 오류화면** — 10,000ms 초과·비정상(2xx아님) → `error.tsx` 오류화면.
+3. **스켈레톤=성공화면 기반** — 성공 레이아웃과 동일 크기 회색뼈대(`loading.tsx`, CLS 방지).
+> 표준 파일: `happypoint-web2/interface/README.md`, `_TEMPLATE.ts`. 계약파일 구성 = 엔드포인트+인증+타임아웃 / 요청·응답 타입 / 목업 / UI메모(성공·로딩·에러·빈값).
+
+## 🛠️ 백엔드 /api 구축 현황 (2026-07-23)
+계약(interface) 대응 JSON API를 **신규 패키지 `com.spc.hpc.api`** 에 구축(컴포넌트 스캔 `com.spc.hpc`라 자동 인식). **기존 home.services 재사용**, 반환만 JSON. **`mvn compile` 성공**.
+- URL 스킴: **`/api/<도메인>/<화면>`**(A안, /page 제거). 인증 필요 화면은 `SecurityUtils.getCurrentUser()==null → ApiError.unauthorized()`(세션 방식 유지).
+- 공통: `api/common/ApiError`(401/400/500 통일 오류응답), `api/common/ApiExceptionHandler`(@RestControllerAdvice basePackages=com.spc.hpc.api → 예외를 JSON 오류로).
+- 컨트롤러 20개: alliance, main, store, donation, event(+mypage/event), customer, survey, live, sleeveqr, presentation, reception, email, mypage(point/card), member(join/member-info/dormancy), brand, cert.
+- ⚠️ **TODO 스텁(수동 포팅 필요)** — 쿠키(_AUTH_INFO_TOKEN_ 등)/리다이렉트/벤더콜백 의존 단계는 `ApiError.error("TODO...")`로 컴파일만 통과시킴: member 가입 policy/form/optional/welcome, member-info find/confirm/modify/changePw/withdrawal *-process, dormancy *-process, brand-member 대부분(join/find/confirm/modify/withdrawal 흐름). 조회성 endpoint·cert·event·mypage·main/store/donation/customer 등은 실제 구현됨.
+- ⚠️ event-view 비이미지 본문(S3 JSP importView)은 `""`로 두고 React 대체 필요(TODO).
+
 ## 아키텍처 현황 (분리 기준)
 - **페이지 컨트롤러**: `@Controller`, base `/page/**`(+`.spc`), JSP 뷰 + Model 반환 → **이관 대상**
 - **REST**: `@RestController`, base `/api/**` → 이미 JSON. 액션(POST) 위주로 존재, **조회(GET)는 부족**

@@ -53,6 +53,30 @@
 - **로컬 설정 정본**: `D:\100_WORKS\web-tomcat-10.1.57` (스테이징으로 커스텀됨), 원본 대조 `D:\100_WORKS\web-tomcat-9.0.68`.
 - ⚠️ **검증 TODO**: Scouter 2.8.1의 JDK21 호환(구버전→기동 실패 가능, 최신 에이전트 교체 검토), NewSize 고정값 G1GC 경고 여부.
 
+## 운영 (PRODUCTION) — ha-web-api Tomcat 10.1.57
+2026-07-28 운영 서버 톰캣(기존 **8.5.59/JDK8/Spring MVC**)의 설정을 **10.1.57(JDK21/Spring6)** 로 이관. 스테이징 톰캣10 설정을 기반으로 **운영값만 교체**(구조 동일 → 변경 최소). Scouter 연동 포함.
+- **포트(★ 운영 원본 유지)**: HTTP **8021** / shutdown **8006** / redirect 8442. `URIEncoding=UTF-8` 유지. executor(8080)·SSL(8443)·AJP(8009)는 전부 주석(미사용, 운영 동일).
+  - 운영 원본(8.5.59)의 활성 커넥터는 8021 하나뿐이었음 → 그대로 계승.
+- **Host**: `www.happypointcard.com` **1개**(스테이징은 stg-www/stg 2개였음), `appBase=webapps unpackWARs=true autoDeploy=true`, AccessLog prefix `www-access`, Engine `defaultHost=www.happypointcard.com`.
+- **JDK21 설치(2026-07-28)**: 운영서버(`ip-10-0-70-57`)에 `java-21-amazon-corretto-devel` 설치 → **Corretto 21.0.11 LTS** @ `/usr/lib/jvm/java-21-amazon-corretto`. **시스템 기본 java = 1.8.0_265 유지**(alternatives 미변경, 다른 톰캣 admin/api/cms 보호). 이 톰캣만 setenv `JAVA_HOME`으로 21 격리. ※ 이 서버 java 는 alternatives 미관리(PATH 기반)라 설치해도 기본 안 바뀜(확인 완료).
+- **JVM(setenv.sh)**: 힙 **`-Xms1536m -Xmx1536m`**(운영과 동일) + `-XX:MaxMetaspaceSize=256m`. **NewSize/MaxNewSize 고정은 제거(B안)** — JDK8 튜닝값이라 JDK21 기본 G1GC 자동조정에 맡김(힙 총량은 동일 1536m). 프로파일 **`-Dspring.profiles.active=prod`**. 인코딩/타임존(UTF-8/Asia-Seoul)·headless 유지.
+- **Scouter**: `bin/startup.sh`에서 활성화(톰캣9 방식, setenv 쪽은 주석 유지=중복 금지). 에이전트 **2.21.3**(JDK21 호환, 운영 원본 2.8.1 아님). `scouter.conf`: obj_name=**`WEB`**, collector **운영 `11.7.11.31`**(UDP·TCP 6100), 운영 풀옵션 이식(X-Forwarded-For·http헤더/쿼리 프로파일·정적확장자·health.jsp discard).
+- **세션 영속**: context.xml `<Manager>`는 스테이징도 주석(비활성)이라 운영(`pathname=""`)과 동일 → **변경 불필요**.
+- **DB(운영)**: 톰캣 설정에 DB 없음 → 앱(WAR)이 `spring.profiles.active=prod`로 운영 DB 분기. 계정/비번 **문서화 금지**.
+- **로컬 설정 정본**: `D:\100_WORKS\web-tomcat-10.1.57`(2026-07-28 운영값으로 전환), 운영 원본 대조 `D:\100_WORKS\web-tomcat-8.5.59`.
+- ⚠️ **확인 필요(배포 전)**: ① 운영 nginx/L4가 8021로 라우팅하는지 ② 운영 collector(`11.7.11.31`) scouter-server 버전이 agent 2.21.3과 호환되는지(server≥agent) ③ JDK21 기동 로그에서 GC 경고 없는지.
+
+## 리버스 프록시 라우팅 (리뉴얼: 프론트+백엔드 한 도메인 분기)
+앞단(nginx/ALB)이 경로로 분기:
+```
+https://<도메인>/
+  ├─ /api/**  → Tomcat 9022 (Spring, ha-web-api)
+  └─ 그 외     → Next 3000 (pm2, ha-web-fo)
+```
+- **개발: `https://dev.happypointcard.com/`** — `/api/**`=9022 톰캣 / 그 외=3000 Next(pm2).
+- same-origin이라 로그인 세션쿠키(JSESSIONID)·`/api` 호출 그대로 동작(CORS 불필요).
+- Next `next.config`의 `/api` 프록시 rewrite는 **로컬 개발(nginx 없음)용 폴백**. 배포 환경에선 nginx가 `/api`를 톰캣으로 보냄.
+
 ## 편의 알리어스 (ha-web-api Tomcat 10.1.57) — dev·staging 공통
 서버 `~/.bashrc`에 등록. dev·스테이징 모두 톰캣 경로가 동일(`/app/server/web-tomcat-10.1.57`)해서 정의도 동일하다.
 ```bash

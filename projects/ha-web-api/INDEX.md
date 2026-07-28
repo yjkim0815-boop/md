@@ -2,7 +2,7 @@
 문서유형: INDEX
 프로젝트: ha-web-api
 작성일: 2026-07-16
-최종수정: 2026-07-22
+최종수정: 2026-07-26
 상태: 진행중
 요약: 신규 홈페이지 리뉴얼 Spring API 백엔드 — Java 21 / Spring 6 기반. Spring6/Jakarta/Tomcat10.1 세팅 완료(빌드·기동), 실검증 진행중. 코드베이스 구조 맵 반영(2026-07-22)
 ---
@@ -15,10 +15,11 @@
 - 레거시 기존 홈페이지(Spring MVC)는 별도 프로젝트 **`ha_web`** 이며 혼동 금지 → [ha_web INDEX](../ha_web/INDEX.md)
 
 ## 프로젝트 개요
-- **워크스페이스 폴더**: `ha-web-api` (KB 기준 `../../../ha-web-api`)
+- **워크스페이스 폴더**: `ha-web-api` (KB 기준 `../../../ha-web-api`). ⚠️ **별도 체크아웃 `j-ha-web-api`(브랜치 `dev-j`)** 에 신규 프론트(happypoint-web2) 연동용 **계약 API 레이어(`com.spc.hpc.api.*`)** 가 있음 — 아래 "계약 API" 절 참조.
 - **Bitbucket remote**: `bitbucket.org/sectanine/ha-web-api.git`
 - **스택**: Java 21 / Spring 6.1.14 / Spring Security 6.2.6 / Jakarta EE / Tomcat 10.1.57 / MyBatis 3.5.16
-- **주요 브랜치**: master 기준 작업 브랜치 `feature/WORK-16665` (코드 이관 커밋 `b60d1ea`, 푸시 전)
+- **주요 브랜치**: `feature/WORK-16665`(Spring6 이관), **`dev-j`(계약 API·개발서버 dev-www 배포)**
+- **개발서버 배포처**: `dev-www.happypointcard.com` (프론트 happypoint-web2의 `LEGACY_BASE`가 이곳을 호출)
 
 ## 문서 목록
 | 문서 | 유형 | 상태 | 요약 |
@@ -26,6 +27,12 @@
 | [ARCHIVE-WORK-16665-spring-upgrade.md](./ARCHIVE-WORK-16665-spring-upgrade.md) | ARCHIVE | 완료(빌드·기동) | Spring6/Java21/Jakarta/Tomcat10.1 전면 세팅·마이그레이션 풀 기록 |
 | [WORKLOG-20260721-nextjs-api-migration-map.md](./WORKLOG-20260721-nextjs-api-migration-map.md) | WORKLOG | 진행중 | JSP 페이지→Next.js(happypoint-web2) 이관용 "페이지 URL↔API" 매핑 인벤토리 |
 | [WORKLOG-20260722-codebase-analysis.md](./WORKLOG-20260722-codebase-analysis.md) | WORKLOG | 진행중 | 코드베이스 구조 전수 파악 + ECC 기준 보안 1차 진단(크리덴셜 평문 Critical) |
+| [api-detail-response.md](./api-detail-response.md) | SHARED | 진행중 | ha-web-api 상세 응답코드(detailCode/detailMessage·도메인 message·로그인 rpsCd) — 공통 규격은 conventions/api-response.md |
+| [tendency/weekly/TENDENCY-2026-W30.md](./tendency/weekly/TENDENCY-2026-W30.md) | TENDENCY | 진행중 | 프로젝트 주간 성향 — 인프라·이관설계·문서정비, 확인/안전/현행화 선호 |
+| [worklog/weekly/WORKLOG-2026-W31.md](./worklog/weekly/WORKLOG-2026-W31.md) | WORKLOG | 진행중 | 2026-W31 — 인증 me→check, KCB 본인인증 postMessage, /api/page/cert 라우팅 통일 |
+| [worklog/weekly/WORKLOG-2026-W30.md](./worklog/weekly/WORKLOG-2026-W30.md) | WORKLOG | 진행중 | 2026-W30(07-20~26) 주간작업 — 스테이징톰캣/Scouter, 이관매핑, 계약API/로그인 |
+
+> 🔁 **회고 규칙(2026-07-26 개정)**: [운영 규칙](../../README.md#️-운영-규칙--성향작업내역-주기-2026-07-26-확정-최우선) 준수. 프로젝트 성향/작업내역은 **주 단위**(`tendency/weekly/`·`worklog/weekly/`), 작업 전 **최근 3개월치**를 먼저 읽고 반영.
 
 ## 🧱 코드베이스 구조 (2026-07-22 실측)
 
@@ -73,8 +80,20 @@ SPC 사내 전문 API(happypointcard `processHpc`) · 해피오더 · 해피마�
 SSO(isignplus) · 인터파크 · 현대오일뱅크 · SKT 에이닷 · 카카오 공유 · 네이버 지도 · Instagram/Facebook/YouTube Graph ·
 VOC(homevoc-hpc) · Cloudflare Turnstile · GA4 · Amplitude · AWS(S3 · KMS · DynamoDB).
 
+## 🔌 계약 API 레이어 (신규 프론트 happypoint-web2 연동) — 2026-07-26 추가
+- **위치**: `j-ha-web-api`(dev-j) 의 `com.spc.hpc.api.*` — HTML 스크래핑이 아닌 **JSON 계약 API**. 프론트는 `{LEGACY_BASE=dev-www}/api/...` 로 호출.
+- **패키지**: `api/{auth,alliance,brand,cert,customer,donation,email,event,live,main,member,mypage,presentation,reception,sleeveqr,store,survey,common}`
+- **응답 규약**: HTTP는 항상 200, 성공/실패는 body `code`(또는 `success`)로 판별 (`ApiError`/공통 응답).
+- **인증 API** (`api/auth/AuthApiResource`):
+  - `POST /api/auth/login` — body `{ login, password, rememberMe }`(`LoginVm`). 성공 시 `{success:true, returnUrl, userId, userNm, mbrGrCd, ...}` + **HttpSession(JSESSIONID) 쿠키**. 실패 시 `{success:false, message, redirect}`. (checkauth.jsp 로직 이식, `sso.enable=false` 경로 `SsoService.devAuth` = MB2000H0 전문)
+  - `POST /api/auth/logout` — 세션 무효화
+  - `GET /api/auth/me` — 현재 사용자(미로그인 401)
+- **프론트 연동**: happypoint-web2가 BFF `app/api/login/route.ts`로 프록시해 JSESSIONID를 프론트 오리진으로 relay. 상세: [happypoint-web2 INDEX](../happypoint-web2/INDEX.md).
+- 예) `GET /api/alliance/corporation?category&onOff&page` — 제휴사 계약 API(`api/alliance/AllianceApiResource`).
+
 ## 현재 상태 / 핵심 메모
 - ✅ Java21/Spring6/Jakarta 세팅 완료 → `mvn clean package -P dev` BUILD SUCCESS, Tomcat 10.1.57 기동 성공(컨텍스트 초기화까지).
+- ✅ **계약 API(`api/*`) + 인증(`/api/auth/*`) 구현됨** → dev-j/dev-www 기준 프론트 로그인 연동 대상. 프론트 짝 = [happypoint-web2](../happypoint-web2/INDEX.md).
 - ⏭ **실검증 TODO**: JSP 화면 렌더링, SiteMesh 레이아웃, DB(jdbc/ha·jdbc/cms), 본인인증 벤더 jar(NiceID/okname) JDK21 동작 — 아카이브 16절 참조.
 - **포트**: HTTP 9022 / shutdown 8010. **빌드 산출물**: `ha-web.war`(전 프로파일 동일명).
 - **SiteMesh**: `ext-libs`의 `sitemesh:3.0.1-jakarta` 커밋본 사용.

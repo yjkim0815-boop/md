@@ -14,6 +14,10 @@
 > `happypointcard` 하위 **모든 프로젝트·모든 채팅에서 공통 적용**한다.
 >
 > ⚠️ 각 문서는 현재 **초안(일반 모범기준)** 이다. 실제 개인 스타일에 맞게 검토·수정한 뒤 상태를 `확정`으로 바꿀 것.
+>
+> 🔒 **컨벤션 변경 규칙(중요)**: 컨벤션은 **임의로 수정하지 않는다.** 수정이 필요하다고 판단되면 **먼저 사용자에게 확인(제안)**한 뒤 승인 시에만 변경한다.
+> **특히 API 응답코드([api-response.md](./api-response.md))의 `code`·`detailCode` 대역/체계**를 바꾸는 것(대역 추가·remap·삭제)은 **반드시 사용자 확인 후**.
+> **예외(확인 불필요)**: 개별 API 응답에 **detailCode/detailMessage 를 명시적으로 담아야 하는 경우**(레거시 rpsCd 등 그대로 전달)는 **자동으로 추가**해도 된다. → 대역/체계 변경 = 확인 대상 / 개별 응답에 detail 값 채우기 = 자동 OK.
 
 ## 사용법 (새 채팅에서)
 - 대화 시작 시: "`md/shared/conventions/` 규칙 반영해서 작업해줘" 한 줄로 전 기술 공통 적용.
@@ -28,6 +32,7 @@
 | [javascript.md](./javascript.md) | JavaScript (공통) |
 | [react.md](./react.md) | React |
 | [html-css.md](./html-css.md) | HTML / CSS |
+| [api-response.md](./api-response.md) | **API 응답 표준** (전 프로젝트 공통: 엔벨로프·code 대역·detailCode) |
 
 ## 관련 공통 문서
 - [보안/취약점 진단 기준](../security-review.md)
