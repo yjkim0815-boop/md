@@ -9,6 +9,8 @@
 
 # 📇 ha-web-api 문서 인덱스
 
+> 🔗 **상위 프로젝트**: [homepage-ai-renewal(홈페이지 AI 리뉴얼)](../homepage-ai-renewal/INDEX.md) — 프론트 [`happypoint-web2`](../happypoint-web2/INDEX.md)와 한 프로젝트.
+
 ## 프로젝트 정체성 (중요)
 - **이 프로젝트 = 신규 홈페이지 리뉴얼의 Spring API 백엔드.**
 - **Java 21 / Spring 6** 기반. 지금까지 진행한 Spring6/Jakarta/Java21/Tomcat10.1 마이그레이션 작업물이 **실제로 속하는 프로젝트**이다.
@@ -25,6 +27,7 @@
 | 문서 | 유형 | 상태 | 요약 |
 |------|------|------|------|
 | [ARCHIVE-WORK-16665-spring-upgrade.md](./ARCHIVE-WORK-16665-spring-upgrade.md) | ARCHIVE | 완료(빌드·기동) | Spring6/Java21/Jakarta/Tomcat10.1 전면 세팅·마이그레이션 풀 기록 |
+| [WORKLOG-20260729-model-api-migration.md](./WORKLOG-20260729-model-api-migration.md) | WORKLOG | 진행중 | 레거시 페이지 컨트롤러 → 모델API 전수 이식(A 스텁32 완료 / B 신규 진행 / C 라우트) |
 | [WORKLOG-20260721-nextjs-api-migration-map.md](./WORKLOG-20260721-nextjs-api-migration-map.md) | WORKLOG | 진행중 | JSP 페이지→Next.js(happypoint-web2) 이관용 "페이지 URL↔API" 매핑 인벤토리 |
 | [WORKLOG-20260722-codebase-analysis.md](./WORKLOG-20260722-codebase-analysis.md) | WORKLOG | 진행중 | 코드베이스 구조 전수 파악 + ECC 기준 보안 1차 진단(크리덴셜 평문 Critical) |
 | [api-detail-response.md](./api-detail-response.md) | SHARED | 진행중 | ha-web-api 상세 응답코드(detailCode/detailMessage·도메인 message·로그인 rpsCd) — 공통 규격은 conventions/api-response.md |

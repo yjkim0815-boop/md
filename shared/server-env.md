@@ -66,16 +66,19 @@
 - **로컬 설정 정본**: `D:\100_WORKS\web-tomcat-10.1.57`(2026-07-28 운영값으로 전환), 운영 원본 대조 `D:\100_WORKS\web-tomcat-8.5.59`.
 - ⚠️ **확인 필요(배포 전)**: ① 운영 nginx/L4가 8021로 라우팅하는지 ② 운영 collector(`11.7.11.31`) scouter-server 버전이 agent 2.21.3과 호환되는지(server≥agent) ③ JDK21 기동 로그에서 GC 경고 없는지.
 
-## 리버스 프록시 라우팅 (리뉴얼: 프론트+백엔드 한 도메인 분기)
-앞단(nginx/ALB)이 경로로 분기:
+## ELB/리버스 프록시 라우팅 (리뉴얼: 프론트+백엔드 한 도메인 분기)
+**3도메인**: 개발 `dev.happypointcard.com` · 스테이징 `stg.happypointcard.com` · 운영 `www.happypointcard.com`.
+앞단(ELB)이 **경로 prefix로 분기**(3도메인 공통):
 ```
 https://<도메인>/
-  ├─ /api/**  → Tomcat 9022 (Spring, ha-web-api)
-  └─ 그 외     → Next 3000 (pm2, ha-web-fo)
+  ├─ /api/*  → 신규 Spring 백엔드 (ha-web-api)
+  └─ 그 외    → Next.js 프론트 서버 (ha-web-fo)
 ```
-- **개발: `https://dev.happypointcard.com/`** — `/api/**`=9022 톰캣 / 그 외=3000 Next(pm2).
+- **서버 토폴로지**: 운영 = **프론트 2대 + 백엔드 Spring 2대**. 개발/스테이징 = **1대에 프론트·백엔드 공존(포트 분리)**.
+  - 개발 예: `/api/*`=9022 톰캣 / 그 외=3000 Next(pm2).
+- **마이그레이션 원칙(중요)**: `/page`로 시작·`.spc`로 끝나는 **모든 레거시 Spring MVC 화면 = 전부 Next로 이관**. URL 동일, **맨 뒤 `.spc`만 제거**한 경로가 신규 라우트(예: `/page/brand/member/join-auth.spc`→`/page/brand/member/join-auth`). `.spc` 화면은 ELB상 프론트가 받으므로, 미들웨어에서 진입 URL은 `.spc` 제거 후 **같은 오리진 rewrite**로 Next에서 연다(레거시 백엔드 절대경로 리다이렉트 금지).
 - same-origin이라 로그인 세션쿠키(JSESSIONID)·`/api` 호출 그대로 동작(CORS 불필요).
-- Next `next.config`의 `/api` 프록시 rewrite는 **로컬 개발(nginx 없음)용 폴백**. 배포 환경에선 nginx가 `/api`를 톰캣으로 보냄.
+- Next `next.config`의 `/api` 프록시 rewrite는 **로컬 개발(ELB 없음)용 폴백**. 배포 환경에선 ELB가 `/api/*`를 백엔드로 보냄.
 
 ## 편의 알리어스 (ha-web-api Tomcat 10.1.57) — dev·staging 공통
 서버 `~/.bashrc`에 등록. dev·스테이징 모두 톰캣 경로가 동일(`/app/server/web-tomcat-10.1.57`)해서 정의도 동일하다.

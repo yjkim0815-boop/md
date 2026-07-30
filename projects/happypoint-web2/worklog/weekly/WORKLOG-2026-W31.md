@@ -5,10 +5,10 @@
 기간: 2026-W31 (07-27~)
 이슈키: WORK-16611
 작성일: 2026-07-27
-최종수정: 2026-07-27
+최종수정: 2026-07-29
 작성자: dominic
 상태: 진행중
-요약: KCB 본인인증(휴대폰·아이핀) React 연동, SSR 로그인 판별, 서버 파일 로그, /api 라우팅 통일
+요약: KCB 본인인증(휴대폰·아이핀) React 연동, SSR 로그인 판별, 서버 파일 로그, /api 라우팅 통일 (+07-29: 로그인체크 최소화·dev 도메인·로컬로그인 BFF프록시 일원화)
 ---
 
 # 🛠️ happypoint-web2 주간 작업내역 — 2026-W31
@@ -46,7 +46,28 @@
 - `BrandMemberController`: `POST /join-policy.spc` 가 authInfo(암호문) 받아 `AES128Util.decrypt(cert.key)` 복호화 → `MEMBER_AUTH_INFO` **HttpOnly 쿠키(30분)** 로 저장. `join-view.spc` 가 그 쿠키로 이름/생년/휴대폰 복호화해 폼 채움.
 - 시사점: authInfo·CI/DI 는 프론트가 다루지 않고, **약관동의 API 에 authInfo 넘기면 백엔드가 HttpOnly 쿠키로 유지**하는 구조로 React 연동해야 함.
 
+## 7. (07-29) 로그인 체크 API 최소화
+- `/api/auth/check` 응답을 **"로그인 여부"만**으로 축소 결정. 백엔드는 로그인 시 `{code:"00", data:{loggedIn:true}}`, 미로그인 `code:"50"`.
+- 프론트 `lib/auth-server.ts`: `getCurrentUser` → **`checkLoggedIn(): Promise<boolean>`** (개인정보 미수신). `auth-provider.tsx`/`layout.tsx` 는 로그인여부만 클라이언트 전달.
+- 원리 정리: SSR fetch 자체는 브라우저 미노출이나, **AuthProvider(클라이언트 컴포넌트)로 넘기는 값이 곧 유출 지점** → 최소 필드만 전달. 개인정보는 렌더 후 사용자 액션 시점에 백엔드 직접 호출로 취득.
+- ※ 이후 워킹트리에서 `AuthProvider`가 GA/Amplitude용 `mbrNo` 포함 버전으로 되돌아옴(seokej 라인) — 최종 필드 범위는 정합 필요.
+
+## 8. (07-29) dev 도메인 정리
+- `dev-www.happypointcard.com` → **`dev.happypointcard.com`** 전체 치환: 프론트 `.env.local`/`.env.dev`(`LEGACY_BASE`·`LEGACY_BASE_FALLBACK`·`NEXT_PUBLIC_API_BASE`), `.env.stg`/`.env.prod` 주석.
+
+## 9. (07-29) 로컬 로그인 — BFF 프록시 방식으로 일원화 ★
+- **문제**: 로컬(localhost:3000) → dev 백엔드 크로스오리진 로그인이 CORS/Secure쿠키로 실패. `NEXT_PUBLIC_API_BASE` 유실로 self(localhost) 호출되던 버그도 확인.
+- **검토①(폐기) 백엔드 회사IP CORS**: dev/stg 한정 + 회사IP(14.32.109.30)에서만 localhost CORS/CSRF예외/SameSite=None. → nginx preflight 403·Secure쿠키·배포 불일치로 난항. **커밋 삭제·원복**.
+- **채택 = 프론트 BFF 프록시** (seokej `7977955`, `app/api/auth/[...path]/route.ts`): 브라우저는 동일오리진 `/api/auth/{login,logout,check}` 만 호출 → Next 서버가 `LEGACY_BASE` 로 중계 + `Set-Cookie`의 `Domain`/`Secure` 제거(로컬). **서버-투-서버라 CORS/CSRF 완화 불필요**.
+- 결론: **백엔드 인증 커스터마이징 0** (원본 `SecurityConfig` = permitAll + 전역 CSRF). 로컬 로그인은 프론트 프록시 단독으로 완결.
+
+## 10. (07-29) 로그인 보안 논의 (설계 단계, 미구현)
+- 서버-투-서버 로그인은 원리상 완전차단 불가(브라우저 신호 위조 가능). 남용 방지가 목표 → CAPTCHA(폼에 자리 존재)·rate limit·계정 잠금·WAF.
+- DynamoDB **nonce** 검토: 리플레이 차단·발급지점 방어훅으론 유효하나 봇 차단은 불가 → **세션/IP 바인딩 + single-use TTL + rate limit + CAPTCHA 결합** 조건 하에서만 실효.
+
 ## 다음 할 일 (TODO)
+- [ ] (07-29) 로그인 nonce(+CAPTCHA/rate limit) 실제 구현 여부 결정
+- [ ] (07-29) `AuthProvider` 최종 노출 필드 범위 확정(로그인여부 최소화 vs GA용 mbrNo)
 - [ ] 신규 계약 API(`JoinApiResource`/`BrandMemberApiResource`)에 join-policy(authInfo 수신)·join-view(복호화 정보 반환) 존재 여부 확인
 - [ ] 약관동의 → 정보입력폼 authInfo 연동 (HttpOnly 쿠키 방식)
 - [ ] ELB /api strip 여부 확인 후 cert 컨트롤러 매핑 확정

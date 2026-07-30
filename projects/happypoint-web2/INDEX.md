@@ -10,6 +10,7 @@
 # 📇 happypoint-web2 문서 인덱스
 
 > 📛 폴더/슬러그 = **Bitbucket 저장소명** `happypoint-web2` (로컬 폴더명과 동일).
+> 🔗 **상위 프로젝트**: [homepage-ai-renewal(홈페이지 AI 리뉴얼)](../homepage-ai-renewal/INDEX.md) — 백엔드 [`ha-web-api`](../ha-web-api/INDEX.md)와 한 프로젝트.
 
 ## 프로젝트 개요
 - **저장소명(=KB 슬러그)**: `happypoint-web2`
