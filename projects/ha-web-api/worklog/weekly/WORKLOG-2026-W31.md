@@ -4,10 +4,10 @@
 주기: 주
 기간: 2026-W31 (07-27~)
 작성일: 2026-07-27
-최종수정: 2026-07-29
+최종수정: 2026-07-31
 작성자: AI(Claude)
 상태: 진행중
-요약: 인증 API(me→check), KCB 본인인증 complete postMessage, /api/page/cert 라우팅 통일 (+07-29: check 로그인여부만·dev 도메인·회사IP CORS 폐기 원복)
+요약: 인증 API(me→check), KCB 본인인증 complete postMessage, /api/page/cert 라우팅 통일 (+07-29: check 로그인여부만·dev 도메인·회사IP CORS 폐기 원복) (+07-31: 파바앱 본인인증/브랜드 join 정합·모델API 룰셋·auth/check 유입URL 로깅)
 ---
 
 # 🛠️ ha-web-api 주간 작업내역 — 2026-W31 (프론트 happypoint-web2 연동)
@@ -46,7 +46,41 @@
 ## 8. (07-29) 로그인 보안 (설계, 미구현)
 - 서버-투-서버 로그인 완전차단 불가 → 남용방지(CAPTCHA·rate limit·lockout·WAF). DynamoDB nonce 는 리플레이/발급훅용, 바인딩+TTL+CAPTCHA 결합 시에만 실효.
 
+## 9. (07-31) 파바앱 본인인증/브랜드 join 정합
+- `BrandMemberModelApiResource.joinAuth`: 응답 `reqPath` `"APP"`→**`"OPBS"`**.
+- `JoinModelApiResource.policy`: `landingType`→**`alertType`**, 요청 컨텍스트 `reqPath`/`reqChnl`/`reqPage` 전 분기 항상 포함(빈값 기본), javadoc 에서 alert 규격 제거(프론트 SSOT 포인터만). `/api/join/index` 파라미터 에코 제거(빈 data).
+- (프론트 짝) 브랜드 본인인증 팝업 신설·약관 라우트 `join-policy`→`policy` 이동은 happypoint-web2 W31 §12·§13 참조.
+
+## 10. (07-31) 룰셋 "1 page ↔ 1 model API" — 백엔드 신규/스텁 엔드포인트
+- 프론트 진입 핑(`pingModel`) 대상 중 백엔드 미존재/POST전용 경로에 **GET 성공 스텁** 추가:
+  - POST 전용 form 계열 진입 핑용 GET: `join/form`, `join/optional-form`, `member-info/modify-info-form`.
+  - 그룹2 신규 GET(성공만 반환): `event/my-coupon`, `search`(page/search), `dormancy/auth-form`, `member-info/{withdrawal-form, find-id-pw-form, confirm-pw-form, change-pw-form}`.
+- 룰: page 진입 시 대응 모델 API 1회 호출. 없으면 백엔드 생성(동작 없어도 `{code:"00"}`). 실로직 이식은 후속.
+
+## 11. (07-31) 유입 트래킹 로깅(26컬럼 TSV) — ha1-api 포맷 정합 ★
+- **포맷 정합**: 참조 로그 `ha1-api-*.log`(앱API 트래킹, 26컬럼 TSV)와 동일하게. ha-web-api엔 이미 `TrackingInterceptor`(26컬럼)+`TrackingLogger`가 XML(`dispatcher-config.xml`)로 `/api/**` 등록·활성 상태였음(초기 오판정정). 커스텀 `url=…` 로거는 폐기.
+- **파일명**: `TrackingAppender` 파일패턴 → **`${LOG_DIR}/tracking/ha-web-%d{yyyyMMdd_HH}_ip-${serverip:}.log`**(매시간 롤링·168시간 보관, 헤더 유지). 커스텀 Lookup `ServerIpLookup`(`${serverip:}`=서버IP 대시, EC2 `ip-12-12-12-12` 형식) + `<Configuration packages="com.spc.hpc.home.config.log">`.
+- **로깅 2종**:
+  1. `AuthApiResource.check()` — 프론트가 body로 넘긴 **원본 페이지 url을 service_url**로 단건 기록(`TrackingInterceptor.write(...)`, 페이지 진입=check 호출=1줄).
+  2. `TrackingInterceptor` `/api/**` — **2제외**: `dispatcher-config.xml`에 `/api/auth/check` exclude(중복방지) + 인터셉터 코드에서 핸들러 패키지 `com.spc.hpc.api.model.*` skip(모델API 제외).
+- `TrackingInterceptor.write(...)` static 추출(인터셉터·check 공용), 파라미터 password 마스킹 유지.
+
+## 12. (07-31) 스테이징 도메인 확인
+- `application-stage.yml`: `cert.return-server`·`site.url` **이미 `stg-www.happypointcard.com`**(변경 불필요). `application-stagep.yml`은 프록시(stg-napi)만. 프론트 짝 `.env.stg`는 stg-www로 수정(web2 W31 §16).
+
+## 13. (07-31) 홈페이지 메인 일반 배너 계약 API
+- 대상 정정: 레거시 `ha-api`가 아닌 **`j-ha-web-api`(ha-web-api dev-j)** 에 구현.
+- **GET `/api/home/banner-list`**: `com.spc.hpc.api.home.HomeBannerApiResource`의 비-모델 전용 홈 API. `ApiResponseWrapper`가 `{code:"00", ..., result:[...]}`로 래핑.
+- `BannerInfoRepository.listNormalBannerInfo`에 `ha-api`의 동일 조회 조건을 이식하고, 서비스에서 `areaCode=HA_11101`·웹 기기코드 `W`·S3 이미지 URL·세션 회원 등급/세그먼트/임직원 조건을 조립.
+- 검증: `mvn -o -DskipTests compile` **BUILD SUCCESS**.
+
+- `listNormalBannerInfo`의 최종 CTE 조회에서 파생 테이블을 제거한 뒤 남은 `) PA` 때문에 ORA-00933이 발생했다. `A.WEBP_YN = 'N'` 필터를 `VW_BANNER_LIST A` 조회에 직접 적용하고, 정렬 별칭도 `A`로 통일해 수정했다. `mvn -o -DskipTests compile` BUILD SUCCESS로 검증했다.
+
+- `POST /api/member-info/confirm-pw-process`에서 비밀번호 불일치 시 기존 성공 응답 대신 `ApiError.AUTH`를 반환하도록 변경했다. 응답 `code`는 `40`이며, 비밀번호 확인 성공 시에만 확인 쿠키와 랜딩 정보를 반환한다. `mvn -o -DskipTests compile` BUILD SUCCESS로 검증했다.
+
 ## 다음 할 일 (TODO)
+- [ ] (07-31) 그룹2 신규 스텁 API 실로직 이식(레거시 컨트롤러 기반) 여부
+- [ ] (07-31) 그룹3(정적 page) 모델API 처리 방침
 - [ ] (07-29) 로그인 nonce/rate limit/CAPTCHA 백엔드 구현 여부 결정
 - [ ] 신규 계약 API 에 join-policy(authInfo 수신)/join-view(복호화 반환) 존재 확인·없으면 추가
 - [ ] ELB /api strip 여부 확인 → cert 컨트롤러 매핑 확정
@@ -58,3 +92,8 @@
 
 ## 참고
 - 이전 주차: [WORKLOG-2026-W30](./WORKLOG-2026-W30.md)
+
+## 14. (2026-07-31) Login empty model API
+- Added `GET /api/auth/login` in `com.spc.hpc.api.model.auth.AuthModelApiResource`.
+- It returns the standard successful `ApiOkBody` with an empty result for login page entry. The existing `POST /api/auth/login` remains the authentication submission endpoint.
+- Verification: `mvn -o -DskipTests compile` completed with `BUILD SUCCESS`.

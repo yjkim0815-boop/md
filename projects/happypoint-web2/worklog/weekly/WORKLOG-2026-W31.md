@@ -65,7 +65,101 @@
 - 서버-투-서버 로그인은 원리상 완전차단 불가(브라우저 신호 위조 가능). 남용 방지가 목표 → CAPTCHA(폼에 자리 존재)·rate limit·계정 잠금·WAF.
 - DynamoDB **nonce** 검토: 리플레이 차단·발급지점 방어훅으론 유효하나 봇 차단은 불가 → **세션/IP 바인딩 + single-use TTL + rate limit + CAPTCHA 결합** 조건 하에서만 실효.
 
+## 11. (07-31) 회원가입 흐름 정리 — 공통 alert·필드 리네임·브랜드 라우트 이동
+- **공통 안내 페이지**: `/page/join/popup` → **`/page/common/alert`** 이관(구 경로는 완전 이동 아님/리다이렉트 스텁 유지). alert 랜딩 규격(type 5종·문구·버튼)은 이 페이지가 **정본(SSOT)**, 백엔드는 값만 내려줌.
+- **백엔드 `/api/join/policy` 응답 변경**: `landingType`→**`alertType`**, `landing` 유지, 요청 컨텍스트 `reqPath`/`reqChnl`/`reqPage` **전 분기 항상 포함**(없으면 빈값). 주석은 alert 규격 제거 후 프론트 SSOT 포인터만.
+- **디버그 제거**: `join-auth.tsx`의 클라이언트 `console.log("[cert]", data)`(개인정보) + 죽은 `/api/cert/log` fetch 제거 → 클라이언트 `console.log` 0건. (서버 `apiLog`는 유지, `next start`라 브라우저 미노출)
+- **as/ad**: 앰플리튜드(분석) 전용 → 회원가입 policy 체인엔 **넘기지 않음**(확정). 레거시 model명 `app_as`/`app_ad`, 신규 API 응답 `appAs`/`appAd`, 요청 파라미터는 공통 `as`/`ad`.
+- **브랜드 본인인증 라우트 이동**: `/page/brand/member/join-auth` → **`/page/brand/member/join/index`** (완전 이동, 하위호환 스텁 없음). 참조 갱신: join-gate CTA, middleware `OPBS_REDIRECT_MAP`(`/page/join/auth.spc`→새 경로), canonical, error 태그, interface 주석. 백엔드 계약 API `/api/brand/member/join-auth`·lib는 **불변**.
+  - ⚠️ 브랜드 `join/index` 페이지는 아직 **KCB 팝업 미연동(정적 placeholder)** — 일반 `join-auth.tsx`의 `openCert` 이식 필요(미결).
+
+## 12. (07-31) 파바앱(브랜드) 본인인증 팝업 이식 — 일반과 정합 ★
+- **레거시 확인**: 브랜드 `join-auth.spc`는 `instCd`를 **INSAUT 쿠키**로 저장, cert 팝업(config.jsp)은 `reqChnl/reqPage/reqPath`만 읽음(instCd 안 읽음). 즉 팝업 파라미터 세트는 일반과 동일, **reqChnl 자리에 브랜드 코드(instCd)** 를 싣는 구조.
+- **일반 `join-auth.tsx`**: 팝업 `reqChnl` `"NONE"` → **`channel`(pc/mo, 없으면 빈값)**.
+- **신규 `brand/member/join/index/join-auth.tsx`**(일반 포팅): cert 팝업 `reqChnl=instCd`·`reqPage=join`·`reqPath=OPBS`. 성공 → form POST → `/page/brand/member/join-policy` (hidden: authInfo/reqPath=OPBS/reqPage=join/reqChnl=instCd/**instCd**). `brand/member/join/index/page.tsx`는 정적 → `BrandJoinAuth` 렌더(휴대폰만), `getJoinAuth` SSR 검증 유지.
+- **미들웨어**: `POST /page/brand/member/join-policy` 브랜치 추가 → `hp_join_auth` 쿠키(+instCd) 저장 후 303 GET(일반과 동일 방식).
+- **브랜드 `join-policy/page.tsx`**: searchParams → **쿠키(hp_join_auth)에서 authInfo/instCd/reqPath 읽어 `postJoinPolicy`** 호출로 정합(쿠키 없으면 searchParams 폴백).
+- **백엔드 `BrandMemberModelApiResource.joinAuth`**: `reqPath` `"APP"`→**`"OPBS"`**.
+- 확정 규칙: 일반 reqChnl=pc/mo(없으면 빈값), 파바앱 reqChnl=instCd. as/ad는 앰플리튜드용(policy 미전달).
+
+## 13. (07-31) 브랜드 약관 라우트 이동 + as/ad 앰플리튜드 버그 수정
+- **라우트 완전 이동**: `/page/brand/member/join-policy` → **`/page/brand/member/policy`** (하위호환 스텁 없음). 갱신: 이동된 page/error, `join/index/join-auth.tsx` form.action+주석, `middleware.ts`(브랜드 policy POST 브랜치 pathname·쿠키 path), interface 주석. 백엔드 API `/api/brand/member/join-policy`·lib는 불변.
+- **as/ad 앰플리튜드 연결 버그 수정**: `analytics-provider.tsx`가 URL에서 `app_as`/`app_ad`(레거시 **model 속성명**)를 읽어 `setSessionId`/`setDeviceId`가 **한 번도 동작 안 하던** 문제 → 실제 URL 파라미터 **`as`/`ad`** 로 교체. 앰플리튜드 초기화는 **전역 프로바이더 단일 지점**(중복 없음)이라 이 한 파일로 전량 수정됨.
+
+## 14. (07-31) 룰셋 "1 page ↔ 1 model API" 확립 + 그룹1 배선
+- **룰셋 확정**: 모든 프론트 page.tsx는 진입 시 대응 모델 API 1회 호출(데이터 불필요해도). `lib/model-ping.ts` `pingModel()` 신설(fire-and-forget). 없으면 백엔드 생성(성공만 반환). → INDEX 아키텍처 핵심 + 메모리(page-model-api-rule)에 저장.
+- **전수조사**: 79개 page 중 33개 모델 API 미호출 → 대응 API 존재(그룹1 17~18) / 이름확인 필요(그룹2 8) / 정적(그룹3 8)로 분류.
+- **그룹1 배선(진행)**: 18개 page에 `pingModel("/api/...")` 추가. POST 전용 3개(join/form·join/optional-form·member-info/modify-info-form)는 백엔드에 **진입 핑용 GET 엔드포인트**(빈 `LinkedHashMap` 성공) 추가. 백엔드 컴파일 ✅.
+- **`/api/join/index`**: 파라미터 에코 제거(빈 data 반환) — 프론트는 URL에서 직접 읽으므로 불필요.
+- 그룹2·3은 사용자 검토 대기.
+
+## 15. (07-31) 그룹2 배선 — 신규 모델 API 6개 + 스텁 + 핑
+- **백엔드 신규 GET 모델 API 7개**(전부 성공만 반환 스텁, `com.spc.hpc.api.model.*`): `event/my-coupon`, `search`(page/search용), `dormancy/auth-form`, `member-info/{withdrawal-form, find-id-pw-form, confirm-pw-form, change-pw-form}`. 컴파일 ✅.
+- **`page/search`**: 삭제하려 했으나 **실사용 검색 결과 페이지**(header-search·mobile-header·site-nav·layout SearchAction·robots 참조) 확인 → 삭제 대신 빈 모델 API(`/api/search`) 신설·연결로 방향 전환.
+- **프론트 그룹2 8개 page** `pingModel` 배선: `join/auth`→`/api/join/index`, `event/my-coupon`, `dormancy/auth-form`, `search`, `member-info/{withdrawal-form,change-pw-form,confirm-pw-form,find-id-pw-form}`.
+- ※ 신규 6개는 현재 **성공만 반환하는 스텁**. 레거시 컨트롤러(MemberInfoController form 계열·DormancyController·couponService) 실로직 이식은 후속 과제.
+
+## 16. (07-31) main 머지 + 스테이징 도메인 정합
+- **머지**: `feature/WORK-16613` → `main`(커밋 `a31b9de`). 충돌 10파일 해결(중요: `lib/legacy-http.ts` git auto-merge 함수중복 → main버전 복원). main 실기능 보존 + 16613 산출물(pingModel·브랜드흐름·analytics·common/alert) 전량 반영. tsc 신규에러 0(main baseline 17=머지 17). push는 미실행.
+- **스테이징 도메인**: 프론트 `.env.stg` `LEGACY_BASE` `www`(오류)→**`stg-www.happypointcard.com`** + `LEGACY_BASE_FALLBACK`·`NEXT_PUBLIC_API_BASE=""` 추가. 백엔드 `application-stage.yml`은 이미 stg-www(불변). 구동=PM2 `ha-web-fo` `pnpm start:stg`.
+
+## 17. (07-31) `/page/auth/login` 개발 서버 404 수정
+- **증상**: `app/(site)/page/auth/login/page.tsx` 파일과 Next 개발 산출물은 존재했지만, 로컬 `pnpm dev`에서 `/page/auth/login`이 404로 응답.
+- **원인/조치**: 해당 페이지가 정적으로 최적화되는 경로로 처리되어 `(site)` 라우트 등록이 불안정했다. 로그인 상태 확인은 요청 단위 SSR이므로 `page.tsx`에 `export const dynamic = "force-dynamic"`을 명시했다.
+- **검증**: `http://localhost:3000/page/auth/login` HTTP 200, 페이지 제목 `로그인 | Happy Point` 및 로그인 폼 렌더링 확인. `/api/auth/check`도 정상 200 응답.
+
+## 18. (07-31) 모델 API param/model 디버그 로깅 (운영 제외)
+- `lib/model-ping.ts` `pingModel()`: 모델 API 호출 후 **받은 파라미터 + 모델 응답**을 `apiLog`로 출력.
+  - 형식: `[model] <path>` / `param=<x-hp-query & x-hp-body>` / `model=<응답 JSON>`.
+  - param 출처 = 미들웨어가 심은 원요청 GET쿼리(`x-hp-query`) + POST바디(`x-hp-body`) → **페이지 수정 0**(24개 page가 이미 `pingModel` 호출).
+- **노출 게이트**: `process.env.APP_ENV !== "prod"` → local/dev/stg 노출, **운영만 제외**(개인정보 보호). apiLog 경유(서버 로그파일 + 콘솔).
+- tsc: 신규 에러 0(baseline 17 유지).
+
+## 19. (07-31) 메인 일반 배너 계약 API 연동
+- 홈(/, PC/모바일 공통) 하단의 "지금 가장 인기 있는 이벤트만 모았어요" 마키를 정적 배너 대신 새 배너 API 응답으로 교체.
+- AppHomeBanner가 서버에서 세션 쿠키를 전달해 호출하고, 이미지·브랜드·제목·부제목·링크를 카드에 렌더링한다. Oracle/MyBatis Map 직렬화의 대문자 키도 함께 수용.
+- 각 카드에 API의 모든 원시 필드를 `data-*`로 자동 전개한다(예: `BN_INFO_ID` → `data-bn-info-id`). `IMG_URL`/`imgUrl`은 HTTP(S)·상대경로 검증 후 실제 img 태그에 적용.
+- 후속 정합: 실제 응답의 스네이크 케이스(`img_url`, `brand_nm` 등)도 카멜/대문자 키와 동일시해 읽도록 키 정규화. 데이터 속성만 보이고 이미지·문구가 비던 현상을 해결.
+- 배너 카드의 `promo-card-text` 텍스트 오버레이를 제거하고 이미지 단독 노출로 확정. `data-*`와 링크 동작은 유지.
+- 링크는 상대 경로 또는 HTTP(S)만 허용하며 외부 링크는 새 탭으로 연다. 조회 실패 또는 빈 목록이면 섹션을 숨긴다.
+- 검증: pnpm exec tsc --noEmit 실행. 이번 변경 오류 0건, 기존 회원정보/마이페이지 타입 오류 16건으로 전체는 실패.
+
+- 배너 클릭은 `returnUrl` 없이 `/page/auth/login?bninfoid=<BN_INFO_ID>&linkvalue=<LINK_VALUE>`로 이동한다. 로그인 GET 랜딩 시 middleware가 두 URL 값을 동일 이름의 `httpOnly` 쿠키(`SameSite=Lax`, `Path=/`, 30분)로 저장해 후속 로그인 처리에서 사용할 수 있게 했다.
+
+## 20. (07-31) 세션 stickiness 이슈 — ALB 앱쿠키 방식 (Redis 미사용) ★미결
+- **증상(스테이징)**: ALB 스티키를 duration(ELB세션)으로 뒀는데, **프론트 SSR→백엔드** 구간이 스티키로 못 붙어 JSESSIONID 세션 미스. 프론트는 한쪽에 붙지만 백엔드는 라운드로빈.
+- **원인**: ALB 스티키는 브라우저가 `AWSALB` 쿠키를 저장·재전송해야 유지되는데, **SSR(front 서버)은 브라우저가 아니라 쿠키잼이 없어** 매 요청 새 방문자로 인식 → 라운드로빈. (front·백엔드 동일 도메인이라 `AWSALB` 쿠키명 충돌도 겹침)
+- **채택 방향(Redis 안 씀)**: ALB **애플리케이션 기반 stickiness** + **앱 쿠키명 `HA_AWSALB`**. 단, **프론트가 모든 SSR 호출에 요청 쿠키(JSESSIONID+`HA_AWSALB`)를 forward** 해야 실효.
+- **현재 프론트 쿠키 forward 실태**: `getCurrentUser`(check)만 forward ✅ / `pingModel`·`join/policy` raw fetch·`legacyContractGet/Post`(기본) ❌ → 이 호출들은 여전히 라운드로빈.
+
+## 21. (07-31) 회원가입 약관(policy) 정합 — 동의값 POST 전달 + 약관 전문 이식 ★
+- **Part 2 (기능)**: PolicyForm이 **앞단계에서 받은 값 + 화면 동의값을 전부 form POST**로 다음 단계 전달.
+  - `AGREE_CODE` 매핑(레거시 pc/join/policy.jsp hidden name): 필수 `EUTL`(이용약관)·`ETDP`(제3자), 안내 `EIND=Y 고정`, 선택 `SIND/SBRD/STDP/SLOC`, 제휴사 `SBRD2~5`(신한/SK브로드/메리츠/SK엠앤). 멤플러스·광고성은 레거시처럼 **미제출**. 필수 체크 2개 = EUTL+ETDP.
+  - PolicyForm props로 `authInfo(무조건)/reqPath/reqPage/reqChnl/joinInfo` 수신 → 히든필드로 POST. `router.push` 제거.
+  - `policy/page.tsx`: 응답 `joinInfo` 읽어 props 전달. `middleware.ts`: **`POST /page/join/form` 브랜치** → policyInfo 전체 `hp_join_policy` 쿠키(303 GET). `join/form/page.tsx`: 쿠키→**`POST /api/join/form`**(백엔드 setPolicyCookie + `_AUTH_INFO_TOKEN_` 복호화 프리필), none-auth/error→공통 alert.
+- **Part 1 (약관 전문)**: 프론트 모달 근사치 → 레거시 `popupTerms` 순수텍스트 **1:1 이식**.
+  - 교체: `ETDP`(03)·`SIND`(04)·`SBRD`(07)·**`STDP`(05, ~40개 제휴사 전량**→`ALLIANCE_GROUPS` 온·오프라인 그룹핑)·제휴사 `SBRD2~5`(09~12)·멤플러스(08)·광고성(13/14). 제네릭 `affiliateTerm`/`AFFILIATES` 제거→업체별 실데이터.
+  - 유지: `EUTL`(01, 399줄)·`SLOC`(06, 494줄)는 전체 법령문서라 **외부 링크 유지**. `notice`(02)는 이미 일치.
+- **약관 대조 방법**: HTML 태그 제거 순수 텍스트로 비교 → `notice`(EIND)만 기존 일치, 나머지는 프론트 임의요약이었음(제3자=SPC 계열사 실명 누락 등) 확인 후 교체.
+- tsc: 신규 에러 0(baseline 17 유지).
+- 후속(미결): `join/form` 프리필(RSLT_NAME/TEL_NO/isUnder14/joinInfoObj)을 JoinInfoForm에 연결(현재 폼 props 미수신).
+
+- `pingModel()` 서버 로그의 페이지 파라미터를 원본 query/body 문자열 대신 JSON 객체로 직렬화하도록 변경했다. 빈 값은 `param={}`, 예: `?redirectUrl=HCHP&cd=HPWW`는 `param={"redirectUrl":"HCHP","cd":"HPWW"}`로 기록하며 중복 키는 배열로 보존한다. `model=`은 기존과 같이 API 응답 JSON을 기록한다. 전체 `tsc` 및 eslint 실행은 패키지 프로세스가 시간 제한을 넘어 완료 결과를 얻지 못했다.
+
+- `/page/join/policy`는 `pingModel()` 대신 직접 `POST /api/join/policy`를 호출하므로 별도 디버그 로그를 추가했다. local/dev/stg(`APP_ENV !== "prod"`)에서만 `param={authInfo,reqPath,reqPage,reqChnl}`과 `model={...}`을 출력하며 운영에는 인증 정보가 기록되지 않는다.
+
 ## 다음 할 일 (TODO)
+- [ ] (07-31) 회원가입 form 단계 프리필: 백엔드 `/api/join/form` 응답(RSLT_NAME/TEL_NO/TEL_COM_CD/isUnder14/joinInfoObj/encMnm)을 `JoinInfoForm`에 연결
+- [ ] (07-31) modify-info-form: 프론트가 `result.alertType`(need-confirm-pw/need-ownership) 분기 처리(현재 result.code만 봐서 깨짐) + 백엔드 alertType 숫자 prefix(`1need-…`) 제거
+- [ ] (07-31) ★ **[인프라] ALB 앱쿠키 stickiness 설정** — 백엔드 TG 애플리케이션 기반 stickiness, 앱 쿠키명 **`HA_AWSALB`**, 기간=세션 수명. 프론트 TG stickiness는 끄기(쿠키명 충돌 방지).
+- [ ] (07-31) ★ **[프론트] 모든 SSR 백엔드 호출에 요청 쿠키 forward 통일** — `legacyContractGet/Post` 기본 `forwardCookies:true`, `pingModel` 쿠키 전달, `join/policy` 등 raw fetch에 `cookie` 헤더 추가. (ALB 설정만으론 안 됨 — 이게 핵심 전제)
+- [ ] (07-31) [백엔드] `HA_AWSALB` 쿠키가 로그인/응답 Set-Cookie로 브라우저까지 전파되는지(BFF 프록시 경유) 확인. 세션 TTL·스케일인 재분배 엣지 점검.
+- [ ] (07-31) (대안 보류) Spring Session + Redis(ElastiCache) — 앱쿠키 방식의 취약점(충돌·TTL·재분배) 재발 시 근본 전환 검토.
+- [ ] (07-31) 그룹2 신규 스텁 API 실로직 이식(레거시 컨트롤러 기반) 여부 결정
+- [ ] (07-31) 그룹3(정적: about/points/services/mypage-inquiry 등) 처리 방침 결정
+- [ ] (07-31) 브랜드 policy 이후(join-view/optional/complete)로 instCd·authInfo 전파 검증(쿠키/API)
+- [ ] (07-31) cert `request.spc`가 reqChnl=instCd(브랜드) 처리에 문제없는지 dev 확인
+- [ ] (07-31) 회원가입 none-auth 근본원인(sessionStorage↔쿠키 불일치 + `_AUTH_INFO_TOKEN_` 크로스오리진 전달) 수정
 - [ ] (07-29) 로그인 nonce(+CAPTCHA/rate limit) 실제 구현 여부 결정
 - [ ] (07-29) `AuthProvider` 최종 노출 필드 범위 확정(로그인여부 최소화 vs GA용 mbrNo)
 - [ ] 신규 계약 API(`JoinApiResource`/`BrandMemberApiResource`)에 join-policy(authInfo 수신)·join-view(복호화 정보 반환) 존재 여부 확인
@@ -77,3 +171,7 @@
 ## 참고
 - 상세 이전 주차: [WORKLOG-2026-W30](./WORKLOG-2026-W30.md)
 - 백엔드 짝: [ha-web-api INDEX](../../ha-web-api/INDEX.md)
+
+## 14. (2026-07-31) Login empty model API
+- `app/(site)/page/auth/login/page.tsx` now calls `await pingModel("/api/auth/login")` at page entry.
+- The login page query (for example `returnUrl`) is therefore logged as `param={...}` and the empty backend response as `model={...}` in local/dev/stg only, following the existing `pingModel` logging rule.

@@ -56,6 +56,7 @@ Maven 중앙에 없어 `ext-libs/`에 두고 `mvn install:install-file` 수행 (
 ## 문서 목록
 | 문서 | 유형 | 상태 | 요약 |
 |------|------|------|------|
+| [WORKLOG-20260731-home-banner-api.md](./WORKLOG-20260731-home-banner-api.md) | WORKLOG | 진행중 | 홈페이지 메인 배너(`HA_11101`) 조회 일반 REST API `POST /api/home/banner-list` 추가 |
 | [archive/ARCHIVE-event-template.md](./archive/ARCHIVE-event-template.md) | ARCHIVE | **완료** | **이벤트 템플릿 프로젝트**(크로스 정본) — 1차(2025) Rule Based 고도화 + 2차(2026 상반기) 프로모션폼·클래스 바인딩 컴포넌트. 서브=`ha_admin` |
 | [WORKLOG-20260724-attendance-check-revamp.md](./WORKLOG-20260724-attendance-check-revamp.md) | WORKLOG | 진행중 | 출석체크 개편 기획 — 월 만근 추첨(1만P×10) → 주 7일 완주 전원 5P 실시간 + 추첨 1만P×3명 |
 | [MEETING-20260724-attendance-revamp.md](./MEETING-20260724-attendance-revamp.md) | MEETING | 진행중 | 개편 회의록 — 일 00시 트래픽(NetFUNNEL)·확률공개 법무검토·토요일 사전선정(순수 3회)·실시간랜덤/선착순 지양 |

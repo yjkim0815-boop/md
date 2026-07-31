@@ -2,7 +2,7 @@
 문서유형: SHARED
 프로젝트: 공통(지식 베이스 경로)
 작성일: 2026-07-30
-최종수정: 2026-07-30
+최종수정: 2026-07-31
 작성자: dominic
 상태: 진행중
 요약: Happy Point Card Codex 컨텍스트 자동참조에 사용하는 Windows 절대 경로.
@@ -24,3 +24,7 @@
 3. 작업으로 새로 생기거나 변경된 지식은 md 지식 베이스에 업데이트한다.
 
 > 다른 운영체제에서는 이 문서의 역할과 원칙은 유지하되, 각 PC에 존재하는 로컬 절대 경로로 Codex 전역 훅 설정을 구성한다.
+
+## 적용 기록
+
+- 2026-07-31: Windows 개발 PC에서 `~/.codex/hooks/inject-readme.js`를 SessionStart 훅으로 등록했다. Windows/macOS 경로 상수와 반대 OS 폴백을 사용하며, `md/README.md`와 `md/shared/ecc-reference.md`를 자동 주입한다.

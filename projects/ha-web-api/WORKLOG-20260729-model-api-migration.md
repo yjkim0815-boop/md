@@ -111,6 +111,24 @@
 - 조치: `lib/auth-server.ts` `getCurrentUser` 를 **React `cache()`** 로 래핑. 같은 요청 내 모든 호출이 최초 1회 결과 공유 → **단일 로그인 상태(일관성)** + 요청당 fetch 1회. 새로고침·이동은 새 요청이라 매번 새로 1회(정상). 호출부 변경 없음. `tsc --noEmit` 0.
 - ※ 목적은 절약이 아니라 **일관성**(동일 구조의 로그인 필요 페이지에서 체크 결과로 페이지 정보가 달라지지 않도록). 회원가입 흐름은 체크 불필요라 무관.
 
+### 🔧 후속 — 모델API 체크 + 프론트 계약(interface) 현행화 (2026-07-30)
+- **모델API 체크**: `mvn compile` 통과, 모델API 114 엔드포인트. 문제 없음.
+- **계약 드리프트 스캔**(백엔드 엔드포인트 ↔ interface/lib 참조 대조):
+  - **갭B 수정완료**: 계약 `[API]` 주석이 `/api/page/...`로 stale → 실제 백엔드 `/api/...`로 일괄 교정. 브랜드회원 22 계약(`/api/page/brand/member/`→`/api/brand/member/`) + email(reject/unsubscribe) + reception-agree(+proc) + survey/coretype + live/grip-live-show + presentation/membership + `event/sleeveQr`→`sleeve-qr`. **api-lib은 이미 정경로(D클러스터) — 계약 주석만 stale이었음.** cert(`/api/page/cert`는 실경로)는 미변경. grep 0건 / `tsc` 0.
+  - **join/policy 계약 현행화**: 요청에 `reqPage`/`reqChnl` 추가, 응답 필드명 `landingType`→`alertType`(백엔드 실제), `reqPage`/`reqChnl` echo 추가, 랜딩 대상 `/page/join/popup`→`/page/common/alert` 반영, 백엔드 표기 `JoinController`→`JoinModelApiResource`. (문서 전용 계약 — import처 없음 확인)
+  - **갭A 완료(계약 신규 작성 21개)**: 백엔드 응답(`res.put` 키)을 그대로 미러링해 도메인별 신규 계약 작성(서브에이전트 4그룹 병렬). 실제 경로 `/api/...` 사용, 전 파일 `tsc --noEmit` 0.
+    - customer: qna/voc/term (암호화 cust 파라미터 + action/isList/no)
+    - live: secta9ine/live-show/secta9ine-live-show (stage 게이트 landing/redirectTo + liveInfo/deepSeq/sessionKey)
+    - alliance: culture/gate-check/agree-proc (landing/landingType + W_* 파라미터 + login-required 분기)
+    - mypage-card: index(→password redirect)/register (인증 게이트 401)
+    - join: temp-id-app 신규 / *policy-term 은 기존 `policyTerm.ts` 존재로 스킵*
+    - cert-NICE: nice/phone/fail·phone-order/fail(license)·ipin/process
+    - event: ai-jukebox(data)/event-proc(eventseq/tableNm/…/importView)
+    - sleeveqr: qr-banner-count(success) → `interface/event/qr-banner-count.ts`
+    - email: unsubscribe / reception: reception-agree-proc / survey: coretype-error
+    - 참조 경로 전수 대조: 신규 계약 21개 전부 백엔드 엔드포인트와 **일치(불일치 0)**.
+    - ✅ 정리완료: `interface/page/email/reject.ts` 의 구 `EmailUnsubscribeRequest/Response` 선언 제거 → 정본은 신규 `interface/page/email/unsubscribe.ts`(success/fail union). reject.ts 는 GET reject 전용으로 정리, [API] 주석에 unsubscribe 계약 위치 명시. `tsc` 0.
+
 ## 검증
 - 각 flow 이식 후 `mvn compile` 통과 유지(현재 BACKEND OK).
 - 빌드/배포·실동작 테스트는 dominic 직접.
