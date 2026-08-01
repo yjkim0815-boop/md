@@ -2,10 +2,10 @@
 문서유형: INDEX
 프로젝트: 공통(지식 베이스 루트)
 작성일: 2026-07-21
-최종수정: 2026-07-30
+최종수정: 2026-08-01
 작성자: dominic
 상태: 진행중
-요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-07-22 ha-push-batch·ha_panel·thehappy_ios·thehappy_aos·gcs_fo 등록 + **gcs 등록 = 미등록 우선순위 1위 해소 · KB 최초 JPA/PostgreSQL/Redis 프로젝트**)
+요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-07-22 ha-push-batch·ha_panel·thehappy_ios·thehappy_aos·gcs_fo 등록 + **gcs 등록 = 미등록 우선순위 1위 해소 · KB 최초 JPA/PostgreSQL/Redis 프로젝트** + 2026-08-01 `shared/atlassian-access.md` 신규 — Bitbucket·Jira·Confluence 접근 수단 공통 정리)
 ---
 
 # 📚 happypointcard 지식 베이스 (md)
@@ -98,6 +98,7 @@ md/
 |------|------|------|
 | [ecc-reference.md](./shared/ecc-reference.md) | 진행중 | ECC 정체·핵심 규칙·해피포인트 백엔드↔ECC 스킬/에이전트 매핑 (참조 전용 안내) |
 | [server-env.md](./shared/server-env.md) | 진행중 | 개발/스테이징 EC2·Tomcat 인스턴스·포트·DB(JNDI)·Scouter APM·배포 원칙 |
+| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) |
 | [conventions/api-response.md](./shared/conventions/api-response.md) | 진행중 | **전 프로젝트 공통** API 응답 표준 — 엔벨로프·code 대역(00/01/50/70/80/99)·detailCode 규칙 (+ha-web-api 참조 구현) |
 | [security-review.md](./shared/security-review.md) | 초안 | OWASP 기반 취약점 진단/보안 리뷰 개인 기준 + ECC 커밋 전 체크리스트·시크릿 스윕·대응 프로토콜·진단 이력 |
 | [conventions/README.md](./shared/conventions/README.md) | 초안 | 기술별 코드 컨벤션 인덱스 (개발자 개인 공통 규칙) |
