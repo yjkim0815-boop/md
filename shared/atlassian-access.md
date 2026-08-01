@@ -12,6 +12,9 @@
 # 🔐 Atlassian 접근 수단 (Bitbucket · Jira · Confluence)
 
 > ⚠️ **이 문서에는 토큰·비밀번호 값을 절대 적지 않는다.** 저장 위치와 꺼내는 방법만 기록한다. 실제 값은 macOS 키체인 / Windows DPAPI 에만 존재한다.
+>
+> 🚦 **[상시 규칙] API 호출은 초당 2회를 넘기지 않는다.** Bitbucket·Jira·Confluence 전부 해당. 상세는 [§3-1 호출 속도 제한](#3-1-호출-속도-제한-상시-규칙).
+>
 > 상위: [../README.md](../README.md)
 
 ## 1. 계정·사이트 정보
@@ -79,6 +82,47 @@ security find-generic-password -a dominic.kim@spc.co.kr -s atlassian-api -w
 | Bitbucket | `https://api.bitbucket.org/2.0/` |
 
 인증은 **Basic (이메일:토큰)**. 사용자명은 Bitbucket 아이디(`dominic.kim`)가 아니라 **이메일**이어야 한다.
+
+## 3-1. 호출 속도 제한 (상시 규칙)
+
+> 🚦 **Bitbucket · Jira · Confluence API 는 초당 2회를 초과해 호출하지 않는다.**
+> 즉 **연속 호출 사이에 최소 0.5초 간격**을 둔다. 사람이 수동으로 부르든, 에이전트가 스크립트로 부르든 동일하게 적용한다.
+
+### 원칙
+
+1. **최소 간격 0.5초.** 루프 안에서 호출할 때는 매 반복마다 대기를 넣는다.
+2. **페이지네이션이 가장 위험하다.** `next` 를 따라가는 반복문은 순식간에 수십 회를 호출한다. 반드시 대기를 넣는다.
+3. **호출 횟수 자체를 줄인다.** 페이지 크기를 키우면(`pagelen=100` / `maxResults=100`) 같은 데이터를 더 적은 호출로 가져온다. 대기보다 이쪽이 우선이다.
+4. **필요한 필드만 요청한다.** `fields=` · `?fields=` 로 응답을 줄이면 재조회가 줄어든다.
+5. **429(Too Many Requests) 를 받으면 즉시 중단**하고 지수 백오프(1s → 2s → 4s)로 재시도한다. `Retry-After` 헤더가 있으면 그 값을 따른다.
+6. **병렬 호출 금지.** 여러 저장소·이슈를 동시에 훑지 않는다. 순차 처리한다.
+
+### 구현 예시
+
+```bash
+# bash/zsh — 페이지네이션 루프에 0.5초 대기
+URL="https://api.bitbucket.org/2.0/repositories/sectanine?pagelen=100"
+while [ -n "$URL" ]; do
+  RESP=$(curl -s -u "$E:$T" "$URL")
+  # ... 처리 ...
+  URL=$(echo "$RESP" | python3 -c "import json,sys;print(json.load(sys.stdin).get('next',''))")
+  sleep 0.5          # ← 필수
+done
+```
+
+```powershell
+# PowerShell
+foreach ($u in $urls) {
+  Invoke-RestMethod -Uri $u -Headers $h
+  Start-Sleep -Milliseconds 500   # ← 필수
+}
+```
+
+### 배경
+
+- 워크스페이스 저장소가 **135개**라 전수 조회 시 페이지네이션이 여러 번 돈다. 무제한으로 돌리면 순간 호출량이 급증한다.
+- Atlassian 은 계정·IP 단위로 레이트리밋을 걸며, 초과 시 **일시 차단**될 수 있다. 차단되면 git 작업까지 영향을 받을 수 있으므로 예방이 우선이다.
+- 조회는 대부분 급하지 않다. **속도보다 안정성**을 택한다.
 
 ## 4. 기능 범위 (2026-08-01 실측)
 

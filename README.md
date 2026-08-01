@@ -98,7 +98,9 @@ md/
 |------|------|------|
 | [ecc-reference.md](./shared/ecc-reference.md) | 진행중 | ECC 정체·핵심 규칙·해피포인트 백엔드↔ECC 스킬/에이전트 매핑 (참조 전용 안내) |
 | [server-env.md](./shared/server-env.md) | 진행중 | 개발/스테이징 EC2·Tomcat 인스턴스·포트·DB(JNDI)·Scouter APM·배포 원칙 |
-| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) |
+| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) + **API 호출 속도 제한** |
+
+> 🚦 **[상시 규칙] Bitbucket · Jira · Confluence API 는 초당 2회를 초과해 호출하지 않는다.** 연속 호출 사이에 **최소 0.5초** 간격을 둔다. 페이지네이션 루프에 반드시 `sleep 0.5` 를 넣고, 병렬 호출은 금지한다. 호출 횟수 자체를 줄이려면 `pagelen=100`/`maxResults=100` 으로 페이지 크기를 키운다. 429 수신 시 즉시 중단하고 지수 백오프(1s→2s→4s). 상세: [shared/atlassian-access.md §3-1](./shared/atlassian-access.md).
 | [conventions/api-response.md](./shared/conventions/api-response.md) | 진행중 | **전 프로젝트 공통** API 응답 표준 — 엔벨로프·code 대역(00/01/50/70/80/99)·detailCode 규칙 (+ha-web-api 참조 구현) |
 | [security-review.md](./shared/security-review.md) | 초안 | OWASP 기반 취약점 진단/보안 리뷰 개인 기준 + ECC 커밋 전 체크리스트·시크릿 스윕·대응 프로토콜·진단 이력 |
 | [conventions/README.md](./shared/conventions/README.md) | 초안 | 기술별 코드 컨벤션 인덱스 (개발자 개인 공통 규칙) |
