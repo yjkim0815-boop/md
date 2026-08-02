@@ -191,3 +191,38 @@
   → 이후 `form/page.tsx`(SSR)가 `store.toString()`(그 쿠키 포함)을 upstream 전달 → 백엔드 `form()` 인증 통과.
 - **일반 원칙 확립**: SSR fetch로 유실되는 "백엔드 발급 쿠키"는, 쿠키 쓰기 가능한 계층(middleware/Route Handler/Server Action)에서 복원해야 한다. 브라우저가 Route Handler(`/api/auth`,`/api/legacy`) 경유로 호출하면 그 핸들러가 `getSetCookie()`를 relay하므로 자동(로그인이 되는 이유).
 - tsc: 변경 파일(policy/page, policy-form, middleware) 에러 0.
+
+## 17. (2026-08-02) 회원가입 none-auth 근본원인 — 미들웨어 Edge 바디읽기 + 브리지쿠키 one-time 삭제
+- **증상**: 본인인증 성공 후 policy에서 authInfo 빈값 → `none-auth`. 프론트 로그 `param={"authInfo":"",...}` 전부 빈값.
+- **원인 2겹**:
+  1. `join-auth.tsx`가 `/page/join/policy`로 form POST → 미들웨어(Edge)가 바디를 읽어 브리지 쿠키 생성하는 구조인데 Edge 바디읽기 불안정. → **POST 수신을 Node Route Handler로 이전**: `app/api/join/policy-bridge/route.ts`(`runtime="nodejs"`, formData 안정 read), `join-auth.tsx` action=`/api/join/policy-bridge`.
+  2. **진짜 근본원인**: `middleware.ts`의 "브리지 쿠키 one-time 삭제" 블록이 GET `/page/join/policy`에서 `hpw_join_policy`를 응답 `maxAge=0` 삭제 → **Next가 이 삭제를 같은 요청 RSC `cookies()` 뷰에 반영** → RSC가 읽기도 전에 비워짐(구 flow도 동일하게 당함). → **해당 블록 제거**(브리지 쿠키는 짧은 maxAge/덮어쓰기로 만료).
+- 검증: 프론트 로그 `[JOIN-POLICY-BRIDGE] authInfoLen=896` + policy `landing=true,type=policy` 확인.
+
+## 18. (2026-08-02) 회원가입 form→optional 파라미터 전송 + 프리필 연결
+- **form 프리필**: `form/page.tsx`가 백엔드 `form()` 응답(`RSLT_NAME/RSLT_BIRTHDAY/TEL_NO` + 컨텍스트 `encMnm/telNo/telComCd/reqPath·reqChnl·reqPage/isUnder14/joinInfoObj`)을 `JoinInfoForm`에 전달. 이름/생년월일/휴대폰 표시(하드코딩 "본인인증 후 표시" 제거).
+- **form→optional 전송**: 기존 `router.push(id)`(id만) → **레거시 hidden 필드 1:1 전부 POST**(userId/pwd/postInput/homeRoadNmAddr1·2/mailId/telNo/telComCd/encMnm/reqPath·reqChnl·reqPage/regPath=PC/hpAuthYn=Y/checkIdResult/mkt*/juniorYn/보호자필드) → `app/api/join/optional-form-bridge/route.ts`(신규 Node) → `hpw_join_optional_form` 쿠키 → `optional-form/page.tsx`가 `POST /api/join/optional-form`(백엔드 encMnm 무결성 검증). 최종 joinProc는 범위 외.
+
+## 19. (2026-08-02) 회원가입 데이터컨트롤 레거시 정합 (#2 중복확인 · #3 주소 · #4 인증)
+- **레거시 대조 결론**: 기존 form은 입력UI+목업검증만, 실 데이터컨트롤/제출 누락이었음. form.jsp 기준 이식.
+- **#2 아이디/이메일 중복확인 실 API**: `join-info-form.tsx`가 가짜 `TAKEN_IDS`/무조건ok 제거 → `GET /api/join/check-id`(`result.onlnIdUsePossYn`)·`check-email`(`useFlag`) 실호출. 프록시 `app/api/legacy/[...path]` 허용목록에 `api/join/check-id`·`api/join/check-email` 추가(백엔드 `JoinResource @RequestMapping /api/join`).
+- **#3 주소검색(키리스 Daum, 임베드)**: 레거시는 `postcode.v2.js`+`findZipcode.js`의 **키 없는 Daum 임베드**(appkey/confmKey 없음). 프론트도 `new window.daum.Postcode({oncomplete,onresize,width,height}).embed(el)` 동적로드로 포팅(레거시 `findZipcodeNewIframe` 동일 인라인 iframe 방식 — `#findZipCodeArea` 대응 컨테이너 div ref). zonecode→postInput, 도로명 참고항목 조합→homeRoadNmAddr1, 상세주소→homeRoadNmAddr2. 가짜 ADDRESS_BOOK 제거.
+  - **CSP 원인·해결(중요)**: 최초 미동작 원인 = `next.config.mjs` CSP가 Daum 도메인 차단(`script-src`에 `t1.kakaocdn.net` 없음, `frame-src 'self'`). → 레거시 `header-ga4.jsp` CSP 미러: `script-src` += `https://t1.kakaocdn.net`, `frame-src` += `https://postcode.map.daum.net https://postcode.map.kakao.com`. **CSP는 응답헤더라 dev 서버 재시작 필요.**
+- **#4 인증 정합(정정 2026-08-02)**: 처음엔 "아이핀 폐지(A안)"로 이해해 진입 아이핀을 제거했으나, 사용자 재확인 결과 요구는 **"진입은 휴대폰+아이핀 2종 유지, 보호자 인증만 휴대폰 팝업"**이었음 → **진입(`join/index`·`join/auth`) 아이핀 복원**. 보호자만 휴대폰 단일.
+  - 14세미만(`isUnder14`) 보호자 동의 블록(form) → `useKcbCert(reqPage='parent')` 팝업(진입 휴대폰과 동일 KCB 모듈) → postMessage(`reqPage==='parent' && pFlag==='Y'`) → `P_authYn=Y/P_authInfo/P_userName(pInfo)/ptorFamyRelCd=90`. 미인증 제출 차단.
+  - **아이핀 회원 휴대폰 SMS 점유인증(구현 완료)**: form에서 `TEL_NO` 없으면(=아이핀 회원) 통신사 select + 번호입력 + 인증요청/확인 블록 표시. 백엔드 SMS API는 이미 존재(`SmsResource @RequestMapping /api/sms`, `POST /send·/check/mobileOwnerAuthNo`, `@RequestBody` JSON). 프록시 `/api/legacy` 허용목록에 두 경로 추가. send `{mobileNo}`→`result.authNo`(암호화)+3분타이머, check `{mobileAuthNo,authNo,mobileNo,userNm=RSLT_NAME}`→성공 시 `telNo`/`encMnm(=result.data)` 로컬 state 확정. 아이핀 회원은 점유인증 완료 전 제출 차단. 제출 시 `certType=ipin|mobile` + verified telNo/encMnm/telComCd 전송.
+  - 판별: `form()` 응답 `TEL_NO` 유무(휴대폰 회원=프리필 읽기전용 / 아이핀 회원=SMS 블록).
+- tsc: 변경 파일 전부 에러 0.
+
+## 20. (2026-08-02) 회원가입 최종 저장(joinProc) 파이프라인 연결 — optional→welcome
+- **레거시 대조**: `optional-form.jsp` → `page.joinProc(data)` = `$.ajax POST /api/join/joinProc` (JSON: 전 단계 암호화 joinInfo + intrFildCd) → code 00 시 `welcome.spc`. 백엔드 `JoinResource.joinProc`가 `_AUTH_INFO_TOKEN_`(flagCertifiTime=Y) + `getPolicyCookie()`(join_policy_info) + 각 값 복호화(intrFildCd 제외) → `saveNewMember` → `_HPC_USER_ID_`/`_HPC_EN_MBR_NO_` 쿠키 세팅.
+- **발견 문제 & 해결**:
+  1. **encMnm 검증은 안전**(SHAUtil.checkEncMnm: reqChnl/reqPage/reqPath는 로그용, 해시는 `SHA512(userNm|telNo)+salt`) → 프론트가 RSLT_NAME(쿠키)·telNo만 맞추면 통과(현 구현 OK).
+  2. **`join_policy_info`(동의값) 쿠키 SSR 유실** → `form/page.tsx`가 form() 응답 Set-Cookie에서 값 캡처 → `JoinInfoForm` `policyCookie` prop → 제출 hidden `__join_policy_info` → `optional-form-bridge`가 **raw Set-Cookie**(이중인코딩 방지)로 `join_policy_info` 브라우저 쿠키 복원.
+  3. **암호화 joinInfo 미전달** → `optional-form/page.tsx`가 optionalForm 응답 `result.joinInfo`(암호화) 캡처 → `ReferralForm`에 전달.
+  4. **최종 joinProc 미구현** → `ReferralForm`: 레거시 intrFildCd 코드(J1~J7/P1~P3/JZ, 나중에하기=JY) + `POST /api/legacy/api/join/joinProc {...joinInfo, intrFildCd}`(프록시가 쿠키·Set-Cookie relay) → code 00 시 `/page/join/welcome` push. 프록시 허용목록에 `api/join/joinProc` 추가.
+  5. **welcome(완료) 페이지** → `pingModel` 대신 **SSR `GET /api/join/welcome`(쿠키 forward)** 로 joinProc 가 심은 `_HPC_USER_ID_` 쿠키에서 실제 가입 아이디를 읽어 표시(쿼리 id 폴백). 축하화면+아이디+로그인 버튼.
+- ✅ **PC 회원가입 E2E 성공(2026-08-02)** — 본인인증→약관→정보입력→가입경로→joinProc→welcome 완주, 실제 회원 저장 확인. (PC 휴대폰 인증 경로 기준)
+- **누락 필드 보정**(form→optional 제출): `homeRoadNmPostNo`, `labelAddress`, `ptorTelNo`/`ptorEmlAddr`(빈값) 추가.
+- **옵셔널 페이지 = 레거시 정합 확정(2026-08-02)**: 레거시 `optional-form.jsp`에서 수신매체(infoRetnMda)/직업(jobCd)/결혼기념일(maryCeleDay)은 **주석처리(비활성)** → 실사용 필드는 `intrFildCd` 하나뿐. `ReferralForm`이 intrFildCd + 전단계 암호화 joinInfo 전달 + 나중에하기(JY)/가입완료로 이미 동일. **추가 이식 대상 아님(사용자 1번 선택).**
+- **미결(런타임 검증 필요)**: dev 재기동 후 전 구간 E2E(휴대폰/아이핀/14세) 테스트, 임시 진단 로그(`[ADDR]`,`[JOIN-*-BRIDGE]`) 제거, welcome 페이지 표시값 확인.
