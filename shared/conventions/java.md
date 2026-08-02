@@ -29,6 +29,12 @@
 - **Java 21 신기능 적극 활용** (이 프로젝트는 JDK21): 신규 DTO/값 타입은 `record`, 지역변수 `var`, `switch` expression(화살표), 텍스트 블록(SQL·JSON), `instanceof` 패턴매칭(캐스팅 생략), 닫힌 계층은 `sealed`
   - ⚠️ 레거시 기존 클래스는 무리하게 record로 갈아엎지 말 것(대원칙 #1). **새로 만드는 것부터** 적용.
 
+## Java Change Formatting Rule (effective 2026-08-02, highest priority)
+- When modifying a `.java` file, never reformat the entire file. Apply this formatter only to the changed or newly added code region; leave unrelated existing formatting untouched.
+- Use tab characters for indentation in the changed or newly added Java code region.
+- Keep every changed or newly added Java line at 200 characters or fewer. Wrap at a meaningful boundary when necessary.
+- This rule overrides any existing Java project convention or `.editorconfig` guidance that requires spaces.
+
 ## Optional 사용
 - 결과가 없을 수 있는 조회(finder)는 `Optional<T>` 반환, null 반환 최소화
 - `map()/flatMap()/orElseThrow()` 활용. **`isPresent()` 확인 없이 `get()` 호출 금지**

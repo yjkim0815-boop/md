@@ -175,3 +175,19 @@
 ## 14. (2026-07-31) Login empty model API
 - `app/(site)/page/auth/login/page.tsx` now calls `await pingModel("/api/auth/login")` at page entry.
 - The login page query (for example `returnUrl`) is therefore logged as `param={...}` and the empty backend response as `model={...}` in local/dev/stg only, following the existing `pingModel` logging rule.
+
+## 15. (2026-07-31) One-time POST bridge cookie
+- Standardized the POST-to-GET RSC bridge cookie naming rule as `hpw_` plus the target URL segments after `/page/`: `/page/join/policy` becomes `hpw_join_policy`.
+- `getPostBridgeCookieName()` is shared by middleware and RSC pages. Current flows are `hpw_join_policy`, `hpw_join_form`, and `hpw_brand_member_policy`; each keeps its own cookie `Path`, so values cannot collide.
+- On the target GET request, middleware passes the original request cookie to the RSC once and returns `Set-Cookie` with `maxAge: 0` for the matching path. The browser therefore removes the bridge cookie immediately after it is consumed.
+
+## 16. (2026-08-02) 회원가입 policy→form `_AUTH_INFO_TOKEN_` 쿠키 자동연동 (SSR 유지)
+- **문제**: 백엔드 `join/policy`가 재암호화 토큰(`flagCertifiTime=Y`)을 `_AUTH_INFO_TOKEN_` 쿠키(Set-Cookie)로 심는데, `policy/page.tsx`가 **SSR fetch**로 호출 → 이 Set-Cookie가 Next 서버까지만 오고 **브라우저로 전파 안 됨**. 다음 단계 `form()`은 이 쿠키로 인증 판별 → 항상 `none-auth`.
+- **원인(구조적)**: Next의 서버 `fetch`엔 쿠키 jar 없음 + **RSC(page 렌더)는 `cookies().set()` 불가**(Route Handler/Server Action/middleware 에서만 가능). 모놀리식(브라우저↔백엔드 직결)→BFF/SSR(브라우저↔Next↔백엔드)로 바뀌며 중간 Next 계층이 Set-Cookie를 가로챈 것.
+- **해결(모델API·로그인체크 서버사이드 유지, 클라이언트 fetch·백엔드 변경 없음)**:
+  1. `policy/page.tsx`(SSR) — 응답 `res.headers.getSetCookie()`에서 `_AUTH_INFO_TOKEN_` **값만 읽어**(RSC는 읽기 가능) PolicyForm에 `authToken` prop 전달. 겸해서 policy 호출에 `cookie: store.toString()`로 요청 쿠키 upstream 자동 첨부.
+  2. `policy-form.tsx` — `authToken`을 form POST hidden 필드 `_AUTH_INFO_TOKEN_`로 실어 `/page/join/form` 전송.
+  3. `middleware.ts` — `/page/join/form` POST 가로챌 때 `_AUTH_INFO_TOKEN_`을 **진짜 브라우저 쿠키**(httpOnly, path=/, 30분)로 set + 백엔드로 보내는 `policyInfo`에서는 제외.
+  → 이후 `form/page.tsx`(SSR)가 `store.toString()`(그 쿠키 포함)을 upstream 전달 → 백엔드 `form()` 인증 통과.
+- **일반 원칙 확립**: SSR fetch로 유실되는 "백엔드 발급 쿠키"는, 쿠키 쓰기 가능한 계층(middleware/Route Handler/Server Action)에서 복원해야 한다. 브라우저가 Route Handler(`/api/auth`,`/api/legacy`) 경유로 호출하면 그 핸들러가 `getSetCookie()`를 relay하므로 자동(로그인이 되는 이유).
+- tsc: 변경 파일(policy/page, policy-form, middleware) 에러 0.

@@ -97,3 +97,37 @@
 - Added `GET /api/auth/login` in `com.spc.hpc.api.model.auth.AuthModelApiResource`.
 - It returns the standard successful `ApiOkBody` with an empty result for login page entry. The existing `POST /api/auth/login` remains the authentication submission endpoint.
 - Verification: `mvn -o -DskipTests compile` completed with `BUILD SUCCESS`.
+
+## 15. (2026-08-02) Tracking interceptor instance cleanup
+- `TrackingInterceptor` has no external static calls. Converted `write()` and its helper methods, hostname/object-name state, and loggers to instance members.
+- Converted all remaining constants too, leaving no `static` member in `TrackingInterceptor`.
+- Verification: `mvn -o -DskipTests compile` completed with `BUILD SUCCESS`.
+
+## 16. (2026-08-02) Dev tracking appender repair
+- Cause of missing dev tracking output: `TrackingAppender` had `filePattern` only, without `fileName` or `DirectWriteRolloverStrategy`; its generic log layout also did not preserve the 26-column TSV contract.
+- Updated `log4j/dev/log4j2.xml` to use `${LOG_DIR}/tracking/tracking.log`, hourly rollover, the 26-column TSV header with `%m%n`, and the same 200-file retention policy as stage/prod.
+- Verification: dev/stage/prod Log4j files parse as XML and `mvn -o -DskipTests compile` completed with `BUILD SUCCESS`. Runtime file creation still requires Tomcat restart and one `/api/**` request.
+
+## 17. (2026-08-02) Tracking interceptor package alignment
+- Moved `TrackingInterceptor` from `com.spc.hpc.api.common` to `com.spc.hpc.home.interceptor`, alongside `SpcInterceptor`.
+- Updated `dispatcher-config.xml` to register `com.spc.hpc.home.interceptor.TrackingInterceptor` for `/api/**`.
+- Verification: no old package reference remains and `mvn -o -DskipTests compile` completed with `BUILD SUCCESS`.
+
+## 18. (2026-08-02) Log4j runtime loading and SLF4J 2 bridge repair
+- `Log4j2ConfigurationFactory` now resolves `/log4j/<profile>/log4j2.xml` from the WAR classpath before passing its URI to Log4j.
+- Replaced the SLF4J 1.x bridge `log4j-slf4j-impl:2.17.0` with the SLF4J 2.x bridge `log4j-slf4j2-impl:2.20.0`, and aligned `log4j-api` and `log4j-core` to `2.20.0`.
+- Verification: `mvn -Pdev -DskipTests package` completed with `BUILD SUCCESS`; the WAR includes the dev Log4j XML, `log4j-api/core-2.20.0`, `log4j-slf4j2-impl-2.20.0`, and `slf4j-api-2.0.16`.
+- Remaining runtime check: redeploy and restart the dev Tomcat, then request a non-API page for `SpcInterceptor` and an `/api/**` endpoint for `TrackingInterceptor`.
+
+## 19. (2026-08-02) Tracking log profile scope confirmed
+- Tracking logging is enabled only for `dev`, `stage`, and `prod`; `local/log4j2.xml` has no `TrackingAppender`, `TrackingLogger`, or tracking log path.
+- The enabled profiles write the 26-column header and data rows as TSV: 25 tab delimiters in the header and `%m%n` preserves the tab-delimited message body.
+- User-applied Log4j changes were preserved. No Java source or Log4j XML was modified during this confirmation; all four profile XML files parse successfully.
+
+## 18. (2026-08-02) 트래킹 로그 미기록 실환경 근본원인 — DirectWrite vs fileName
+- 증상: 트래킹 폴더(`logs/tracking/`)는 생성되나 로그 파일이 안 쌓임. `write()` 호출 자체는 정상(임시 `System.out` 진단으로 catalina.out 확인됨).
+- **서버 디렉토리 실사로 판별**: `member/alliance/dormancy`(= `fileName=` 기반 appender)는 **파일 존재**, `happyAds/hpcapi/sendMail/tracking`(= `DirectWriteRolloverStrategy`)는 **디렉토리만 있고 파일 0개**. → **이 배포 환경(ec2-user Tomcat)에서 DirectWrite가 파일을 생성하지 않음**이 확정. 권한/설정로딩은 정상(폴더 생성됨).
+- **처방**: `TrackingAppender`를 검증된 `fileName=` 방식으로 확정 — `fileName="${LOG_DIR}/tracking/tracking.log"` + `filePattern=".../tracking.%d{yyyyMMdd_HH}.log"`(시간별) + `DefaultRolloverStrategy`+`Delete`(`IfAccumulatedFileCount exceeds=200`, 최대 200개 보관). 4개 프로파일(local/dev/stage/prod) 동일 적용. 26컬럼 TSV header 유지.
+- 부수정리: 미사용 `${serverip:}` 제거로 `ServerIpLookup.java` 삭제 + `<Configuration packages=...>` 속성 제거(ConfigurationFactory는 `Log4j2Plugins.dat`로 등록되어 무관). `mvn -o clean compile` BUILD SUCCESS, dat에서 serverip 제거 확인.
+- **미결**: 배포 후에도 `tracking.log` 미생성 시 → 배포된 WAR의 `log4j2.xml`이 `fileName=` 버전인지(구버전 WAR 여부), Tomcat work/ 캐시, 재기동 확인 필요. (진단표는 대화 참조)
+- 설계원칙: DirectWrite는 첫 이벤트 전까지 파일 미생성 + 이 환경에서 미작동 → 트래킹처럼 확실한 산출이 필요한 로그는 `fileName=` 기반 사용.
