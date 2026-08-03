@@ -2,20 +2,20 @@
 문서유형: INDEX
 프로젝트: gcs_fo
 작성일: 2026-07-22
-최종수정: 2026-07-22
+최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중
-요약: 해피포인트 앱 내 기프트카드(상품권) 웹뷰 프론트엔드 — React18 + TypeScript + CRA/CRACO SPA. KB 최초의 웹 프론트엔드 프로젝트이며 백엔드 짝은 `gcs`(Spring Boot 3.4 / Java21, 미등록)
+요약: 해피포인트 앱 내 기프트카드 프론트 FO — React18 + TypeScript + CRA/CRACO SPA. KB 최초의 웹 프론트엔드 프로젝트이며 백엔드 짝은 `gcs`(Spring Boot 3.4 / Java21, 미등록)
 ---
 
-# 📇 gcs_fo 문서 인덱스
+# 📇 기프트카드 프론트 FO (gcs_fo)
 
 > 📛 **폴더/슬러그 명명 규칙**: `projects/<slug>/` 의 `<slug>` 는 **Bitbucket 저장소명과 정확히 일치**시킨다. 매핑표는 [루트 README](../../README.md) 참조.
 
 ## 프로젝트 개요
 - **저장소명(=KB 슬러그)**: `gcs_fo` ⚠️ **언더스코어** (로컬 폴더는 하이픈)
 - **로컬 폴더**: 워크스페이스 루트 하위 `gcs-fo` (KB 기준 `../../../gcs-fo`)
-- **설명**: **해피포인트 앱에 임베드되는 기프트카드(상품권) 웹뷰 프론트엔드**. 카드 등록/관리 · 충전(결제) · 이용내역 · 환불 · 현금영수증 · 결제 비밀번호를 담당한다.
+- **설명**: **해피포인트 앱에 임베드되는 기프트카드 프론트 FO**. 카드 등록/관리 · 충전(결제) · 이용내역 · 환불 · 현금영수증 · 결제 비밀번호를 담당한다.
 - **스택**: React 18 / TypeScript 4.9 / CRA(`react-scripts` 5) + **CRACO** / TanStack Query v5 + Zustand / axios / styled-components·Emotion·MUI·Tailwind
 - **remote/브랜치**: `bitbucket.org/sectanine/gcs_fo.git` / `main`(기본) · `dev`(작업) · `WORK-*`(이슈 브랜치, PR 머지 방식)
 - **규모**: `src` 약 **10,900줄** / TS·TSX 기준. 테스트 **0건**

@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: INDEX
 프로젝트: ha_admin
 작성일: 2026-07-26
@@ -22,11 +22,11 @@
 ## 문서 목록
 | 문서 | 유형 | 상태 | 요약 |
 |------|------|------|------|
-| ↗ [이벤트 템플릿 프로젝트 (정본: ha_api)](../ha_api/archive/ARCHIVE-event-template.md) | ARCHIVE(크로스) | **완료** | **이 프로젝트가 서브 참여.** BO 측 담당 = 프로모션폼 선택화면·Rule Based 관리화면·페이지 빌더·테스터 관리. 정본은 `ha_api` 에 있음 |
+| ↗ [이벤트 템플릿 프로젝트 (정본: ha_api)](../task/event-template/archive/ARCHIVE-event-template.md) | ARCHIVE(크로스) | **완료** | **이 프로젝트가 서브 참여.** BO 측 담당 = 프로모션폼 선택화면·Rule Based 관리화면·페이지 빌더·테스터 관리. 정본은 `ha_api` 에 있음 |
 
 ## 현재 상태 / 핵심 메모
 - 신규 등록(2026-07-26). 상세 작업 이력 없음 — 작업 발생 시 이 인덱스에 문서 추가.
-- ⚙️ **이벤트 템플릿 프로젝트(완료)의 서브 프로젝트**다. BO(관리자) 측 = **프로모션폼 선택·Rule Based 등록·페이지 빌더**, 앱 런타임 측 = `ha_api`. **한쪽만 보고 판단 금지** → [정본 아카이브](../ha_api/archive/ARCHIVE-event-template.md)
+- ⚙️ **이벤트 템플릿 프로젝트(완료)의 서브 프로젝트**다. BO(관리자) 측 = **프로모션폼 선택·Rule Based 등록·페이지 빌더**, 앱 런타임 측 = `ha_api`. **한쪽만 보고 판단 금지** → [정본 아카이브](../task/event-template/archive/ARCHIVE-event-template.md)
   - 관련 테이블: `EVENT_TMPL_FORM` · `EVENT_TMPL_BRIDGE` · `EVENT_TMPL_BTN` · `EVENT_TMPL_RULE(_META)` · `EVENT_TMPL_CONTENTS` · `EVENT_TMPL_ASSETS` · `EVENT_TMPL_TESTER` (스키마 `SPCADMIN`)
 
 ## 참고 (공통 문서)

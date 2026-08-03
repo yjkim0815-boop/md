@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: ARCHIVE
 상위문서: ../ARCHIVE-event-template.md
 프로젝트: ha_api
@@ -62,7 +62,7 @@
 - [ ] **동적 HTML에서도 이벤트 위임 동작 확인**
 
 ## 4. 검수 시 권장 추가 항목 (ECC 기준 보강)
-> 원문 체크리스트에는 없으나, [ECC `security-review`](../../../../shared/security-review.md) 기준으로 금전성 기능에 필요한 항목.
+> 원문 체크리스트에는 없으나, [ECC `security-review`](../../../../../shared/security-review.md) 기준으로 금전성 기능에 필요한 항목.
 
 - [ ] **중복 지급 방지** — 동일 사용자·동일 조건 재요청/동시요청(따닥) 시 1회만 처리되는지
 - [ ] **정원·소진 처리** — `maxCnt` 초과 발급이 발생하지 않는지 (동시성)

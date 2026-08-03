@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: WORKLOG
 프로젝트: sms-agent-replacement
 이슈키: --
@@ -36,6 +36,7 @@ JVM 옵션: `-Xms64m -Xmx64m -XX:+PrintGCDetails -Dfile.encoding=KSC5601`, 메�
 
 ### 5. 프로젝트 신설
 `projects/sms-agent-replacement/` 신설 + 루트 README 인덱스 등록 + `shared/server-env.md` 에 배치서버 항목 추가.
+> 📦 **2026-08-03 폴더 이관**: 태스크 전용 폴더 신설에 따라 `projects/sms-agent-replacement/` → **`projects/task/sms-agent-replacement/`** 로 이동(`git mv`, 이력 보존). 상대경로 링크 전부 갱신 완료.
 
 ## 발생 이슈 & 해결
 | 이슈 | 원인 | 해결 |
@@ -108,8 +109,39 @@ sed -E 's/((pass|pwd|passwd|secret|key|token)[^=:]*[=:]).*/\1********/I' /app/nd
 - [ ] **1차 전환 범위** 확인 — 선례 파악
 - [ ] Phase 1 사전 조사 SQL 실행 (TRAN_TYPE 분포·REFKEY 길이·시퀀스명·결과코드 분포)
 
+---
+
+## [2026-08-03 추가 2] 현행 에이전트 전수 분석 + 벤더 메일 + 실행 런북
+
+### 현행 NDSoft 에이전트 전수 확보·해부
+서버 `/app/ndsoft` 전체(11파일/15MB)를 받아 **jar 내부까지 분석**. 미확인 7건 해소.
+- ✅ **발송 방식 = DB 폴링(1초) + Netty 소켓 상주 하이브리드** (Spring `task:scheduled` 7종)
+- ✅ **기동 절차**: `cd /app/ndsoft/bin && sh runner-unix.sh start` (status 옵션 없음)
+- ✅ **2017-04 변경 = 발송 계정 3종 교체**(`happypass_*` → `happycustom_*`)
+- ✅ **2026-04 변경 = 파일 내용 수정 아님** → **운영 커스터마이징 전무**, 이관 범위 conf 로 한정
+- ✅ **로그 미정리 원인** = `.out` 무회전 + `DailyRollingFileAppender` 삭제정책 부재
+- 🔴 **추가 리스크 6건**: SNAPSHOT 운영배포(`1.6.9-SNAPSHOT`) · **Java 5 타깃**(major 49) · ARIA↔AES 상이 · 경계없는 grep · `.out` 무회전 · Windows 파일 사장
+
+### 벤더 공식 메일(.eml) 분석
+- 🔴 **일정은 우리가 회신하는 구조** — 2026-07-24 요청, 07-28 재안내·배정, **08-03 현재 미회신**
+- ✅ **방화벽 확정**: `10.0.111.252`(L4) / `.253` / `.254`, SMS **5200** · MMS **8200** · RCS 8400
+- ✅ **계정 발급 2단계 확정**: 모니터링 가입(Agent 직연동) → 계정+네트워크유형 회신 → ID/PW 발급
+- ✅ JDK 1.8 이상 요구 → **배치서버 충족**
+- 🆕 **발송번호 통신사 가입증빙원** 필요 (신규 요구사항, 리드타임 김)
+
+### 산출물
+- 🚀 [전환 실행 런북](../../WORKLOG-20260803-cutover-runbook.md) 신규 작성 — 체크리스트·벤더 회신초안·조사SQL 5종·설정 템플릿·설치/검증 명령·D-day 타임라인·롤백 절차
+- [분석 문서](../../WORKLOG-20260803-secta-agent-analysis.md)에 §13(현행 전수분석)·§14(설정 이식 가능성)·§15(메일+계획) 추가
+
+### 추가 TODO
+- [ ] 🔴 **전환 가능 일정 회신** (지연 중)
+- [ ] 모니터링 계정 가입 → Agent ID/PW 발급 요청
+- [ ] 발송번호 목록 확정 → 가입증빙원 신청
+- [ ] 방화벽 신청 · TABLESPACE 확인
+- [ ] 사전 조사 SQL C1~C5 실행
+
 ## 참고 링크
 - [프로젝트 INDEX](../../INDEX.md)
 - [섹타나인 Agent 전환 분석](../../WORKLOG-20260803-secta-agent-analysis.md)
-- [shared/server-env.md](../../../../shared/server-env.md)
-- [shared/security-review.md](../../../../shared/security-review.md)
+- [shared/server-env.md](../../../../../shared/server-env.md)
+- [shared/security-review.md](../../../../../shared/security-review.md)

@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: INDEX
 프로젝트: sms-agent-replacement (과업/엄브렐러)
 이슈키: --
@@ -6,14 +6,28 @@
 최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중(분석)
-요약: 배치서버(ip-10-0-70-71)의 (주)엔디소프트 NDMG SMS 에이전트(/app/ndsoft) → **섹타나인 Agent v2.0.1(Legacy 호환)** 전환 개발 과업. "2차 문자 서비스 전환" 건. 현행 실사 + 신규 배포본/매뉴얼 분석 완료, 리스크 12건 도출
+요약: SMS Agent 전환 — 배치서버(ip-10-0-70-71)의 (주)엔디소프트 NDMG SMS 에이전트(/app/ndsoft) → **섹타나인 Agent v2.0.1(Legacy 호환)** 전환 개발 과업. "2차 문자 서비스 전환" 건. 현행 실사 + 신규 배포본/매뉴얼 분석 완료, 리스크 12건 도출
 ---
 
-# 📇 SMS Agent 교체 프로젝트 (sms-agent-replacement)
+# 📇 SMS Agent 전환 (sms-agent-replacement)
 
-> ⚠️ **이 슬러그는 저장소가 아니라 "과업 묶음"이다.** 코드 저장소가 아직 특정되지 않았고(현행 에이전트는 벤더 납품 바이너리), 배치서버 인프라·발송 연동에 걸쳐 있어 **과업 단위**로 등록한다. (폴더명=저장소명 규칙의 예외 — [homepage-ai-renewal](../homepage-ai-renewal/INDEX.md) 선례)
+> ⚠️ **이 슬러그는 저장소가 아니라 "과업 묶음"이다.** 코드 저장소가 아직 특정되지 않았고(현행 에이전트는 벤더 납품 바이너리), 배치서버 인프라·발송 연동에 걸쳐 있어 **과업 단위**로 등록한다. (폴더명=저장소명 규칙의 예외 — [homepage-ai-renewal](../../homepage-ai-renewal/INDEX.md) 선례)
 >
-> 🔕 **자동 주입 제외.** 사용자 지시(2026-08-03)에 따라 SessionStart 훅 화이트리스트에 등록하지 않는다. 필요 시 `sms agent 교체 컨텍스트 연결해` 로 수동 연결(4시간).
+> 🔕 **자동 주입 제외.** 사용자 지시(2026-08-03)에 따라 SessionStart 훅 화이트리스트에 등록하지 않는다. 필요 시 `sms agent 교체 컨텍스트 연결해` 로 수동 연결(12시간).
+
+## 🚨 지금 막고 있는 것 (2026-08-03)
+> **벤더(섹타나인 Dev2팀 이봄 프로)가 2026-07-24 에 "전환 가능 일정 회신"을 요청했고, 07-28 재안내 후 팀장 경유로 배정됐다. 08-03 현재 회신 여부 미확인.**
+> **계정 발급이 우리 회신에 걸려 있어, 회신이 늦어지면 전체 일정이 그만큼 밀린다.**
+
+| # | 즉시 할 일 | 비고 |
+|---|---|---|
+| 1 | **전환 가능 일정 + 네트워크 환경(내부망) 회신** | 🔴 지연 중 |
+| 2 | 모니터링 계정 가입 (`sms.secta9ine.co.kr/register/signup`, **Agent 직연동**) | 계정 발급 선행조건 |
+| 3 | 가입계정 + 네트워크유형(**내부**) 회신 → **Agent ID/PW 발급 요청**(SMS·MMS 각각) | |
+| 4 | **발송번호 통신사 가입증빙원** 발급 신청 | 🔴 리드타임 김 |
+| 5 | **방화벽 신청** — `10.0.111.252/.253/.254` · SMS **5200** / MMS **8200** | 각 담당자 직접 신청 |
+
+📄 전체 계획: [분석문서 §15-7](./WORKLOG-20260803-secta-agent-analysis.md) · 🚀 **실행 절차·소스코드·D-day 계획: [전환 실행 런북](./WORKLOG-20260803-cutover-runbook.md)**
 
 ## 프로젝트 정의
 - **목표**: 배치서버의 **레거시 SMS 발송 에이전트(엔디소프트 NDMG) → 섹타나인 Agent v2.0.1(Legacy 호환) 전환 개발**.
@@ -110,7 +124,7 @@ java -Dprocess.id=ndsoft-agnet-sms \
 - 런처 `com.sds.anyframe.batch.launcher.BatchJobLauncher`
 - 스택: Spring 2.5.6 / spring-batch 1.1.4 / log4j 1.2.17 / ojdbc8 · mysql-connector-j 8.0.32 · sqljdbc4
 - 예: `hp/batch/wthr/gov/GovForecastGrib_CFG.xml`(기상청 예보) 잡이 분 단위 기동
-- 관련 KB: [spc_batch](../spc_batch/INDEX.md) · [spc_spring_batch](../spc_spring_batch/INDEX.md) — **동일 여부 미확인**
+- 관련 KB: [spc_batch](../../spc_batch/INDEX.md) · [spc_spring_batch](../../spc_spring_batch/INDEX.md) — **동일 여부 미확인**
 
 ## 🔴 리스크 (교체 근거)
 | # | 리스크 | 내용 |
@@ -124,7 +138,7 @@ java -Dprocess.id=ndsoft-agnet-sms \
 | 7 | **로그 미정리** | logs 디렉터리 엔트리 다수 누적. 디스크 여유 미확인 |
 | 8 | **미상 변경 이력** | 2026-04-10(conf)·2026-04-21(bin) 변경 주체·내용 불명 |
 
-> 🔴 6번은 [README 횡단 취약 패턴](../../README.md)의 **하드코딩 시크릿** 사례와 같은 계열이다. 진단 시 [security-review.md](../../shared/security-review.md) 시크릿 스윕을 적용한다.
+> 🔴 6번은 [README 횡단 취약 패턴](../../../README.md)의 **하드코딩 시크릿** 사례와 같은 계열이다. 진단 시 [security-review.md](../../../shared/security-review.md) 시크릿 스윕을 적용한다.
 
 ## ❓ 미확인 (다음 실사 항목)
 > 📌 2026-08-03 분석으로 **신규 에이전트 쪽은 대부분 해소**됐다. 아래는 **현행 운영 실측**이 필요한 항목이다. 신규 관련 미결(벤더 문의 항목 포함)은 [분석 문서 §11 Phase 1](./WORKLOG-20260803-secta-agent-analysis.md)에 정리.
@@ -134,17 +148,18 @@ java -Dprocess.id=ndsoft-agnet-sms \
 - [ ] **기동/재기동 스크립트** (`/app/ndsoft/bin/*.sh`)
 - [ ] `agent.bak` → `agent.conf` **diff**(2바이트 차, 단일 값 변경)
 - [ ] **2026-04 변경 이력**의 주체·내용
-- [ ] **발송 요청 주체** — `/app/batch` 잡인지, 다른 앱([ha_api](../ha_api/INDEX.md) 등)인지
+- [ ] **발송 요청 주체** — `/app/batch` 잡인지, 다른 앱([ha_api](../../ha_api/INDEX.md) 등)인지
 - [ ] 로그 용량·디스크 여유 (`du -sh /app/ndsoft/logs`, `df -h /app`)
 - [ ] 벤더 지원 계약 유효 여부
 
 ## 📄 문서 목록
 | 문서 | 상태 | 요약 |
 |---|---|---|
+| 🚀 [WORKLOG-20260803 전환 실행 런북](./WORKLOG-20260803-cutover-runbook.md) | 진행중 | **실행용** — 담당자 체크리스트·벤더 회신초안·조사SQL·설정템플릿·D-day 타임라인·롤백 절차 |
 | ⭐ [WORKLOG-20260803 섹타나인 Agent 전환 분석](./WORKLOG-20260803-secta-agent-analysis.md) | 진행중 | **정본 분석** — 현행/신규 전수 대조, 결과코드·발송정책 차이, 스키마 결함, 리스크 12건, Phase 1~5 전환 계획 |
 | [WORKLOG-2026-W32](./worklog/weekly/WORKLOG-2026-W32.md) | 진행중 | 주간 기록 — 현행 에이전트 실사 (설치경로·설정·벤더 특정) |
 
 ## 참고 (공통 문서)
-- [공유 KB README](../../README.md)
-- [shared/server-env.md](../../shared/server-env.md) — 서버 환경 (배치서버 항목 추가됨)
-- [shared/security-review.md](../../shared/security-review.md) — 시크릿 스윕 기준
+- [공유 KB README](../../../README.md)
+- [shared/server-env.md](../../../shared/server-env.md) — 서버 환경 (배치서버 항목 추가됨)
+- [shared/security-review.md](../../../shared/security-review.md) — 시크릿 스윕 기준

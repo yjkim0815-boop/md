@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: INDEX
 프로젝트: ha_api
 작성일: 2026-07-22
@@ -57,13 +57,13 @@ Maven 중앙에 없어 `ext-libs/`에 두고 `mvn install:install-file` 수행 (
 | 문서 | 유형 | 상태 | 요약 |
 |------|------|------|------|
 | [WORKLOG-20260731-home-banner-api.md](./WORKLOG-20260731-home-banner-api.md) | WORKLOG | 진행중 | 홈페이지 메인 배너(`HA_11101`) 조회 일반 REST API `POST /api/home/banner-list` 추가 |
-| [archive/ARCHIVE-event-template.md](./archive/ARCHIVE-event-template.md) | ARCHIVE | **완료** | **이벤트 템플릿 프로젝트**(크로스 정본) — 1차(2025) Rule Based 고도화 + 2차(2026 상반기) 프로모션폼·클래스 바인딩 컴포넌트. 서브=`ha_admin` |
+| [archive/ARCHIVE-event-template.md](../task/event-template/archive/ARCHIVE-event-template.md) | ARCHIVE | **완료** | **이벤트 템플릿 프로젝트**(크로스 정본) — 1차(2025) Rule Based 고도화 + 2차(2026 상반기) 프로모션폼·클래스 바인딩 컴포넌트. 서브=`ha_admin` |
 | [WORKLOG-20260724-attendance-check-revamp.md](./WORKLOG-20260724-attendance-check-revamp.md) | WORKLOG | 진행중 | 출석체크 개편 기획 — 월 만근 추첨(1만P×10) → 주 7일 완주 전원 5P 실시간 + 추첨 1만P×3명 |
 | [MEETING-20260724-attendance-revamp.md](./MEETING-20260724-attendance-revamp.md) | MEETING | 진행중 | 개편 회의록 — 일 00시 트래픽(NetFUNNEL)·확률공개 법무검토·토요일 사전선정(순수 3회)·실시간랜덤/선착순 지양 |
 
 ## 현재 상태 / 핵심 메모
 - 2026-07-22 최초 등록. 코드 **가벼운 구조 파악** 완료(스택·도메인·DB·프로파일).
-- ✅ 2026-07-28 **이벤트 템플릿 프로젝트 완료 아카이브 등록** — 1차(2025, `HA25H101`/`HA25H204`) Rule Based 고도화 + 2차(2026 상반기, `HA26H197`) 프로모션폼·클래스 바인딩. ⚠️ **`ha_admin` 과 크로스 프로젝트**(정본은 이쪽) → [아카이브](./archive/ARCHIVE-event-template.md)
+- ✅ 2026-07-28 **이벤트 템플릿 프로젝트 완료 아카이브 등록** — 1차(2025, `HA25H101`/`HA25H204`) Rule Based 고도화 + 2차(2026 상반기, `HA26H197`) 프로모션폼·클래스 바인딩. ⚠️ **`ha_admin` 과 크로스 프로젝트**(정본은 이쪽) → [아카이브](../task/event-template/archive/ARCHIVE-event-template.md)
   - 미해결 리스크: **class prefix 혼재**(`ha-btn-` vs `ha-rule-btn-`) → 코드 수정 전 운영 소스 확인 필수.
 - 2026-07-24 **출석체크 개편 기획 기록**(문서화만, 코드 변경 없음) → 관련 도메인 `services/stamp` + `services/point`/`pointstation`. 기획 확정(Open Questions) 대기. [WORKLOG](./WORKLOG-20260724-attendance-check-revamp.md)
 - 대형 레거시 모놀리식: Spring XML 설정(`context-*.xml`, `dispatcher-config.xml`) + JSP + MyBatis, **Java 8 고정**.

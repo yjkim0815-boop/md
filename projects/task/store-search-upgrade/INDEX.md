@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: INDEX
 프로젝트: store-search-upgrade (과업/엄브렐러)
 이슈키: --
@@ -6,17 +6,17 @@
 최종수정: 2026-08-03
 작성자: dominic
 상태: 완료(잔여 정리 있음)
-요약: 매장검색엔진 고도화(2026-03) — 와이즈넛 SF-1 라이선스 2026-04-05 만료에 따라 Elasticsearch 8.19로 전환. 만료 7일 전(03-29) ES 기동 완료. SF-1 프로세스는 2026-08 현재까지 잔존
+요약: 매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치, 2026-03) — SF-1 라이선스 2026-04-05 만료에 따라 Elasticsearch 8.19로 전환. 만료 7일 전(03-29) ES 기동 완료. SF-1 프로세스는 2026-08 현재까지 잔존
 ---
 
-# 📇 매장검색엔진 고도화 (store-search-upgrade)
+# 📇 매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치)
 
-> ⚠️ **이 슬러그는 저장소가 아니라 "과업 묶음"이다.** 검색 서버 인프라·엔진 전환에 걸친 작업으로, 코드 저장소 단위가 아니라 **과업 단위**로 등록한다. ([homepage-ai-renewal](../homepage-ai-renewal/INDEX.md) · [sms-agent-replacement](../sms-agent-replacement/INDEX.md) 선례)
+> ⚠️ **이 슬러그는 저장소가 아니라 "과업 묶음"이다.** 검색 서버 인프라·엔진 전환에 걸친 작업으로, 코드 저장소 단위가 아니라 **과업 단위**로 등록한다. ([homepage-ai-renewal](../../homepage-ai-renewal/INDEX.md) · [sms-agent-replacement](../../task/sms-agent-replacement/INDEX.md) 선례)
 >
-> 🔕 **자동 주입 제외.** 필요 시 `매장검색엔진 컨텍스트 연결해` 로 수동 연결(4시간).
+> 🔕 **자동 주입 제외.** 필요 시 `매장검색엔진 컨텍스트 연결해` 로 수동 연결(12시간).
 
 ## 프로젝트 정의
-- **명칭**: 매장검색엔진 고도화
+- **명칭**: 매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치)
 - **수행 시기**: **2026년 3월** (ES 기동 완료 2026-03-29)
 - **목표**: 매장검색 엔진을 **와이즈넛 SF-1 → Elasticsearch** 로 전환
 - **직접 트리거**: **와이즈넛 SF-1 라이선스 2026-04-05 만료**
@@ -66,7 +66,7 @@
 
 ### 서버
 **`ip-10-0-75-31`** (검색 전용 서버). ⚠️ 배치서버 `ip-10-0-70-71` 과 **다른 서버**다.
-상세: [shared/server-env.md](../../shared/server-env.md)
+상세: [shared/server-env.md](../../../shared/server-env.md)
 
 ## 4. 🟠 잔여 과제 (2026-08-03 실사 기준)
 
@@ -83,9 +83,9 @@
 ## 5. 애플리케이션 연동 (확인 필요)
 
 홈페이지 리뉴얼 쪽에 검색 관련 흔적이 있어 **연결 관계를 확인해야 한다**.
-- 프론트 [happypoint-web2](../happypoint-web2/INDEX.md) — `page/search` (실사용 검색 결과 페이지, `header-search`·`mobile-header`·`site-nav`·`SearchAction` 참조)
-- 백엔드 [ha-web-api](../ha-web-api/INDEX.md) — `GET /api/search` (**2026-W31 시점 빈 모델 스텁**)
-- 레거시 [ha-web-api WORKLOG](../ha-web-api/WORKLOG-20260721-nextjs-api-migration-map.md) — `GET /page/store/search.spc` → `GET /api/store/search?brandCode&metro&city` (**매장검색**)
+- 프론트 [happypoint-web2](../../happypoint-web2/INDEX.md) — `page/search` (실사용 검색 결과 페이지, `header-search`·`mobile-header`·`site-nav`·`SearchAction` 참조)
+- 백엔드 [ha-web-api](../../ha-web-api/INDEX.md) — `GET /api/search` (**2026-W31 시점 빈 모델 스텁**)
+- 레거시 [ha-web-api WORKLOG](../../ha-web-api/WORKLOG-20260721-nextjs-api-migration-map.md) — `GET /page/store/search.spc` → `GET /api/store/search?brandCode&metro&city` (**매장검색**)
 
 > ❓ **핵심 질문**: 이 과업의 "매장검색"이 위 `store/search` 경로와 같은 것인지, 별도 시스템인지. 같다면 **홈페이지 리뉴얼과 직접 연결된 과업**이 된다.
 
@@ -142,6 +142,6 @@ ls -alt /app/search/sf-1/log/ | head; du -sh /app/search/sf-1
 ```
 
 ## 참고 (공통 문서)
-- [공유 KB README](../../README.md)
-- [shared/server-env.md](../../shared/server-env.md) — 검색 서버 `ip-10-0-75-31` 항목
-- 관련 과업: [sms-agent-replacement](../sms-agent-replacement/INDEX.md) — **동일 패턴**(레거시 상용 솔루션 교체)
+- [공유 KB README](../../../README.md)
+- [shared/server-env.md](../../../shared/server-env.md) — 검색 서버 `ip-10-0-75-31` 항목
+- 관련 과업: [sms-agent-replacement](../../task/sms-agent-replacement/INDEX.md) — **동일 패턴**(레거시 상용 솔루션 교체)

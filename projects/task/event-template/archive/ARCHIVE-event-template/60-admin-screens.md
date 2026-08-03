@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: ARCHIVE
 상위문서: ../ARCHIVE-event-template.md
 프로젝트: ha_admin
@@ -115,5 +115,5 @@ https://front.happypointcard.com/ha/resources/api/images_renewal/event/
 
 ## 참고
 - [상위 허브](../ARCHIVE-event-template.md) · [번들 인덱스](./00-INDEX.md)
-- [ha_admin INDEX](../../../ha_admin/INDEX.md)
+- [ha_admin INDEX](../../../../ha_admin/INDEX.md)
 - [21-class-binding-spec.md](./21-class-binding-spec.md) · [30-ddl-event-tmpl.md](./30-ddl-event-tmpl.md)

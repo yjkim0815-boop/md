@@ -126,11 +126,47 @@
 
 - 배너 클릭은 `returnUrl` 없이 `/page/auth/login?bninfoid=<BN_INFO_ID>&linkvalue=<LINK_VALUE>`로 이동한다. 로그인 GET 랜딩 시 middleware가 두 URL 값을 동일 이름의 `httpOnly` 쿠키(`SameSite=Lax`, `Path=/`, 30분)로 저장해 후속 로그인 처리에서 사용할 수 있게 했다.
 
-## 20. (07-31) 세션 stickiness 이슈 — ALB 앱쿠키 방식 (Redis 미사용) ★미결
+## 20. (07-31→08-03) 세션 stickiness — ALB 앱쿠키 방식 (Redis 미사용) ★프론트/백엔드 구현 완료, dev 검증 대기
 - **증상(스테이징)**: ALB 스티키를 duration(ELB세션)으로 뒀는데, **프론트 SSR→백엔드** 구간이 스티키로 못 붙어 JSESSIONID 세션 미스. 프론트는 한쪽에 붙지만 백엔드는 라운드로빈.
-- **원인**: ALB 스티키는 브라우저가 `AWSALB` 쿠키를 저장·재전송해야 유지되는데, **SSR(front 서버)은 브라우저가 아니라 쿠키잼이 없어** 매 요청 새 방문자로 인식 → 라운드로빈. (front·백엔드 동일 도메인이라 `AWSALB` 쿠키명 충돌도 겹침)
-- **채택 방향(Redis 안 씀)**: ALB **애플리케이션 기반 stickiness** + **앱 쿠키명 `HA_AWSALB`**. 단, **프론트가 모든 SSR 호출에 요청 쿠키(JSESSIONID+`HA_AWSALB`)를 forward** 해야 실효.
-- **현재 프론트 쿠키 forward 실태**: `getCurrentUser`(check)만 forward ✅ / `pingModel`·`join/policy` raw fetch·`legacyContractGet/Post`(기본) ❌ → 이 호출들은 여전히 라운드로빈.
+- **원인**: ALB 스티키는 브라우저가 쿠키를 저장·재전송해야 유지되는데, **SSR(front 서버)은 브라우저가 아니라 쿠키잼이 없어** 매 요청 새 방문자로 인식 → 라운드로빈.
+- **확정 구성(08-03, 스테이징 ELB 셋팅 완료)**: 도메인 `stg-www.happypointcard.com`.
+  - **프론트 TG(ha-web-fo EC2 2대)** = ELB **세션 스티키**(쿠키 `AWSALB`). 프론트는 무상태라 자체 스티키는 정합성 무관 — 신경 안 씀.
+  - **백엔드 TG(ha-web-api EC2 2대)** = **애플리케이션 기반 쿠키 스티키**, 앱 쿠키명 **`HA_AWSALB`**, duration 1h, 알고리즘 round robin. (`stg-app-web-api-tg`, HTTP:8021)
+  - 쿠키명 분리(`AWSALB`≠`HA_AWSALB`)로 동일 도메인 충돌 없음.
+- **핵심 이해**: AWS 애플리케이션 기반 스티키는 **LB 가 쿠키를 만들지 않는다.** 타겟(ha-web-api)이 `HA_AWSALB` 를 직접 Set-Cookie 해야 ALB 가 `AWSALBAPP` 를 발급하고 이후 요청을 같은 타겟으로 고정. → **백엔드가 앱 쿠키를 발급하는 게 필수 전제.**
+- **구현 (08-03)**:
+  - **[백엔드]** `com.spc.hpc.home.filter.StickinessCookieFilter`(OncePerRequestFilter) 신설 — 요청에 `HA_AWSALB` 없으면 `UUID` 값으로 발급(Path=/·HttpOnly·Secure(X-Forwarded-Proto=https 포함)·MaxAge 1h). `web.xml` 에 `hstsFilter` 다음으로 `/*` 매핑 등록.
+  - **[프론트]** SSR→백엔드 쿠키 forward 통일 — 요청 쿠키 전체(`cookies().toString()`)를 전달하므로 `AWSALBAPP`+`HA_AWSALB`+`JSESSIONID` 자동 커버.
+    - `lib/legacy-http.ts`: `legacyContractGet/Post` 의 `forwardCookies` **기본값 true** 전환(명시적 false 는 존중, no-store 라 캐시 오염 없음). → `pingModel` 포함 전 계약 호출 자동 forward.
+    - `app/(site)/page/join/policy/page.tsx`: raw fetch 에 `cookie: store.toString()` 추가(유일 미forward raw fetch).
+    - 이미 forward: `getCurrentUser`(auth-server), `join/form/page.tsx`.
+  - **[env]** `.env.stg` 에 `LEGACY_BASE=https://stg-www.happypointcard.com` 기존 존재 확인 ✅.
+- **검증(스테이징 배포 후, 미완)**: ① 브라우저 쿠키에 `HA_AWSALB`/`AWSALBAPP` 생성 확인 ② 백엔드 healthy 타겟 **2대** 등록 상태에서 로그인 후 페이지 이동 시 동일 인스턴스 세션 유지 확인(현재 TG target 1대만 보임 → 2대 healthy 필요). ③ tsc: 수정 파일 에러 0(기존 stale `.next/dev/types` 브릿지 참조 1건은 clean 빌드 시 소멸).
+- **🔴 스테이징 검증 결과 (08-03) — 2B(구조적) 확정, 로그인 토글 발생**:
+  - 증상: 로그인 성공 후 새로고침하면 로그인/로그아웃 버튼이 왔다갔다. 백엔드 2대 액세스 로그상 **SSR(로그인체크·모델API)만 1·2번 서버 번갈아 호출**, 브라우저 직접 호출(`/api/auth/login`)은 2번 서버로만 고정. 세션(JSESSIONID)은 2번에만 생성 → SSR 체크가 1번 갈 때 미로그인으로 보여 토글.
+  - 쿠키 확인: 브라우저에 `HA_AWSALB`(필터 발급 UUID)·`AWSALBAPP-0`(ALB)·`AWSALB`(프론트)·`JSESSIONID` **전부 정상 생성**. → 인프라·필터 설정 정상.
+  - **진단 로그(`getCurrentUser` non-prod)**: SSR 이 백엔드로 forward 하는 Cookie 헤더에 `HA_AWSALB=true AWSALBAPP=true AWSALB=true JSESSIONID=true` — **넷 다 실려감**. 그런데 **동일 쿠키를 실은 두 check 요청이 각각 다른 백엔드로 라우팅**(하나 `isAuthenticated:false`, 하나 `true`). → **2A(forward 누락) 배제, 2B 확정.**
+  - **결론**: ALB 애플리케이션 쿠키 스티키는 **브라우저 직접 요청에는 적용되나, 프론트 서버(BFF)가 대리 전송한 요청에는 적용되지 않는다.** ALB 쿠키 스티키 + BFF(SSR이 세션을 대리 운반) 구조의 근본적 불일치.
+  - **채택 방향(08-03, 사용자 제안)**: Redis 대신 **암호화 인증 쿠키(무상태/세션 부트스트랩)**. 로그인 시 백엔드가 사용자정보를 AEAD 암호화 쿠키로 발급 → 어느 인스턴스로 가도 쿠키 복호화로 로그인 판별 → 스티키 불필요. ⚠️ 핵심: 로그인체크만이 아니라 **세션 의존 다운스트림 API 전부 커버**하도록 "세션 재구성 필터"로 설계해야 함(아니면 버튼만 로그인·데이터는 실패). 보안: AEAD+만료+HttpOnly/Secure/SameSite+키공유.
+  - **사전작업(08-03)**: 쿠키 `Secure` 환경설정값 추가 — `application.yml` `cookie.secure: true`(기본, dev/stage/stagep/prod), `application-local.yml` `cookie.secure: false`(로컬 http). 향후 인증쿠키·`StickinessCookieFilter` 가 이 값을 읽도록 배선 예정.
+  - **ALB 스티키 코드 원복(08-03)**: 방향 전환에 따라 스티키 실험 코드 제거 — 백엔드 `StickinessCookieFilter.java` 삭제 + `web.xml` 등록 원복, 프론트 `getCurrentUser` 스티키 진단 로그 원복. **유지**: ① `cookie.secure` 환경설정값(암호화 쿠키에도 필요) ② 프론트 SSR 쿠키 forward 통일(`legacyContractGet/Post` 기본 ON + `join/policy` cookie) — BFF가 인증쿠키를 백엔드로 전달하는 데 필수라 존치(코멘트를 스티키→세션/인증 기준으로 정리). ALB TG 스티키/HA_AWSALB 인프라 설정은 콘솔에서 해제 가능(암호화 쿠키 방식은 스티키 불필요).
+  - **로그인 정책 확정(08-03)**: **1단계 = 세션유저 암호화 쿠키(권장: AES-GCM/AEAD — 암호화+무결성 동시)**, **2단계(운영 후) = JWT 등 서명 검증 포함 표준화(권장: JWS 단독은 페이로드 노출이므로 JWE/서명+암호화로 프라이버시 유지)**. 공통 전제: 로그인체크만이 아니라 **세션 의존 다운스트림 전부 커버하는 세션 재구성 필터** + exp/짧은 TTL/로그아웃/키공유·회전.
+  - **다음**: 백엔드 로그인 발급 지점 + `/api/auth/check`·세션 사용처 조사 → 1단계(암호화 쿠키+세션 재구성 필터) 스펙·필터 위치·암호화 방식 설계.
+  - **1단계 설계 확정(08-03)**: 방식=**세션 유지(부트스트랩)** — 로그인 시 세션(authToken=SessionUser) 유지 + **SessionUser 전체를 암호화한 `_HPC_AUT` 쿠키 발급**, 이후 요청은 세션에 authToken 없으면 쿠키 복호화로 세션 재구성. 완전 무상태(세션 제거)는 2단계 TODO. 확정값: 암호화=**AES-256-GCM**(IV 매번 랜덤), 페이로드=**SessionUser 전체**(배포 후 쿠키크기 모니터링), 쿠키명=**`_HPC_AUT`**, 만료=**슬라이딩 60분**(무활동 기준, 현행 `setMaxInactiveInterval` 정합), 속성=HttpOnly+Secure(`cookie.secure`)+SameSite=Lax+Path=/.
+  - **KMS 키 획득 경로 분석(08-03)**: `application.yml aws.kms.{id,access-key-id,secret-access-key,encrypt-val}` → `AwsKmsUtil.decryptKeyData()`(AWS KMS.decrypt) → `KMSConfig`(@PostConstruct 1회) 가 복호화된 JSON `{name:{key,iv},...}` 파싱 → `getKeysMap()` 으로 `"hpc.key"/"cert.key"/"oilbank.key"...` 제공. 기존 소비는 전부 `AES128Util`(AES/CBC). **인증쿠키 키도 `KMSConfig.getKeysMap()` 재사용 방침.**
+  - **⚠️ AES-256/GCM 이슈 2건**: ① 256bit 키 → **해결: `kmsConfig.getKeysMap().get("sucToken.key")`(AES-256 KMS 키) 사용 확정.** ② **GCM은 고정 iv 재사용 금지**(치명적) → `sucToken.key`만 쓰고 **IV는 매 암호화 랜덤 생성**해 쿠키에 동봉. `sucToken.iv`는 GCM nonce로 **미사용**(필요 시 AAD 보조용만).
+  - **암호화 확정(08-03)**: AES-256-GCM / 키=`kmsConfig.getKeysMap().get("sucToken.key")` / IV=랜덤 96bit(쿠키 동봉) / 태그 128bit. 쿠키값=base64(IV12+암호문+태그16). KMS 키는 `KMSConfig`(@PostConstruct)가 앱 시작 시 `encrypt-val` 복호화로 로드한 것 재사용.
+  - **timestamp 필드 추가(08-03)**: `SessionUser`에 `private String timestamp=""`(epoch millis) 추가, 로그인 시 `System.currentTimeMillis()` 세팅(`AuthApiResource`). **용도=세션 최초생성 시각 → 암호화 쿠키 만료(exp)/슬라이딩 판정.** (IV 유일성은 랜덤 IV가 담당; timestamp는 nonce 아님 — GCM 고정IV/nonce재사용 위험 회피 확정. CBC+타임스탬프 방식은 위치·유일성·무결성 문제로 폐기.)
+  - **1단계 구현 완료(08-03, ha-web-api, BUILD SUCCESS)**:
+    - `home.security.AuthCookieService`(@Component) 신설 — AES-256-GCM 암복호화(`encrypt/decrypt`), 발급(`issue`, timestamp=now 갱신), 삭제(`clear`), 만료(`isExpired`)·슬라이딩판정(`needsSlidingRefresh`, 만료 절반 경과 시만 재발급→Set-Cookie 남발 방지). 키=`kmsConfig.getKeysMap().get("sucToken.key")`, IV=랜덤96bit, 값=base64url(IV+ct+tag), 만료=`sso.timeout`분, Secure=`@Value("${cookie.secure:true}")`.
+    - `AuthApiResource`: login 성공부 `authCookieService.issue(sessionUser, response)`, logout `authCookieService.clear(response)` (메서드에 HttpServletResponse 추가).
+    - `home.filter.AuthBootstrapFilter`(OncePerRequestFilter) 신설 — 세션에 authToken 없고 `_HPC_AUT` 유효하면 복호화→세션 복원(만료 시 쿠키삭제, 유효 시 슬라이딩 재발급). 빈은 `WebApplicationContextUtils`로 루트컨텍스트에서 지연획득. `web.xml`에 `spcFilter` **앞** 매핑.
+    - `UserService`(이름변경 후 세션 갱신): `authCookieService.issue(sessionUser, WebUtil.response())` 로 쿠키 스냅샷 최신화.
+    - 검증: `mvn -o compile` BUILD SUCCESS. **미검증**: 런타임(로컬 로그인→복원, 스테이징 2대 토글 해소), 쿠키 크기 실측, `sucToken.key` 실제 32byte 여부(아니면 encrypt 실패 로그).
+    - **명칭(기능명)**: **"로그인 인증 암호화 토큰(`_HPC_AUT`)"** — 세션 무상태화(암호화 쿠키 기반). 페이로드=SessionUser, 알고리즘=AES-256-GCM. (대안 호칭: "로그인 인증 암호화 페이로드")
+    - **[진행중] 08-03 스테이징 배포 중** → 배포 후 검증: ① `[_HPC_AUT] 암호화 실패` 로그 유무(키 32byte 확인) ② 로그인 후 새로고침 반복 시 백엔드 2대 어디로 가도 로그인 유지(토글 해소) ③ 브라우저 쿠키 `_HPC_AUT` 생성·크기 ④ 로그아웃 시 쿠키 삭제.
+  - **암호화 방식 최종 확정(08-03)**: **AES-256-GCM + 랜덤 IV 동봉** 확정. 검토·기각한 대안: ⓐ 고정 `sucToken.iv` 사용(GCM nonce 재사용=치명적) ⓑ CBC+고정IV+타임스탬프/난수프리픽스(위치·유일성·무결성 결여, HMAC 별도 필요) ⓒ 랜덤IV를 고정키+고정iv로 재암호화(IV는 비밀 불필요 → 이득0 + 고정IV 재도입 위험). 결론: IV는 공개가 표준(TLS/JWE 동일), 전체 base64 불투명 blob. nonce-misuse 근본회피 필요 시에만 AES-GCM-SIV(BouncyCastle/Tink) 별도 검토.
+- **수신동의 강제 게이트 미사용 처리 → 즉시 원복(08-03, ha-web-api)**: 게이트 4곳(`AuthApiResource` 세션 세팅·`SpcInterceptor` 리다이렉트·`ReceptionAgreeController`/`ReceptionAgreeModelApiResource` 제거로직)을 주석 처리했다가 **사용자 요청으로 전부 원상 복구**(현재 활성 상태 유지). 세션 값 조사 참고: 로그인 관련 HttpSession 값은 `authToken`(SessionUser)·`global_enc_mbr_no`(=SHA512(mbrNo) 파생, SpcFilter 매요청)·`auth_return_url`·`PW_POPUP_OPENED`·`need_reception_agree`/`receptionRedirectUri`, 화면상태 `currentSiteType`/`_platform`, 플래시 `errors`/`successMessages`, 점유인증 `ownershipPath`. 무상태 전환 시 옮길 로그인 상태는 사실상 `authToken`(SessionUser) 하나(나머지는 파생/임시/요청스코프).
 
 ## 21. (07-31) 회원가입 약관(policy) 정합 — 동의값 POST 전달 + 약관 전문 이식 ★
 - **Part 2 (기능)**: PolicyForm이 **앞단계에서 받은 값 + 화면 동의값을 전부 form POST**로 다음 단계 전달.
@@ -153,10 +189,11 @@
 - [x] (08-03 **dev 완주 성공**) **회원탈퇴 dev 라우팅 이슈 수정** — 원인: 백엔드 `confirm-pw-process`가 `@RequestParam(form)`인데 프론트 JSON 전송. 로컬은 Next route handler(`app/api/member-info/*`)가 변환/정규화했으나 **dev는 ELB가 `/api/*`를 백엔드로 직접 보내 route handler 우회 → 비번확인 실패**. 수정: confirm-form = `backendApiUrl`+form+`code==00` 판정, withdrawal-form의 `_MEMBER_CONFIRMED_` 가드 제거, `/api/legacy` 허용목록에 process 4종 추가. **dev 재배포 후 비밀번호 확인→탈퇴 유의사항→동의→탈퇴 완주 확인 완료.**
 - [~] (08-03, **dev 미확인**) **member-info 전 플로우 dev 라우팅 정합** — 백엔드 process API가 전부 `@RequestParam(form)`인데 프론트 JSON + Next route handler(정규화/쿠키) 의존 → dev ELB 우회로 깨짐. confirm-pw(HWDR/HCHP 통합)·change-pw·withdrawal·modify-info process 호출을 **form+backendApiUrl**로 통일, change-pw 게이트를 **`_MEMBER_CONFIRMED_` 쿠키** 기반으로 전환, `/api/legacy` 허용목록 4종 추가. **미결**: modify-info 진입(ownership SMS + MODIFY_INFO_AUTH_COOKIE 게이트)은 여전히 route handler 의존 → 별도 수정 필요. change-pw 응답 shape dev 확인 필요. **전반 dev 재배포 확인 미완.**
 - [x] (08-03 완료, 로컬 기준) **회원탈퇴 흐름 레거시 정합** — 순서가 반대(유의사항→비번)였고 비번확인 성공 시 즉시 탈퇴되던 것을 **비번확인 → 탈퇴 유의사항/동의 화면 → "탈퇴"(동의) 버튼 → withdrawal-process**로 수정. Hub 링크→`confirm-pw-form?redirectUrl=HWDR`, `confirm-form`(HWDR) 즉시탈퇴 제거→`withdrawal-form` 이동, `withdrawal-form`에 `_MEMBER_CONFIRMED_=HWDR` 가드 + 신규 `WithdrawButton`(confirm→withdrawal-process→로그아웃→완료모달). **모델API 정정**: 탈퇴 안내를 `/api/mypage/my-point`(쿠폰=0) → **`/api/member-info/withdrawal-info`**(포인트+쿠폰수)로 교체. confirm-form 기존 tsc 2건도 수정.
+- [ ] (08-03) ★ **[2단계] 로그인 완전 무상태화(세션 제거, 쿠키만)** — 1단계(암호화 쿠키+세션 부트스트랩) 운영 안착 후. `SecurityUtils.getCurrentUser()`/`isAuthenticated()` 구현부를 세션 대신 **쿠키(요청스코프)** 기반으로 교체(Java 호출부 141곳 중 대다수 자동 커버) + `getSession().getAttribute(authToken)` 직접 접근/**JSP 세션 직접참조** 소수 지점 개별 수정 → `HttpSession` 로그인 유저 제거로 **인스턴스 힙 메모리 절감**. + 2단계 표준화(JWT/JWE 서명검증·refresh·키회전) 함께 검토. **선행 조사**: 직접 세션접근 지점(특히 JSP) 실수량 정밀 카운트.
 - [ ] (07-31) modify-info-form: 프론트가 `result.alertType`(need-confirm-pw/need-ownership) 분기 처리(현재 result.code만 봐서 깨짐) + 백엔드 alertType 숫자 prefix(`1need-…`) 제거
-- [ ] (07-31) ★ **[인프라] ALB 앱쿠키 stickiness 설정** — 백엔드 TG 애플리케이션 기반 stickiness, 앱 쿠키명 **`HA_AWSALB`**, 기간=세션 수명. 프론트 TG stickiness는 끄기(쿠키명 충돌 방지).
-- [ ] (07-31) ★ **[프론트] 모든 SSR 백엔드 호출에 요청 쿠키 forward 통일** — `legacyContractGet/Post` 기본 `forwardCookies:true`, `pingModel` 쿠키 전달, `join/policy` 등 raw fetch에 `cookie` 헤더 추가. (ALB 설정만으론 안 됨 — 이게 핵심 전제)
-- [ ] (07-31) [백엔드] `HA_AWSALB` 쿠키가 로그인/응답 Set-Cookie로 브라우저까지 전파되는지(BFF 프록시 경유) 확인. 세션 TTL·스케일인 재분배 엣지 점검.
+- [x] (07-31→08-03 스테이징 셋팅 완료) ★ **[인프라] ALB 앱쿠키 stickiness 설정** — 백엔드 TG(`stg-app-web-api-tg`) 애플리케이션 기반 stickiness, 앱 쿠키명 **`HA_AWSALB`**, duration 1h. 프론트 TG는 ELB 세션 스티키(`AWSALB`, 쿠키명 분리로 충돌 없음). **남은 검증**: 백엔드 healthy 타겟 2대 등록.
+- [x] (08-03 구현 완료, dev 검증 대기) ★ **[프론트] 모든 SSR 백엔드 호출에 요청 쿠키 forward 통일** — `legacyContractGet/Post` 기본 `forwardCookies:true` 전환(→`pingModel` 자동 커버), `join/policy` raw fetch에 `cookie: store.toString()` 추가. 요청 쿠키 전체 전달로 `AWSALBAPP`+`HA_AWSALB`+`JSESSIONID` 커버. (§20)
+- [x] (08-03 구현 완료, dev 검증 대기) [백엔드] `HA_AWSALB` 발급 — `StickinessCookieFilter` 신설 + `web.xml` `/*` 매핑. **검증**: 브라우저 Set-Cookie 전파 + 세션 TTL·스케일인 재분배 엣지 점검(스테이징 배포 후).
 - [ ] (07-31) (대안 보류) Spring Session + Redis(ElastiCache) — 앱쿠키 방식의 취약점(충돌·TTL·재분배) 재발 시 근본 전환 검토.
 - [ ] (07-31) 그룹2 신규 스텁 API 실로직 이식(레거시 컨트롤러 기반) 여부 결정
 - [ ] (07-31) 그룹3(정적: about/points/services/mypage-inquiry 등) 처리 방침 결정

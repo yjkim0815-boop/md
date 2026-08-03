@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: ARCHIVE
 프로젝트: ha_api
 관련프로젝트: ha_admin
@@ -12,7 +12,7 @@
 
 # 📦 이벤트 템플릿 프로젝트 — 완료 아카이브
 
-> **크로스 프로젝트 정본 문서.** 메인 = `ha_api`(해피포인트앱 API 서버, 런타임), 서브 = [`ha_admin`](../../ha_admin/INDEX.md)(관리자 BO, 등록·빌더).
+> **크로스 프로젝트 정본 문서.** 메인 = `ha_api`(해피포인트앱 API 서버, 런타임), 서브 = [`ha_admin`](../../../ha_admin/INDEX.md)(관리자 BO, 등록·빌더).
 > 한쪽만 보고 판단하지 말고 **양쪽을 함께** 확인한다.
 
 > 🔍 **상세 내용은 별도 번들에 있다** → **[ARCHIVE-event-template/00-INDEX.md](./ARCHIVE-event-template/00-INDEX.md)**
@@ -397,6 +397,6 @@ PROMOTION_YN VARCHAR2(1 BYTE) DEFAULT 'Y' NOT NULL   -- 기존 MARKUP_YN 대체
 ---
 
 ## 11. 참고 링크
-- [ha_api INDEX](../INDEX.md) · [ha_admin INDEX](../../ha_admin/INDEX.md)
-- [KB 루트 README](../../../README.md) · [ECC 참조](../../../shared/ecc-reference.md)
-- 관련 진행 문서: [출석체크 개편 기획](../WORKLOG-20260724-attendance-check-revamp.md)
+- [ha_api INDEX](../../../ha_api/INDEX.md) · [ha_admin INDEX](../../../ha_admin/INDEX.md)
+- [KB 루트 README](../../../../README.md) · [ECC 참조](../../../../shared/ecc-reference.md)
+- 관련 진행 문서: [출석체크 개편 기획](../../../ha_api/WORKLOG-20260724-attendance-check-revamp.md)

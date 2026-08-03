@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: ARCHIVE
 상위문서: ../ARCHIVE-event-template.md
 프로젝트: ha_api
@@ -12,7 +12,7 @@
 
 # 🔎 운영 SQL 예시
 
-> 기준: v10(20260706) "운영 SQL 예시". 바인딩은 `:param` 표기이나 **프로젝트 정본은 MyBatis `#{}`** 이므로 실제 매퍼 작성 시 변환할 것 → [sql-mybatis 컨벤션](../../../../shared/conventions/sql-mybatis.md)
+> 기준: v10(20260706) "운영 SQL 예시". 바인딩은 `:param` 표기이나 **프로젝트 정본은 MyBatis `#{}`** 이므로 실제 매퍼 작성 시 변환할 것 → [sql-mybatis 컨벤션](../../../../../shared/conventions/sql-mybatis.md)
 
 ## 1. 이벤트별 사용 가능한 버튼 조회
 

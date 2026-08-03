@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: ARCHIVE
 상위문서: ../ARCHIVE-event-template.md
 프로젝트: ha_api
@@ -148,4 +148,4 @@ DDL 작성 형식:
 ## 참고
 - [상위 허브](../ARCHIVE-event-template.md) · [번들 인덱스](./00-INDEX.md)
 - [70-qa-checklist.md](./70-qa-checklist.md) · [21-class-binding-spec.md](./21-class-binding-spec.md)
-- [ECC 보안 리뷰 기준](../../../../shared/security-review.md)
+- [ECC 보안 리뷰 기준](../../../../../shared/security-review.md)

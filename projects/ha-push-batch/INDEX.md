@@ -2,13 +2,13 @@
 문서유형: INDEX
 프로젝트: ha-push-batch
 작성일: 2026-07-22
-최종수정: 2026-07-22
+최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중
-요약: 해피포인트 출석체크 리마인드 푸시 발송 배치 (Spring Boot 3.5 / Java17 / Spring Batch / Oracle JdbcTemplate) — 유일한 Boot 기반 프로젝트
+요약: 해피포인트 배치서버 (Spring Boot 3.5 / Java17 / Spring Batch / Oracle JdbcTemplate) — 유일한 Boot 기반 프로젝트
 ---
 
-# 📇 ha-push-batch 문서 인덱스
+# 📇 해피포인트 배치서버 (ha-push-batch)
 
 ## 프로젝트 정체성 (중요)
 - **이 프로젝트 = 출석체크(룰렛 응모) 리마인드 푸시 발송 배치**. 사용자 트래픽을 받는 서버가 아니라 **스케줄 구동 배치**다.

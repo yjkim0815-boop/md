@@ -1,11 +1,11 @@
----
+﻿---
 문서유형: INDEX
 프로젝트: 공통(지식 베이스 루트)
 작성일: 2026-07-21
 최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중
-요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-08-03 `sms-agent-replacement` 과업 프로젝트 신설·자동주입 제외, 배치서버 환경 등록)
+요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-08-03 과업 프로젝트 2건 신설[`sms-agent-replacement`·`store-search-upgrade`], 배치서버·검색서버 환경 등록, 프로젝트 목록 표시 규칙 6열 확정)
 ---
 
 # 📚 happypointcard 지식 베이스 (md)
@@ -31,9 +31,78 @@
 
 - **자동 주입**: SessionStart 훅의 사용자 관리 화이트리스트에 등록된 항목만 자동 주입한다. 새 프로젝트·`ai/`·아카이브는 기본적으로 자동 주입하지 않으며, 화이트리스트 변경은 사용자만 지시한다.
 - **수동 연결**: 사용자가 **`<프로젝트 또는 주제> 컨텍스트 연결해`** 라고 말하면 해당 범위의 정본·직접 관련 문서를 현재 대화에 연결한다. 예: `ai 컨텍스트 연결해`, `이벤트 템플릿 컨텍스트 연결해`.
-- **유지 시간**: 수동 컨텍스트는 활성화 시점부터 **4시간**만 유지한다. 기간 중에는 해당 범위를 참조하고, 확정된 결과는 해당 KB 문서에 기록한다. 실제 시스템·코드·설정 변경에는 별도 명시적 실행 지시가 필요하다.
-- **만료**: 4시간이 지나면 해당 범위를 더 이상 자동 참조·기록하지 않는다. Codex는 해당 대화의 알림 자동화가 사용 가능한 경우 만료 알림을 예약하며, 모든 하네스는 다음 응답에서 만료 사실을 알린다. Claude Code의 독립 모바일 푸시는 별도 외부 알림 연동이 있어야 보장된다. 재사용하려면 같은 연결 명령으로 새 4시간을 시작한다.
+- **유지 시간**: 수동 컨텍스트는 활성화 시점부터 **12시간** 유지한다. 기간 중에는 해당 범위를 참조하고, 확정된 결과는 해당 KB 문서에 기록한다. 실제 시스템·코드·설정 변경에는 별도 명시적 실행 지시가 필요하다.
+- **만료**: 12시간이 지나면 해당 범위를 더 이상 자동 참조·기록하지 않는다. Codex는 해당 대화의 알림 자동화가 사용 가능한 경우 만료 알림을 예약하며, 모든 하네스는 다음 응답에서 만료 사실을 알린다. Claude Code의 독립 모바일 푸시는 별도 외부 알림 연동이 있어야 보장된다. 재사용하려면 같은 연결 명령으로 새 12시간을 시작한다.
 - **대화 경계**: 수동 연결은 현재 대화에만 적용하며, 새 대화는 비활성으로 시작한다.
+
+### 📋 프로젝트 목록 표시 규칙 (2026-08-03 확정 · Claude Code·Codex 공통)
+사용자가 **"프로젝트 목록"**을 요청하면 아래 **6열 표**로 응답한다.
+
+| 열 | 내용 |
+|---|---|
+| `No` | 일련번호 |
+| `이름` | KB 슬러그 |
+| `설명` | 한 줄 설명 + 핵심 스택 |
+| `상태` | INDEX 프론트매터의 `상태:` 값 |
+| **`컨텍스트 자동주입`** | 현재 세션에 자동 주입되는지 `예` 또는 `아니오` |
+| `구분` | **`태스크`** 또는 **`프로젝트`** |
+
+#### 용어 정의 (⚠️ 표기 고정)
+| KB 실체 | **표기 용어** | 의미 |
+|---|---|---|
+| `projects/` 하위 **저장소** 단위 | **프로젝트** | Bitbucket·CodeCommit 저장소와 1:1 대응하는 코드베이스 |
+| `projects/` 하위 **과업(엄브렐러)** 단위 | **태스크** | 저장소가 아닌 업무 단위. 여러 저장소·인프라에 걸치거나 코드 저장소가 없는 건 |
+
+- ⚠️ 사용자 대면 표기는 **"저장소"·"과업"이 아니라 "프로젝트"·"태스크"** 를 쓴다.
+- 📌 **정렬 규칙: `태스크`를 표 상단에, `프로젝트`를 그 아래에 배치한다.** 각 구분 내부는 최근 갱신순 또는 관련도순.
+
+#### 표시명 (⚠️ `설명` 열 고정값 · 2026-08-03 확정)
+목록의 `설명` 열에는 아래 **고정 표시명만** 쓴다. 벤더명·제품버전·상세 스택·부연설명(`— NDSoft NDMG → 섹타나인 v2.0.1`, `(Next.js16 / React19 / TS)` 등)을 덧붙이지 않는다.
+
+**태스크**
+| 슬러그 | **표시명(고정)** |
+|---|---|
+| `event-template` | **이벤트 템플릿** |
+| `homepage-ai-renewal` | **홈페이지 AI 리뉴얼** |
+| `sms-agent-replacement` | **SMS Agent 전환** |
+| `store-search-upgrade` | **매장검색엔진 고도화 (와이즈넛->엘라스틱서치)** |
+
+**프로젝트**
+| 슬러그 | **표시명(고정)** |
+|---|---|
+| `happypoint-web2` | **홈페이지 리뉴얼 프론트 FO** |
+| `ha-web-api` | **홈페이지 리뉴얼 백엔드 API** |
+| `ha_api` | **해피포인트앱 백엔드 API (Spring MVC)** |
+| `ha_web` | **해피포인트 홈페이지 (Spring MVC)** |
+| `ha_admin` | **해피포인트 앱/웹 어드민** |
+| `ha-push-batch` | **해피포인트 배치서버** |
+| `ha_panel` | **해피포인트 패널 서비스 (설문)** |
+| `thehappy_ios` | **해피포인트 네이티브 iOS** |
+| `thehappy_aos` | **해피포인트 네이티브 AOS** |
+| `gcs_fo` | 기프트카드 프론트 FO |
+| `gcs` | 기프트카드 백엔드 API |
+| `spc_batch` | SPC 배치 (CodeCommit) |
+| `spc_spring_batch` | SPC Spring Batch (CodeCommit) |
+
+> 스택·아키텍처 상세는 `설명` 열이 아니라 아래 [📁 프로젝트 목록](#-프로젝트-목록) 표의 `스택`·`요약` 열과 각 `INDEX.md` 에서 다룬다.
+
+#### 목록 제외 대상 (⚠️ 2026-08-03 확정)
+아래 항목은 **"프로젝트 목록" 응답 표에 표시하지 않는다.** 단 **KB 문서는 그대로 유지**하며, 해당 저장소를 직접 다루는 작업에서는 정상적으로 참조·갱신한다.
+
+| 슬러그 | 제외 사유 |
+|---|---|
+| `spc_batch` | 상시 관리 대상 아님 (독립 스케줄러 묶음, 최근 커밋 2024-08) |
+| `spc_spring_batch` | 상시 관리 대상 아님 (Anyframe Batch, 저장소 2019년 이후 정지) |
+
+- 제외 항목은 목록 번호(`No`)에도 포함하지 않는다 → 현재 목록은 **태스크 4 + 프로젝트 11 = 총 15건**.
+- 제외 대상 추가·해제는 **사용자 지시로만** 변경한다.
+
+#### 컨텍스트 자동주입 열 규칙
+- ⚠️ 열 이름은 **"컨텍스트 자동주입"** 이다. 수동 연결 여부와 잔여 시간은 표에 표시하지 않는다.
+- `예`는 SessionStart 훅으로 해당 항목이 자동 주입되는 경우, `아니오`는 그 외 경우다.
+- 현재 SessionStart 훅은 `README.md`·`shared/ecc-reference.md`만 고정 주입하므로, 개별 `projects/` 항목은 모두 `아니오`로 표기한다.
+
+> ℹ️ **현재 훅 구현 상태(2026-08-03)**: `~/.claude/hooks/inject-readme.js` 는 `README.md` + `shared/ecc-reference.md` **2개 파일만 고정 주입**하며, **화이트리스트 구조가 없다.** 따라서 `projects/` 하위는 **전부 수동 주입 대상**이다. 위 "자동 주입" 항목의 화이트리스트 표현은 **향후 구현 예정 사항**이다.
 
 ## 🔄 Codex·Claude Code 공통 규칙 적용
 
@@ -51,7 +120,7 @@ md/
 │  ├─ server-env.md       개발/스테이징 서버(EC2·Tomcat) 공통 환경
 │  ├─ security-review.md  보안 리뷰/취약점 진단 기준
 │  └─ conventions/        기술별 코드 컨벤션 (java/spring/sql-mybatis/js/react/html-css) + api-response.md(전 프로젝트 API 응답 표준)
-├─ ai/                    개인 AI 활용 — 하네스·컨텍스트·로컬 모델 (`ai 컨텍스트 연결해`로 4시간 수동 참조, 자동 주입 제외)
+├─ ai/                    개인 AI 활용 — 하네스·컨텍스트·로컬 모델 (`ai 컨텍스트 연결해`로 12시간 수동 참조, 자동 주입 제외)
 │  └─ README.md           역할·경계·단계적 구성 계획
 ├─ templates/             문서 작성용 템플릿 (INDEX/ARCHIVE/WORKLOG/MEETING/TENDENCY/WEEKLY)
 └─ projects/              프로젝트별 인덱스 + 아카이브 + 워크로그 + 회고(월/주)
@@ -64,16 +133,28 @@ md/
    ├─ ha_api/          해피포인트 앱 API 서버 (하이브리드 앱 / Spring5.2 / Java8)
    ├─ ha_web/          레거시 홈페이지 (Spring MVC / Java8)
    ├─ ha-web-api/      신규 홈페이지 리뉴얼 백엔드 (Spring6 / Java21)
-   ├─ ha-push-batch/   출석체크 리마인드 푸시 배치 (Spring Boot3.5 / Java17 / Spring Batch)
+   ├─ ha-push-batch/   해피포인트 배치서버 (Spring Boot3.5 / Java17 / Spring Batch)
    ├─ ha_panel/        앱 설문 패널 "패널KOK" (Spring MVC / Java8 / WebLogic / 자체 SPA=AMP)
    ├─ thehappy_ios/    해피포인트 iOS 네이티브 앱 (Swift5 / iOS13+ / UIKit / 웹뷰 하이브리드)
    ├─ thehappy_aos/    해피포인트 Android 네이티브 앱 (Kotlin2.0 / minSdk26 / XML+ViewBinding / 웹뷰 하이브리드)
-   ├─ gcs_fo/          기프트카드 웹뷰 프론트 (React18 / TypeScript / CRA+CRACO) ← 앱 안에서 뜨는 화면
+   ├─ gcs_fo/          기프트카드 프론트 FO (React18 / TypeScript / CRA+CRACO) ← 앱 안에서 뜨는 화면
    ├─ gcs/             기프트카드 백엔드 API 서버 (Spring Boot3.4 / Java21 / JPA+QueryDSL / PostgreSQL) ← gcs_fo의 서버 짝
-   ├─ sms-agent-replacement/  SMS 발송 에이전트 교체 과업 (저장소 아님 · 자동주입 제외)
-   └─ store-search-upgrade/   매장검색엔진 고도화 2026-03 (SF-1→Elasticsearch, 저장소 아님 · 자동주입 제외)
+   ├─ homepage-ai-renewal/    홈페이지 AI 리뉴얼 (엄브렐러) ⚠️ task/ 이관 예정
+   └─ task/                ★ 태스크(저장소 아닌 과업) 전용 폴더 — 2026-08-03 신설
+      ├─ event-template/         이벤트 템플릿 (INDEX + archive/ 정본허브+번들16)
+      ├─ sms-agent-replacement/  SMS Agent 전환 (INDEX + WORKLOG + worklog/weekly)
+      └─ store-search-upgrade/   매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치) 2026-03
 ```
-> 📛 **폴더명 규칙(2026-07-22 변경)**: `projects/` 하위 폴더명은 **Bitbucket 저장소명과 1:1로 일치**시킨다. 이전에는 로컬 임포트 폴더명 기반 `j-ha-*` slug를 썼으나, 머신마다 다를 수 있는 임포트명 대신 **원격 저장소라는 단일 기준**으로 통일했다. 신규 프로젝트 등록 시에도 `git remote get-url origin`의 저장소명을 그대로 쓴다.
+
+### 📂 태스크 폴더 관리 규칙 (2026-08-03 확정)
+- **위치**: 태스크는 **`projects/task/<슬러그>/`** 아래 둔다. 저장소 프로젝트는 기존대로 `projects/<저장소명>/`.
+- **폴더명**: 태스크 슬러그는 **저장소명이 아닌 과업명(kebab-case)** 을 쓴다 → 아래 [폴더명 규칙]의 **명시적 예외**.
+- **내부 구조**: 프로젝트와 동일 (`INDEX.md` + `WORKLOG-YYYYMMDD-<주제>.md` + `worklog/weekly/`).
+- **작업로그 위치**:
+  - **대상 프로젝트(저장소)가 있는 태스크** → 작업로그는 **각 프로젝트 폴더**에 쌓고, 태스크 INDEX가 링크로 참조한다. (예: `homepage-ai-renewal` → `happypoint-web2`·`ha-web-api`의 `worklog/weekly/`)
+  - **대상 저장소가 없는 태스크** → **태스크 폴더 안**에 `worklog/weekly/` 를 둔다. (예: `sms-agent-replacement` — 벤더 납품 바이너리라 저장소 없음)
+- **이관 현황(2026-08-03)**: `sms-agent-replacement` · `store-search-upgrade` · `event-template` **이관 완료**. `homepage-ai-renewal` 은 **작업 진행 후 이관 예정**(사용자 지시).
+> 📛 **폴더명 규칙(2026-07-22 변경 · 2026-08-03 예외 추가)**: `projects/` 하위 폴더명은 **Bitbucket 저장소명과 1:1로 일치**시킨다. ⚠️ **단 `projects/task/` 하위(태스크)는 예외** — 저장소가 없으므로 과업명 kebab-case 를 쓴다(위 [태스크 폴더 관리 규칙] 참조). 이전에는 로컬 임포트 폴더명 기반 `j-ha-*` slug를 썼으나, 머신마다 다를 수 있는 임포트명 대신 **원격 저장소라는 단일 기준**으로 통일했다. 신규 프로젝트 등록 시에도 `git remote get-url origin`의 저장소명을 그대로 쓴다.
 >
 > ⚠️ **저장소명 ≠ 로컬 폴더명.** 대부분 다르므로 아래 매핑표를 기준으로 삼는다. 문서 안에서 **KB 슬러그는 저장소명**, **`../` 상대경로는 로컬 폴더명**을 쓴다(경로는 실제 디스크를 따라가야 하므로).
 >
@@ -127,32 +208,51 @@ md/
 | [security-review.md](./shared/security-review.md) | 초안 | OWASP 기반 취약점 진단/보안 리뷰 개인 기준 + ECC 커밋 전 체크리스트·시크릿 스윕·대응 프로토콜·진단 이력 |
 | [conventions/README.md](./shared/conventions/README.md) | 초안 | 기술별 코드 컨벤션 인덱스 (개발자 개인 공통 규칙) |
 
-## 📇 프로젝트 인덱스 (projects)
+## ✅ 태스크 목록
+| 태스크 | 상태 | 대상 프로젝트 | 요약 |
+|--------|------|---------------|------|
+| [event-template](./projects/task/event-template/INDEX.md) | **완료(phase3 준비)** | [ha_api](./projects/ha_api/INDEX.md) + [ha_admin](./projects/ha_admin/INDEX.md) | **이벤트 템플릿** — 이벤트 개발을 개별 JSP에서 설정 기반 Campaign Builder로 전환. 1·2차(2025/2026 상반기) 완료, **Phase 3 준비 중**. 저장소 아님 |
+| ⭐ [homepage-ai-renewal](./projects/homepage-ai-renewal/INDEX.md) | 진행중 | [happypoint-web2](./projects/happypoint-web2/INDEX.md) + [ha-web-api](./projects/ha-web-api/INDEX.md) | **홈페이지 AI 리뉴얼** — 프론트·백엔드를 함께 이행하는 과업. 저장소 아님 |
+| [sms-agent-replacement](./projects/task/sms-agent-replacement/INDEX.md) | 진행중(분석) | 배치 서버 `/app/ndsoft` + 섹타나인 Agent | **SMS Agent 전환** — 현행 NDSoft에서 신규 Agent v2.0.1로 전환. 저장소 아님 |
+| [store-search-upgrade](./projects/task/store-search-upgrade/INDEX.md) | 완료(잔여정리) | 검색 서버 Elasticsearch 8.19.12 | **매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치)** — SF-1 라이선스 만료 대응 전환. 저장소 아님 |
+
+## 📁 프로젝트 목록
 | 프로젝트 | 상태 | 스택 | 요약 |
 |----------|------|------|------|
-| ⭐ [homepage-ai-renewal](./projects/homepage-ai-renewal/INDEX.md) | 진행중 | **(상위/엄브렐러)** Next.js16 프론트 + Spring6 백엔드 | **홈페이지 AI 리뉴얼** — 프론트([happypoint-web2](./projects/happypoint-web2/INDEX.md))·백엔드([ha-web-api](./projects/ha-web-api/INDEX.md))를 하나로 묶는 상위 프로젝트. 저장소 아님. 완료까지 지속 현행화 |
 | [ha_api](./projects/ha_api/INDEX.md) | 진행중 | Java8 / Spring5.2 / Spring MVC + JSP(SiteMesh3) / MyBatis | 해피포인트 **앱** 백엔드 API 서버 (하이브리드 앱: 웹뷰 + REST). 홈페이지 프로젝트와 구분 |
 | [ha-web-api](./projects/ha-web-api/INDEX.md) | 진행중 | Java21 / Spring6 / Jakarta / MyBatis / Tomcat10.1 | 신규 홈페이지 리뉴얼 Spring API 백엔드 (마이그레이션 작업물의 정식 귀속처) |
 | [ha_web](./projects/ha_web/INDEX.md) | 유지(레거시) | Java8 / Spring5.2 / Spring MVC + JSP / Tomcat9 | 기존 홈페이지(레거시). 소스 원복 예정 |
-| [ha-push-batch](./projects/ha-push-batch/INDEX.md) | 진행중 | **Java17 / Spring Boot 3.5 / Spring Batch / JdbcTemplate / Gradle** | 출석체크 리마인드 푸시 발송 배치(저장소명 `ha-push-batch`). ⚠️ KB 내 **유일한 Boot·Gradle 프로젝트**이자 MyBatis 미사용 |
+| [ha-push-batch](./projects/ha-push-batch/INDEX.md) | 진행중 | **Java17 / Spring Boot 3.5 / Spring Batch / JdbcTemplate / Gradle** | 해피포인트 배치서버(저장소명 `ha-push-batch`). ⚠️ KB 내 **유일한 Boot·Gradle 프로젝트**이자 MyBatis 미사용 |
 | [ha_panel](./projects/ha_panel/INDEX.md) | 진행중 | Java8 / Spring MVC + JSP / MyBatis / **WebLogic** | 앱 설문 패널 서비스 **"패널KOK(SURVEY KOK)"** — 설문 참여 → 해피포인트 적립(저장소명 `ha_panel`, **언더스코어**). ⚠️ KB 내 유일한 **자체 SPA 프레임워크(AMP)** · **빌드 파일 부재** |
 | [thehappy_ios](./projects/thehappy_ios/INDEX.md) | 진행중 | **Swift5 / iOS13+ / UIKit + Storyboard / MVVM + Combine** | 해피포인트 **iOS 네이티브 앱 `TheHappy`**(저장소명 `thehappy_ios`). 웹뷰 하이브리드 — 백엔드 짝은 `ha_api`. ⚠️ KB 내 **첫 비(非)JVM·클라이언트 프로젝트** → java/spring/sql 컨벤션 미적용 |
 | [thehappy_aos](./projects/thehappy_aos/INDEX.md) | 진행중 | **Kotlin2.0 / minSdk26 / XML + ViewBinding / Activity+ViewModel+Repository / Gradle KTS** | 해피포인트 **Android 네이티브 앱 `TheHappy`**(저장소명 `thehappy_aos`). **`thehappy_ios`의 짝 — 구조가 1:1 대응**. ⚠️ **하드코딩 크리덴셜 Critical 1건** 검출 · release 난독화 비활성 |
-| [gcs_fo](./projects/gcs_fo/INDEX.md) | 진행중 | **React18 / TypeScript4.9 / CRA + CRACO / TanStack Query v5 + Zustand** | 해피포인트 앱 내 **기프트카드(상품권) 웹뷰 프론트**(저장소명 `gcs_fo`, **언더스코어**). 충전·환불·현금영수증 등 **금전 거래 화면**. ⚠️ KB **최초 웹 프론트엔드** · **하드코딩 크리덴셜 Critical 1건** 검출 · 테스트/CI 0건. 백엔드 짝 = [gcs](./projects/gcs/INDEX.md) |
+| [gcs_fo](./projects/gcs_fo/INDEX.md) | 진행중 | **React18 / TypeScript4.9 / CRA + CRACO / TanStack Query v5 + Zustand** | 해피포인트 앱 내 **기프트카드 프론트 FO**(저장소명 `gcs_fo`, **언더스코어**). 충전·환불·현금영수증 등 **금전 거래 화면**. ⚠️ KB **최초 웹 프론트엔드** · **하드코딩 크리덴셜 Critical 1건** 검출 · 테스트/CI 0건. 백엔드 짝 = [gcs](./projects/gcs/INDEX.md) |
 | [gcs](./projects/gcs/INDEX.md) | 진행중 | **Java21 / Spring Boot 3.4.2 / Gradle / JPA + QueryDSL / PostgreSQL17 / Redis(Redisson)** | 기프트카드 **백엔드 API 서버**(저장소명 `gcs`). **채널별(승인·월렛·판매·관리자·공통) API** 구조. 🟢 **ECC 적용 강도 최상위** — KB 최초 **JPA·PostgreSQL·Redis** 사용, **테스트 48개 실재**(KB 최대). ⚠️ **운영 크리덴셜 평문 커밋 Critical 1건** · **Spring Security 미사용**(커스텀 인터셉터 인증) · CI 0건 |
 | [happypoint-web2](./projects/happypoint-web2/INDEX.md) | 진행중 | **Next.js 16 / React 19 / TypeScript / TailwindCSS v4 / pnpm / oracledb** | 신규 홈페이지 리뉴얼 **프론트엔드**(저장소명 `happypoint-web2`). PC/모바일 미들웨어 분리·계약 API(ha-web-api) 연동·로그인 BFF. 백엔드 짝 = [ha-web-api](./projects/ha-web-api/INDEX.md), 대체 대상 = [ha_web](./projects/ha_web/INDEX.md) |
 | [ha_admin](./projects/ha_admin/INDEX.md) | 진행중 | Java8 / Spring MVC + JSP / MyBatis / Oracle / WAR | 해피포인트 **관리자(백오피스)** 웹(저장소명 `ha_admin`, **언더스코어**) |
-| [spc_batch](./projects/spc_batch/INDEX.md) | 진행중 | Java / Maven (jar) — 상세 확인 필요 | SPC 배치(저장소 `spc_batch`, **AWS CodeCommit**) |
-| [spc_spring_batch](./projects/spc_spring_batch/INDEX.md) | 진행중 | Java / Spring Batch(추정) — 상세 확인 필요 | SPC Spring Batch(저장소 `spc_spring_batch`, **AWS CodeCommit**) |
-| [sms-agent-replacement](./projects/sms-agent-replacement/INDEX.md) | 진행중(분석) | **(과업/엄브렐러)** 현행 NDSoft(Java8 레거시) → 신규 **섹타나인 Agent v2.0.1**(Spring Boot1.5/MyBatis/Netty, Java8 호환) | **SMS 발송 에이전트 전환 개발** — 전사 "2차 문자 서비스 전환". 배치서버(`ip-10-0-70-71`) `/app/ndsoft` → 섹타나인 Agent. 저장소 아님. 🔕 **자동주입 제외**(수동 연결 전용). ✅ **DB 테이블 동일 → 발송 요청 코드 수정 불필요**. 🔴 **결과코드 체계 상이**(같은 숫자 다른 의미)·`fetch.hour=1` 자동실패·`TRAN_TYPE=5` 미조회·로그테이블 컬럼길이 결함 |
-| [store-search-upgrade](./projects/store-search-upgrade/INDEX.md) | 완료(잔여정리) | **(과업/엄브렐러)** 와이즈넛 SF-1 → **Elasticsearch 8.19.12**(RPM/번들JDK/힙2g) | **매장검색엔진 고도화 (2026-03)** — SF-1 **라이선스 2026-04-05 만료**가 데드라인, 만료 7일 전 **03-29 ES 기동 완료**. 검색서버 `ip-10-0-75-31`. 저장소 아님. 🔕 **자동주입 제외**. 🟠 SF-1 프로세스 **4개월째 잔존**(정리 필요) |
+
+### 🚫 목록 제외 저장소 (문서는 유지 · "프로젝트 목록" 표에는 미표시)
+| 프로젝트 | 상태 | 스택 | 요약 |
+|----------|------|------|------|
+| [spc_batch](./projects/spc_batch/INDEX.md) | 진행중 | Java / **Maven 단일 jar**(`hpc_batch`) / javax.mail · ojdbc6 | SPC 배치(**AWS CodeCommit**). **독립 실행형 스케줄러 묶음**(Spring Batch 아님) — 배너종료·배포·해피오더동기화·로또·메일발송(Slack/Telegram)·기상청 날씨/미세먼지·**매장 좌표변환(KATEC→위경도)**. 커밋 319, 최근 2024-08 |
+| [spc_spring_batch](./projects/spc_spring_batch/INDEX.md) | 진행중(형상 정합 확인 필요) | **삼성SDS Anyframe Batch 1.0.0** / Java8 / 빌드파일 없음(lib 동봉) | SPC 배치(**AWS CodeCommit**). ⚠️ **이름과 달리 Spring Batch 아님**. ✅ **배치서버 `ip-10-0-70-71` 의 `/app/batch` 가동 소스로 확정**(2026-08-03, lib 목록 일치). 기상청 예보·미세먼지 수집. 🔴 **커밋 2개·2019년 이후 정지 + 서버의 `wthr/gov` 패키지가 저장소에 없음** → 형상관리 누락 의심 |
+
+> 📋 **"프로젝트 목록" 응답 규칙 (요약 · 정본은 [§컨텍스트 활성화 정책 > 프로젝트 목록 표시 규칙](#-프로젝트-목록-표시-규칙-2026-08-03-확정--claude-codecodex-공통))**
+> 사용자가 "프로젝트 목록"을 요청하면 태스크와 프로젝트를 **한 개의 Markdown 표**로 제공한다. 열 순서는 반드시 **`No | 이름 | 설명 | 상태 | 컨텍스트 주입 | 구분`** 이다.
+> 설명 고정값: `sms-agent-replacement` = **SMS Agent 전환**, `ha-push-batch` = **해피포인트 배치서버**, `gcs_fo` = **기프트카드 프론트 FO**.
+> - **이름**: KB 슬러그(영문, backtick 표기). **설명**: 사람이 읽는 한글 명칭 + 핵심 스택. **구분**: `태스크` 또는 `프로젝트`.
+> - ⚠️ **`컨텍스트 주입`**(구 "컨텍스트 자동주입" 폐기): **주입 여부 + 잔여 시간**을 표기한다(예: `✅ 11h 24m`). 미주입은 `❌`. 상시 주입 대상은 `상시`. 잔여 시간은 **주입 시각 + 12시간** 기준.
+> - **정렬**: **태스크를 먼저, 프로젝트를 다음에** 표시한다. 현재 고정 순서는 `event-template` → `homepage-ai-renewal` → `sms-agent-replacement` → `store-search-upgrade` → `happypoint-web2` → `ha-web-api` → `ha_api` → `ha_web` → `ha_admin` → `ha-push-batch` → `ha_panel` → `thehappy_ios` → `thehappy_aos` → `gcs_fo` → `gcs` 이다(**총 15건**).
+> - 🚫 **제외**: `spc_batch` · `spc_spring_batch` 는 목록에 표시하지 않는다(문서는 유지). 상세는 위 [목록 제외 대상](#목록-제외-대상--2026-08-03-확정).
+> - **태스크** = 코드 저장소가 아닌, 여러 프로젝트 또는 인프라 전환을 묶는 과업. **프로젝트** = 저장소 1:1 대응 코드베이스.
+> - 현재 `projects/` 하위는 **전부 미주입**이 기본이며, `md/README.md`·`shared/ecc-reference.md`만 세션 시작 시 상시 주입된다.
 
 > 📱 **네이티브 앱 2종은 반드시 함께 본다**: [thehappy_ios](./projects/thehappy_ios/INDEX.md) ↔ [thehappy_aos](./projects/thehappy_aos/INDEX.md) 는 **같은 백엔드([ha_api](./projects/ha_api/INDEX.md))** 를 쓰고 파일명·줄수까지 대응하는 **동일 설계**다(`JavascriptBridge` 양쪽 902줄 등). 앱 이슈는 한쪽만 고치지 말고 **동기화 여부를 항상 확인**한다. 상세 대응표는 [thehappy_aos INDEX](./projects/thehappy_aos/INDEX.md#-ios--aos-구조-대응표-짝-프로젝트-대조용).
 
 > 🎁 **기프트(GCS) 서비스는 프론트/백을 함께 본다**: [gcs_fo](./projects/gcs_fo/INDEX.md)(웹뷰 프론트) ↔ [gcs](./projects/gcs/INDEX.md)(백엔드). ✅ **2026-07-22 `gcs` 등록 완료**로 "서버 측 판정 불가" 제약이 해소됐다. 프론트의 토큰 발급(`axios.config.ts`)은 백엔드 `POST /v1/common/api/token` 과 직결되고, **CORS 실패 원인이 백엔드 `ApiAuthInterceptor` 의 하드코딩 Origin 목록**인 경우가 있으므로 **인증·CORS 이슈는 반드시 양쪽을 대조**한다. 웹뷰라 실제로는 앱 2종을 포함한 **3자 동기화** 대상이기도 하다.
 > 🟢 **`gcs` 는 ECC 적용 강도가 KB 최상위다**: [ha-push-batch](./projects/ha-push-batch/INDEX.md)에 이은 **두 번째 Boot·Gradle** 프로젝트이자 **JPA·PostgreSQL·Redis를 실제로 쓰는 최초 프로젝트** → `jpa-patterns`·`postgres-patterns`·`redis-patterns` 가 **KB에서 처음으로 적용 대상을 갖게 됐다**. 또한 **테스트 48개가 실재**해 `tdd-workflow`·`verification-loop` 를 온전히 돌릴 수 있는 유일 프로젝트다(단 CI 부재로 로컬 수동). 상세: [ecc-reference §4-5](./shared/ecc-reference.md).
 
-> ⚙️ **이벤트 템플릿 프로젝트는 `ha_api` ↔ `ha_admin` 을 함께 본다** (✅ 완료, 2026-07-28 아카이브 등록): 이벤트 개발을 개별 JSP에서 **설정 기반 Campaign Builder**로 전환한 과업. **1차(2025)** Rule Based 고도화(`EVENT_PROC_*`) → **2차(2026 상반기)** 프로모션폼 + Rule Based 클래스 바인딩(`EVENT_TMPL_*`). **BO 등록·페이지빌더 = [ha_admin](./projects/ha_admin/INDEX.md) / 앱 런타임·Rule 실행 = [ha_api](./projects/ha_api/INDEX.md)** 로 양쪽에 걸쳐 있어 한쪽만 고치면 안 된다. **정본 = [ha_api 아카이브](./projects/ha_api/archive/ARCHIVE-event-template.md)** — 크로스 프로젝트 **"정본 1곳 + 서브 INDEX 포인터"** 규칙의 첫 적용 사례다.
+> ⚙️ **이벤트 템플릿 프로젝트는 `ha_api` ↔ `ha_admin` 을 함께 본다** (✅ 완료, 2026-07-28 아카이브 등록): 이벤트 개발을 개별 JSP에서 **설정 기반 Campaign Builder**로 전환한 과업. **1차(2025)** Rule Based 고도화(`EVENT_PROC_*`) → **2차(2026 상반기)** 프로모션폼 + Rule Based 클래스 바인딩(`EVENT_TMPL_*`). **BO 등록·페이지빌더 = [ha_admin](./projects/ha_admin/INDEX.md) / 앱 런타임·Rule 실행 = [ha_api](./projects/ha_api/INDEX.md)** 로 양쪽에 걸쳐 있어 한쪽만 고치면 안 된다. **정본 = [event-template 태스크 아카이브](./projects/task/event-template/archive/ARCHIVE-event-template.md)** (2026-08-03 `task/` 이관) — 크로스 프로젝트 **"정본 1곳 + 서브 INDEX 포인터"** 규칙의 첫 적용 사례다.
 
 > ℹ️ **등록 현황(2026-07-26 현행화)**: 워크스페이스의 git 저장소를 모두 등록 완료 — `happypoint-web2`, `ha_admin`, `spc_batch`, `spc_spring_batch` 신규 추가. 로컬 전용 미체크아웃(`thehappy_ios`/`thehappy_aos`는 인덱스만 존재). ⚠️ `ECC`(github `affaan-m/ECC`)는 해피포인트 프로젝트가 아니라 컨텍스트/스킬 참조물 → [shared/ecc-reference.md](./shared/ecc-reference.md)에서 다룸(프로젝트 미등록). 신규 저장소는 `git remote get-url origin`의 저장소명으로 `projects/<slug>/INDEX.md` 추가.
 >
@@ -187,7 +287,7 @@ md/
   - **번호 prefix**로 주제군 구분·정렬. `00-INDEX.md` 는 **반드시** 두고 허브와 상호링크
   - **대용량 원본(데이터 샘플 등)은 번들에 넣지 않고 `90-source-manifest.md` 에 위치·주의사항만 기록**
   - 원본이 중복·padding 구조면 **큐레이션(주제별 재편성)** 하되, **DDL은 원문 보존**
-  - 적용 사례: [ha_api 이벤트 템플릿](./projects/ha_api/archive/ARCHIVE-event-template.md) + [번들 16파일](./projects/ha_api/archive/ARCHIVE-event-template/00-INDEX.md)
+  - 적용 사례: [이벤트 템플릿](./projects/task/event-template/archive/ARCHIVE-event-template.md) + [번들 16파일](./projects/task/event-template/archive/ARCHIVE-event-template/00-INDEX.md)
 - **크로스 프로젝트(여러 저장소에 걸친) 완료건은 "정본 1곳 + 상대 INDEX 포인터"** 로 관리한다. 양쪽 복사 금지(내용이 갈라짐).
   - 메인 프로젝트에 풀버전 아카이브를 두고, 프론트매터에 **`관련프로젝트:`** 필드로 서브 프로젝트를 명시한다(→ `grep "관련프로젝트"` 로 크로스 건 일괄 검색).
   - 서브 프로젝트 `INDEX.md` 문서목록에는 **정본을 가리키는 링크 행 1줄**만 추가한다.
