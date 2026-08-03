@@ -3,10 +3,10 @@
 프로젝트: 공통
 이슈키: --
 작성일: 2026-07-16
-최종수정: 2026-07-21
+최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중
-요약: happypointcard 개발/스테이징 서버(EC2) 및 Tomcat 인스턴스 공통 환경 정보
+요약: happypointcard 개발/스테이징/운영 서버(EC2)·Tomcat 인스턴스 공통 환경 정보 (2026-08-03 배치서버 `ip-10-0-70-71`[NDSoft SMS 에이전트+Anyframe 배치] · 검색서버 `ip-10-0-75-31`[와이즈넛 SF-1 + Elasticsearch 8.19] 등록)
 ---
 
 # 🖥️ 공통 서버 환경 (개발)
@@ -65,6 +65,62 @@
 - **DB(운영)**: 톰캣 설정에 DB 없음 → 앱(WAR)이 `spring.profiles.active=prod`로 운영 DB 분기. 계정/비번 **문서화 금지**.
 - **로컬 설정 정본**: `D:\100_WORKS\web-tomcat-10.1.57`(2026-07-28 운영값으로 전환), 운영 원본 대조 `D:\100_WORKS\web-tomcat-8.5.59`.
 - ⚠️ **확인 필요(배포 전)**: ① 운영 nginx/L4가 8021로 라우팅하는지 ② 운영 collector(`11.7.11.31`) scouter-server 버전이 agent 2.21.3과 호환되는지(server≥agent) ③ JDK21 기동 로그에서 GC 경고 없는지.
+
+## 배치서버 (`ip-10-0-70-71`) — 2026-08-03 신규 등록
+웹/API 톰캣 서버와 **별개의 서버**. 한 서버에 **성격이 다른 두 시스템이 공존**하므로 혼동 주의.
+
+| 시스템 | 경로 | 런타임 | 성격 |
+|---|---|---|---|
+| **SMS 발송 에이전트** | `/app/ndsoft` | Java (힙 64MB 고정, `KSC5601`) | **(주)엔디소프트 NDMG** 벤더 납품 바이너리. 상시 상주 |
+| **Anyframe 배치** | `/app/batch` | `/opt/java/java-se-8u43` (JDK8) | 삼성SDS Anyframe. Spring 2.5.6 / spring-batch 1.1.4. 잡 단위 기동 |
+
+- **실행 계정**: 둘 다 `ec2-user`
+- **Anyframe 런처**: `com.sds.anyframe.batch.launcher.BatchJobLauncher <잡CFG.xml> BASE_DT=… BASE_TM=… RUN_MODE=PROD`
+  - 예: `hp/batch/wthr/gov/GovForecastGrib_CFG.xml`(기상청 예보) — 분 단위 기동 확인
+  - DB 드라이버 3종 동시 탑재: `ojdbc8` · `mysql-connector-j 8.0.32` · `sqljdbc4`
+  - KB 저장소 [spc_batch](../projects/spc_batch/INDEX.md) / [spc_spring_batch](../projects/spc_spring_batch/INDEX.md) 와의 **동일 여부는 미확인**
+- **SMS 에이전트 요약**: 설치 루트 `/app/ndsoft`(`bin`/`conf`/`lib`/`logs`), jar `lib/nd-message-agent-spc.jar`(**2016-12 빌드**), 메인 `ndsoft.message.agent.base.executor.ConsoleExecutor`
+  - ⚠️ **`-cp` 가 상대경로(`..//lib/`)** → **반드시 `/app/ndsoft/bin` 에서 기동**. cwd 틀리면 기동 실패
+  - ⚠️ **PPID=1 · systemd 미등록** → 프로세스 사망 시 **자동 재기동 없음**
+  - ⚠️ `-Dprocess.id=ndsoft-agnet-sms` 의 `agnet` 은 **벤더 원문 오타** — 임의 수정 금지
+  - ⚠️ `conf/jdbc.conf`·`conf/agent.conf` 에 **평문 크리덴셜 우려** → 조회 시 마스킹, **문서화 금지**
+  - 📄 상세·리스크·교체 검토: **[projects/sms-agent-replacement](../projects/sms-agent-replacement/INDEX.md)** (정본)
+
+## 검색 서버 (`ip-10-0-75-31`) — 2026-08-03 신규 등록
+⚠️ **배치서버(`ip-10-0-70-71`)와 다른 별도 서버.** 혼동 주의.
+**상용 검색엔진(와이즈넛 SF-1)과 Elasticsearch가 같은 서버에 공존**한다.
+
+| 엔진 | 경로 | 계정 | 기동 | 비고 |
+|---|---|---|---|---|
+| **와이즈넛 SF-1** | `/app/search/sf-1` | `ec2-user` | `cmanager` **2025년** / `isc` **2026-02-25** | 상용. **라이선스 2026-04-05 만료 — 폐기 대상인데 프로세스 잔존** |
+| **Elasticsearch 8.19.12** | `/usr/share/elasticsearch` (RPM) | `elasticsearch` | **2026-03-29** | **현행 검색엔진**. 힙 `-Xms2g -Xmx2g`, G1GC, 번들 JDK, x-pack-ml |
+
+> 📌 **공존 사유 확정(2026-08-03)**: **[매장검색엔진 고도화(2026-03)](../projects/store-search-upgrade/INDEX.md)** 과업으로 SF-1 라이선스 만료(2026-04-05) 전에 ES로 전환했다. 현행은 **ES**, SF-1은 **미정리 잔존**이다. ⚠️ SF-1 정지 전 참조하는 앱이 없는지 먼저 확인할 것.
+
+### 와이즈넛 SF-1 구성
+```
+/app/search/sf-1/
+├─ bin/      cmanager(컬렉션 매니저) · isc(Index Search Controller)
+├─ config/   cmanager.xml · config.xml
+├─ license/  license.xml      ← 상용 라이선스(만료일 확인 필요)
+├─ log/      cmanager · isc
+└─ pid/      cmanager.pid · isc.pid
+```
+- 기동 인자: `cmanager -home /app/search/sf-1 -conf ../config/cmanager.xml -pid ... -log ...`
+- `isc -conf config/config.xml -license license/license.xml -log ... -pid ...`
+- 누적 CPU: `cmanager` 약 20분 / **`isc` 약 6시간 22분** → 실부하는 `isc`
+- ⚠️ **PPID=1 · systemd 미등록** → 사망 시 자동 재기동 없음 (NDSoft SMS 에이전트와 동일 패턴)
+- ⚠️ `isc`만 2026-02-25 재기동 — **사유 미확인**
+
+### ❓ 미확인 (조사중)
+- [x] ~~SF-1 ↔ ES 관계~~ → **해소**: 매장검색엔진 고도화(2026-03) 전환. 현행=ES, SF-1=잔존
+- [x] ~~SF-1 라이선스 만료일~~ → **2026-04-05 만료**
+- [ ] **SF-1 정리** — 참조 앱 없음 확인 후 프로세스 정지·경로 보존/삭제 결정
+- [ ] SF-1 컬렉션 구성·서비스 포트 (정리 전 참조 여부 판단용)
+- [ ] ES 인덱스 실사용 여부(`_cat/indices`), 보안(x-pack) 설정
+- [ ] 홈페이지 검색(`page/search` · 백엔드 `/api/search` 스텁)이 어느 엔진에 연결되는지
+      → [happypoint-web2](../projects/happypoint-web2/INDEX.md) · [ha-web-api](../projects/ha-web-api/INDEX.md)
+- [ ] 색인 배치 위치(이 서버 cron인지 배치서버인지)
 
 ## ELB/리버스 프록시 라우팅 (리뉴얼: 프론트+백엔드 한 도메인 분기)
 **3도메인**: 개발 `dev.happypointcard.com` · 스테이징 `stg.happypointcard.com` · 운영 `www.happypointcard.com`.

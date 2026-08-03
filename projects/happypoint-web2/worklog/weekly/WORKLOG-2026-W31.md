@@ -149,7 +149,10 @@
 - `/page/join/policy`는 `pingModel()` 대신 직접 `POST /api/join/policy`를 호출하므로 별도 디버그 로그를 추가했다. local/dev/stg(`APP_ENV !== "prod"`)에서만 `param={authInfo,reqPath,reqPage,reqChnl}`과 `model={...}`을 출력하며 운영에는 인증 정보가 기록되지 않는다.
 
 ## 다음 할 일 (TODO)
-- [ ] (07-31) 회원가입 form 단계 프리필: 백엔드 `/api/join/form` 응답(RSLT_NAME/TEL_NO/TEL_COM_CD/isUnder14/joinInfoObj/encMnm)을 `JoinInfoForm`에 연결
+- [x] (07-31→08-03 완료) **회원가입 전 구간 dev E2E 완주**(본인인증→약관→정보입력→가입경로→joinProc→welcome). 프리필/none-auth/authInfo쿠키/데이터컨트롤/dev라우팅(§16~21) 전부 해결. **남은 실검증**: 아이핀 회원·14세 미만 경로.
+- [x] (08-03 **dev 완주 성공**) **회원탈퇴 dev 라우팅 이슈 수정** — 원인: 백엔드 `confirm-pw-process`가 `@RequestParam(form)`인데 프론트 JSON 전송. 로컬은 Next route handler(`app/api/member-info/*`)가 변환/정규화했으나 **dev는 ELB가 `/api/*`를 백엔드로 직접 보내 route handler 우회 → 비번확인 실패**. 수정: confirm-form = `backendApiUrl`+form+`code==00` 판정, withdrawal-form의 `_MEMBER_CONFIRMED_` 가드 제거, `/api/legacy` 허용목록에 process 4종 추가. **dev 재배포 후 비밀번호 확인→탈퇴 유의사항→동의→탈퇴 완주 확인 완료.**
+- [~] (08-03, **dev 미확인**) **member-info 전 플로우 dev 라우팅 정합** — 백엔드 process API가 전부 `@RequestParam(form)`인데 프론트 JSON + Next route handler(정규화/쿠키) 의존 → dev ELB 우회로 깨짐. confirm-pw(HWDR/HCHP 통합)·change-pw·withdrawal·modify-info process 호출을 **form+backendApiUrl**로 통일, change-pw 게이트를 **`_MEMBER_CONFIRMED_` 쿠키** 기반으로 전환, `/api/legacy` 허용목록 4종 추가. **미결**: modify-info 진입(ownership SMS + MODIFY_INFO_AUTH_COOKIE 게이트)은 여전히 route handler 의존 → 별도 수정 필요. change-pw 응답 shape dev 확인 필요. **전반 dev 재배포 확인 미완.**
+- [x] (08-03 완료, 로컬 기준) **회원탈퇴 흐름 레거시 정합** — 순서가 반대(유의사항→비번)였고 비번확인 성공 시 즉시 탈퇴되던 것을 **비번확인 → 탈퇴 유의사항/동의 화면 → "탈퇴"(동의) 버튼 → withdrawal-process**로 수정. Hub 링크→`confirm-pw-form?redirectUrl=HWDR`, `confirm-form`(HWDR) 즉시탈퇴 제거→`withdrawal-form` 이동, `withdrawal-form`에 `_MEMBER_CONFIRMED_=HWDR` 가드 + 신규 `WithdrawButton`(confirm→withdrawal-process→로그아웃→완료모달). **모델API 정정**: 탈퇴 안내를 `/api/mypage/my-point`(쿠폰=0) → **`/api/member-info/withdrawal-info`**(포인트+쿠폰수)로 교체. confirm-form 기존 tsc 2건도 수정.
 - [ ] (07-31) modify-info-form: 프론트가 `result.alertType`(need-confirm-pw/need-ownership) 분기 처리(현재 result.code만 봐서 깨짐) + 백엔드 alertType 숫자 prefix(`1need-…`) 제거
 - [ ] (07-31) ★ **[인프라] ALB 앱쿠키 stickiness 설정** — 백엔드 TG 애플리케이션 기반 stickiness, 앱 쿠키명 **`HA_AWSALB`**, 기간=세션 수명. 프론트 TG stickiness는 끄기(쿠키명 충돌 방지).
 - [ ] (07-31) ★ **[프론트] 모든 SSR 백엔드 호출에 요청 쿠키 forward 통일** — `legacyContractGet/Post` 기본 `forwardCookies:true`, `pingModel` 쿠키 전달, `join/policy` 등 raw fetch에 `cookie` 헤더 추가. (ALB 설정만으론 안 됨 — 이게 핵심 전제)
@@ -159,12 +162,12 @@
 - [ ] (07-31) 그룹3(정적: about/points/services/mypage-inquiry 등) 처리 방침 결정
 - [ ] (07-31) 브랜드 policy 이후(join-view/optional/complete)로 instCd·authInfo 전파 검증(쿠키/API)
 - [ ] (07-31) cert `request.spc`가 reqChnl=instCd(브랜드) 처리에 문제없는지 dev 확인
-- [ ] (07-31) 회원가입 none-auth 근본원인(sessionStorage↔쿠키 불일치 + `_AUTH_INFO_TOKEN_` 크로스오리진 전달) 수정
+- [x] (08-02 완료) 회원가입 none-auth 근본원인 해결 — Edge 바디읽기→Route Handler, 브리지쿠키 one-time 삭제블록 제거(§17).
 - [ ] (07-29) 로그인 nonce(+CAPTCHA/rate limit) 실제 구현 여부 결정
 - [ ] (07-29) `AuthProvider` 최종 노출 필드 범위 확정(로그인여부 최소화 vs GA용 mbrNo)
-- [ ] 신규 계약 API(`JoinApiResource`/`BrandMemberApiResource`)에 join-policy(authInfo 수신)·join-view(복호화 정보 반환) 존재 여부 확인
-- [ ] 약관동의 → 정보입력폼 authInfo 연동 (HttpOnly 쿠키 방식)
-- [ ] ELB /api strip 여부 확인 후 cert 컨트롤러 매핑 확정
+- [x] (완료) 약관동의 → 정보입력폼 authInfo 연동(HttpOnly `_AUTH_INFO_TOKEN_` relay, §16).
+- [x] (08-03 확인) ELB `/api` 라우팅 = strip 아님, `/api/*` 전부 백엔드로 감(§21). cert 매핑 `/api/page/cert` 정상.
+- [ ] 신규 계약 API에 brand join-view(복호화 정보 반환) 존재 여부 확인(일반 join은 완료)
 - [ ] `/api/cert/log` 디버깅 로깅 제거(운영 전)
 - [ ] 로그인 세션 유지 후속(마이페이지 등 게이트)
 
@@ -222,7 +225,19 @@
   3. **암호화 joinInfo 미전달** → `optional-form/page.tsx`가 optionalForm 응답 `result.joinInfo`(암호화) 캡처 → `ReferralForm`에 전달.
   4. **최종 joinProc 미구현** → `ReferralForm`: 레거시 intrFildCd 코드(J1~J7/P1~P3/JZ, 나중에하기=JY) + `POST /api/legacy/api/join/joinProc {...joinInfo, intrFildCd}`(프록시가 쿠키·Set-Cookie relay) → code 00 시 `/page/join/welcome` push. 프록시 허용목록에 `api/join/joinProc` 추가.
   5. **welcome(완료) 페이지** → `pingModel` 대신 **SSR `GET /api/join/welcome`(쿠키 forward)** 로 joinProc 가 심은 `_HPC_USER_ID_` 쿠키에서 실제 가입 아이디를 읽어 표시(쿼리 id 폴백). 축하화면+아이디+로그인 버튼.
-- ✅ **PC 회원가입 E2E 성공(2026-08-02)** — 본인인증→약관→정보입력→가입경로→joinProc→welcome 완주, 실제 회원 저장 확인. (PC 휴대폰 인증 경로 기준)
+- ✅ **PC 회원가입 E2E 성공(2026-08-02, 로컬)** — 본인인증→약관→정보입력→가입경로→joinProc→welcome 완주, 실제 회원 저장 확인. (PC 휴대폰 인증 경로 기준)
+
+## 21. (2026-08-02) dev 배포 라우팅 정합 — `/api/` ELB 규칙 대응
+- **문제**: 프론트를 dev.happypointcard.com 에 올리니 `POST /api/join/policy-bridge 404`(+연쇄 asset 404, `$ is not defined`). **dev ELB 는 `/api/*` 를 전부 백엔드로 보냄**(그 외는 프론트). 로그인은 `/api/auth/login`(백엔드 실존)이라 OK였지만, 내가 만든 프론트 전용 `/api/` 경로들은 백엔드에 없어 404.
+- **원인 2종 & 해결**:
+  1. **브리지(프론트 전용 POST→쿠키→303)** `/api/join/{policy,form,optional-form}-bridge` → **`/page/join/*-bridge` 로 이동**(app/(site)/page/join/*-bridge/route.ts). `/page/`는 dev에서 프론트로 라우팅. `form.action` 3곳(join-auth/policy-form/join-info-form) 갱신. 미들웨어는 `-bridge` POST 를 **즉시 통과**(collectBody 가 바디 소비하는 것 방지 — 로컬은 /api 제외라 안전했으나 /page 이동으로 필요).
+  2. **백엔드 실존 API 클라이언트 호출**(check-id/check-email/sms send·check/joinProc) → `/api/legacy/...`(프론트 프록시) 대신 **실제 경로 직접**. env 분기 헬퍼 `lib/backend-api.ts` `backendApiUrl(path)`: **배포(NODE_ENV=production)=경로 직접**(ELB→백엔드, 로그인과 동일) / **로컬(development)=`/api/legacy` 프록시**(쿠키 Domain 정리). JoinInfoForm 4곳 + ReferralForm 1곳 적용.
+- SSR 페이지 호출(policy/form/optional-form/welcome page.tsx)은 `${LEGACY_BASE}/api/...` 절대경로라 dev·로컬 모두 정상(변경 불요).
+- **브리지 리다이렉트 상대경로화(2026-08-03)**: dev에서 본인인증 성공 후 policy로 안 넘어감 → 콘솔 진단 결과 **CSP `form-action` 차단**. 원인: 브리지가 `NextResponse.redirect(new URL(path, req.url))`로 **절대 URL** 303 을 주는데 dev는 ELB 뒤라 `req.url`이 내부호스트(localhost 등)로 잡혀 리다이렉트 대상이 `form-action 'self'`에 불일치. → 3개 브리지 모두 **`new NextResponse(null,{status:303,headers:{Location:상대경로}})`** 로 변경(브라우저가 현재 오리진 기준 해석 → self 통과). (`[JOIN-AUTH]` 콘솔 진단으로 origin·인증·POST 정상 확인, 차단지점만 CSP였음.)
+- **optional-form-bridge 502 해결(2026-08-03, dev)**: policy·form 브리지는 OK인데 optional-form-bridge에서 502. 원인 = 이 브리지가 큰 쿠키 3개(`hpw_join_optional_form` 회원정보 전체 + `_AUTH_INFO_TOKEN_` + `join_policy_info` authInfo·암호화 joinInfo·동의코드) ~6KB 를 Set-Cookie 로 내려 **nginx 기본 `proxy_buffer_size`(4k) 초과 → "upstream sent too big header"**. → **dev nginx 프론트 `location /`(→127.0.0.1:3000) 에 버퍼 상향**: `proxy_buffer_size 16k; proxy_buffers 8 16k; proxy_busy_buffers_size 32k;` → 정상. (인프라 설정. 추후 쿠키 슬림화는 선택.)
+- **로그인 탭 이동 수정(2026-08-03)**: `clearable-input.tsx` X(클리어) 버튼에 `tabIndex={-1}` → 아이디 입력 후 Tab 이 X 버튼이 아니라 비밀번호로 이동.
+- ✅ **dev 회원가입 E2E 완주 성공(2026-08-03)** — dev.happypointcard.com(프론트+백엔드 same-origin)에서 본인인증→약관→정보입력(주소/중복확인)→가입경로→joinProc→welcome 전 구간 완주, 실제 회원 저장 확인.
+- **정리 완료**: 임시 진단 로그(`[JOIN-AUTH]`,`[ADDR]`,`[JOIN-POLICY-BRIDGE]`,`[JOIN-FORM-BRIDGE]`,`[JOIN-OPTIONAL-BRIDGE]`) 제거.
 - **누락 필드 보정**(form→optional 제출): `homeRoadNmPostNo`, `labelAddress`, `ptorTelNo`/`ptorEmlAddr`(빈값) 추가.
 - **옵셔널 페이지 = 레거시 정합 확정(2026-08-02)**: 레거시 `optional-form.jsp`에서 수신매체(infoRetnMda)/직업(jobCd)/결혼기념일(maryCeleDay)은 **주석처리(비활성)** → 실사용 필드는 `intrFildCd` 하나뿐. `ReferralForm`이 intrFildCd + 전단계 암호화 joinInfo 전달 + 나중에하기(JY)/가입완료로 이미 동일. **추가 이식 대상 아님(사용자 1번 선택).**
 - **미결(런타임 검증 필요)**: dev 재기동 후 전 구간 E2E(휴대폰/아이핀/14세) 테스트, 임시 진단 로그(`[ADDR]`,`[JOIN-*-BRIDGE]`) 제거, welcome 페이지 표시값 확인.

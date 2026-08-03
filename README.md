@@ -2,10 +2,10 @@
 문서유형: INDEX
 프로젝트: 공통(지식 베이스 루트)
 작성일: 2026-07-21
-최종수정: 2026-08-02
+최종수정: 2026-08-03
 작성자: dominic
 상태: 진행중
-요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-08-02 자동 주입 화이트리스트 + 수동 컨텍스트 4시간 규칙 도입, 개인 AI 영역 `ai/` 추가)
+요약: happypointcard 백엔드/앱서버 개발 개인 지식 베이스의 루트 인덱스 — 작업 프로토콜·공통 문서·프로젝트 인덱스 허브 (2026-08-03 `sms-agent-replacement` 과업 프로젝트 신설·자동주입 제외, 배치서버 환경 등록)
 ---
 
 # 📚 happypointcard 지식 베이스 (md)
@@ -69,7 +69,9 @@ md/
    ├─ thehappy_ios/    해피포인트 iOS 네이티브 앱 (Swift5 / iOS13+ / UIKit / 웹뷰 하이브리드)
    ├─ thehappy_aos/    해피포인트 Android 네이티브 앱 (Kotlin2.0 / minSdk26 / XML+ViewBinding / 웹뷰 하이브리드)
    ├─ gcs_fo/          기프트카드 웹뷰 프론트 (React18 / TypeScript / CRA+CRACO) ← 앱 안에서 뜨는 화면
-   └─ gcs/             기프트카드 백엔드 API 서버 (Spring Boot3.4 / Java21 / JPA+QueryDSL / PostgreSQL) ← gcs_fo의 서버 짝
+   ├─ gcs/             기프트카드 백엔드 API 서버 (Spring Boot3.4 / Java21 / JPA+QueryDSL / PostgreSQL) ← gcs_fo의 서버 짝
+   ├─ sms-agent-replacement/  SMS 발송 에이전트 교체 과업 (저장소 아님 · 자동주입 제외)
+   └─ store-search-upgrade/   매장검색엔진 고도화 2026-03 (SF-1→Elasticsearch, 저장소 아님 · 자동주입 제외)
 ```
 > 📛 **폴더명 규칙(2026-07-22 변경)**: `projects/` 하위 폴더명은 **Bitbucket 저장소명과 1:1로 일치**시킨다. 이전에는 로컬 임포트 폴더명 기반 `j-ha-*` slug를 썼으나, 머신마다 다를 수 있는 임포트명 대신 **원격 저장소라는 단일 기준**으로 통일했다. 신규 프로젝트 등록 시에도 `git remote get-url origin`의 저장소명을 그대로 쓴다.
 >
@@ -115,9 +117,12 @@ md/
 |------|------|------|
 | [ecc-reference.md](./shared/ecc-reference.md) | 진행중 | ECC 정체·핵심 규칙·해피포인트 백엔드↔ECC 스킬/에이전트 매핑 (참조 전용 안내) |
 | [server-env.md](./shared/server-env.md) | 진행중 | 개발/스테이징 EC2·Tomcat 인스턴스·포트·DB(JNDI)·Scouter APM·배포 원칙 |
-| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) + **API 호출 속도 제한** |
+| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) + **API 호출 속도 제한** + 🔴 **App password 폐기 → git은 SSH 필수**(2026-08-02) |
+| [git-sync-routine.md](./shared/git-sync-routine.md) | 진행중 | 🔄 **"비트버켓 페치 받아줘" 트리거 루틴** — 전체 fetch + 안전조건 충족분만 `pull --ff-only`. 판정 기준 8종·실행 절차·함정 |
 
-> 🚦 **[상시 규칙] Bitbucket · Jira · Confluence API 는 초당 2회를 초과해 호출하지 않는다.** 연속 호출 사이에 **최소 0.5초** 간격을 둔다. 페이지네이션 루프에 반드시 `sleep 0.5` 를 넣고, 병렬 호출은 금지한다. 호출 횟수 자체를 줄이려면 `pagelen=100`/`maxResults=100` 으로 페이지 크기를 키운다. 429 수신 시 즉시 중단하고 지수 백오프(1s→2s→4s). 상세: [shared/atlassian-access.md §3-1](./shared/atlassian-access.md).
+> 🔄 **[트리거 규칙] "비트버켓 페치 받아줘"** → [shared/git-sync-routine.md](./shared/git-sync-routine.md) 절차를 수행한다. **먼저 전 저장소 fetch를 모두 완료하고, 그 결과를 기준으로 안전조건 충족분은 모든 로컬 추적 브랜치까지 fast-forward 반영**한다(현재 브랜치=`pull --ff-only`, 비체크아웃 브랜치=SSH refspec fetch). fetch 단계가 끝나기 전에는 브랜치 반영을 시작하지 않는다. 수정중·스테이징·**로컬 커밋(ahead>0)**·충돌·진행중작업·detached·upstream없음·diverged 는 **그냥 둔다**. 전제: **git 은 SSH 경로**(App password 폐기로 HTTPS 410).
+
+> 🚦 **[상시 규칙] Bitbucket · Jira · Confluence API 와 Bitbucket SSH Git 요청은 초당 1회를 초과해 호출하지 않는다.** 연속 호출 사이에 **최소 1초** 간격을 둔다. 페이지네이션·저장소 순회 루프에 반드시 `sleep 1` 을 넣고, 병렬 호출은 금지한다. 호출 횟수 자체를 줄이려면 `pagelen=100`/`maxResults=100` 으로 페이지 크기를 키운다. 429 수신 시 즉시 중단하고 지수 백오프(1s→2s→4s). 상세: [shared/atlassian-access.md §3-1](./shared/atlassian-access.md), [shared/git-sync-routine.md](./shared/git-sync-routine.md).
 | [conventions/api-response.md](./shared/conventions/api-response.md) | 진행중 | **전 프로젝트 공통** API 응답 표준 — 엔벨로프·code 대역(00/01/50/70/80/99)·detailCode 규칙 (+ha-web-api 참조 구현) |
 | [security-review.md](./shared/security-review.md) | 초안 | OWASP 기반 취약점 진단/보안 리뷰 개인 기준 + ECC 커밋 전 체크리스트·시크릿 스윕·대응 프로토콜·진단 이력 |
 | [conventions/README.md](./shared/conventions/README.md) | 초안 | 기술별 코드 컨벤션 인덱스 (개발자 개인 공통 규칙) |
@@ -139,6 +144,8 @@ md/
 | [ha_admin](./projects/ha_admin/INDEX.md) | 진행중 | Java8 / Spring MVC + JSP / MyBatis / Oracle / WAR | 해피포인트 **관리자(백오피스)** 웹(저장소명 `ha_admin`, **언더스코어**) |
 | [spc_batch](./projects/spc_batch/INDEX.md) | 진행중 | Java / Maven (jar) — 상세 확인 필요 | SPC 배치(저장소 `spc_batch`, **AWS CodeCommit**) |
 | [spc_spring_batch](./projects/spc_spring_batch/INDEX.md) | 진행중 | Java / Spring Batch(추정) — 상세 확인 필요 | SPC Spring Batch(저장소 `spc_spring_batch`, **AWS CodeCommit**) |
+| [sms-agent-replacement](./projects/sms-agent-replacement/INDEX.md) | 진행중(분석) | **(과업/엄브렐러)** 현행 NDSoft(Java8 레거시) → 신규 **섹타나인 Agent v2.0.1**(Spring Boot1.5/MyBatis/Netty, Java8 호환) | **SMS 발송 에이전트 전환 개발** — 전사 "2차 문자 서비스 전환". 배치서버(`ip-10-0-70-71`) `/app/ndsoft` → 섹타나인 Agent. 저장소 아님. 🔕 **자동주입 제외**(수동 연결 전용). ✅ **DB 테이블 동일 → 발송 요청 코드 수정 불필요**. 🔴 **결과코드 체계 상이**(같은 숫자 다른 의미)·`fetch.hour=1` 자동실패·`TRAN_TYPE=5` 미조회·로그테이블 컬럼길이 결함 |
+| [store-search-upgrade](./projects/store-search-upgrade/INDEX.md) | 완료(잔여정리) | **(과업/엄브렐러)** 와이즈넛 SF-1 → **Elasticsearch 8.19.12**(RPM/번들JDK/힙2g) | **매장검색엔진 고도화 (2026-03)** — SF-1 **라이선스 2026-04-05 만료**가 데드라인, 만료 7일 전 **03-29 ES 기동 완료**. 검색서버 `ip-10-0-75-31`. 저장소 아님. 🔕 **자동주입 제외**. 🟠 SF-1 프로세스 **4개월째 잔존**(정리 필요) |
 
 > 📱 **네이티브 앱 2종은 반드시 함께 본다**: [thehappy_ios](./projects/thehappy_ios/INDEX.md) ↔ [thehappy_aos](./projects/thehappy_aos/INDEX.md) 는 **같은 백엔드([ha_api](./projects/ha_api/INDEX.md))** 를 쓰고 파일명·줄수까지 대응하는 **동일 설계**다(`JavascriptBridge` 양쪽 902줄 등). 앱 이슈는 한쪽만 고치지 말고 **동기화 여부를 항상 확인**한다. 상세 대응표는 [thehappy_aos INDEX](./projects/thehappy_aos/INDEX.md#-ios--aos-구조-대응표-짝-프로젝트-대조용).
 

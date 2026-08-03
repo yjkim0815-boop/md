@@ -3,17 +3,17 @@
 프로젝트: 공통
 이슈키: --
 작성일: 2026-08-01
-최종수정: 2026-08-01
+최종수정: 2026-08-02
 작성자: dominic
 상태: 진행중
-요약: Bitbucket·Jira·Confluence 접근 수단 공통 정리 — SSH 키(git) + API 토큰 2종(통합/Bitbucket)의 저장 위치·조회 방법·엔드포인트·기능 범위·함정 (macOS/Windows 양쪽)
+요약: Bitbucket·Jira·Confluence 접근 수단 공통 정리 — SSH 키(git) + API 토큰 2종(통합/Bitbucket)의 저장 위치·조회 방법·엔드포인트·기능 범위·함정 (macOS/Windows 양쪽). 2026-08-02 App password 폐기(HTTPS git 410) → SSH 필수 확정, Windows PC 키 등록, MCP 미연결 정정
 ---
 
 # 🔐 Atlassian 접근 수단 (Bitbucket · Jira · Confluence)
 
 > ⚠️ **이 문서에는 토큰·비밀번호 값을 절대 적지 않는다.** 저장 위치와 꺼내는 방법만 기록한다. 실제 값은 macOS 키체인 / Windows DPAPI 에만 존재한다.
 >
-> 🚦 **[상시 규칙] API 호출은 초당 2회를 넘기지 않는다.** Bitbucket·Jira·Confluence 전부 해당. 상세는 [§3-1 호출 속도 제한](#3-1-호출-속도-제한-상시-규칙).
+> 🚦 **[상시 규칙] API 호출은 초당 1회를 넘기지 않는다.** Bitbucket·Jira·Confluence 전부 해당. Bitbucket SSH Git 요청도 동일하게 최소 1초 간격을 둔다. 상세는 [§3-1 호출 속도 제한](#3-1-호출-속도-제한-상시-규칙).
 >
 > 상위: [../README.md](../README.md)
 
@@ -38,15 +38,41 @@
 
 ### 2-1. SSH 키 (git 전용)
 
-```
-경로   ~/.ssh/id_ed25519_bitbucket
-지문   SHA256:G6E25gsjNiMkrg+9rzEkSZeGx4jiJOGXzxEWJuNB4XA
-등록   Bitbucket > Personal settings > SSH keys
-```
+> 🔴 **git HTTPS 는 더 이상 쓸 수 없다 (2026-08-02 확인).** Bitbucket 이 **App password 를 폐기**해서, 저장된 App password 로 HTTPS fetch 시 **410 Gone** 이 떨어진다.
+> ```
+> remote: CHANGE-3222 - Functionality has been deprecated
+> remote: App passwords are deprecated and must be replaced with API tokens.
+> fatal: ... The requested URL returned error: 410
+> ```
+> → **git 접근은 SSH 가 정본 경로**다. (HTTPS 를 굳이 쓰려면 자격증명을 **API 토큰 + username=이메일** 로 교체해야 한다.)
 
-`~/.ssh/config` 에 `bitbucket.org` 호스트를 등록해 키체인 연동(`UseKeychain yes`)한다. **사내망에서 22번 포트가 막히면** `HostName altssh.bitbucket.org` / `Port 443` 으로 전환한다(config 에 주석으로 준비되어 있음).
+**등록 위치**: `https://bitbucket.org/account/settings/ssh-keys/` (Bitbucket > Personal settings > SSH keys)
+
+**등록된 키 (계정 기준, 2026-08-02 API 조회)**
+
+| Label | 등록일 | 비고 |
+|---|---|---|
+| `A2485.Dominic` | 2026-08-01 | |
+| `git.dominic` | 2026-07-18 | |
+| (Windows `JOON-DEV`) | 2026-08-02 | 지문 `SHA256:kH2wWFAbZfdNGlas/NzYoor6T3jlIuGF+jbNKOEZb74` |
+
+**PC별 키 (경로는 공통 `~/.ssh/id_ed25519_bitbucket`)**
+
+| PC | 지문 | 상태 |
+|---|---|---|
+| macOS | `SHA256:G6E25gsjNiMkrg+9rzEkSZeGx4jiJOGXzxEWJuNB4XA` | 기존 |
+| Windows `JOON-DEV` | `SHA256:kH2wWFAbZfdNGlas/NzYoor6T3jlIuGF+jbNKOEZb74` | **2026-08-02 생성·등록·인증 확인**(패스프레이즈 없음) |
+
+`~/.ssh/config` 에 `bitbucket.org` 호스트를 등록한다. macOS 는 키체인 연동(`UseKeychain yes`), **Windows 는 `UseKeychain` 을 넣으면 안 된다**(OpenSSH for Windows 미지원 옵션). 공통으로 `IdentitiesOnly yes` 를 둔다.
+**사내망에서 22번 포트가 막히면** `HostName altssh.bitbucket.org` / `Port 443` 으로 전환한다(config 에 주석으로 준비되어 있음).
+
+> ⚠️ **Windows 에서 config 작성 시 BOM 금지.** PowerShell `Set-Content -Encoding utf8` 은 BOM 을 넣어 `Bad configuration option: \357\273\277#` 로 **config 전체가 거부**된다. `[System.IO.File]::WriteAllText($p,$c,(New-Object System.Text.UTF8Encoding($false)))` 로 작성한다.
 
 remote 는 SSH 형식을 쓴다: `git@bitbucket.org:sectanine/<repo>.git`
+
+> 🚦 Bitbucket SSH Git 요청(`fetch`/`pull`/`push` 포함)은 저장소 간·연속 요청 사이에 **최소 1초** 간격을 둔다. 병렬 요청은 금지한다.
+
+> ⚠️ **이 PC(Windows `JOON-DEV`)의 remote 12개는 아직 HTTPS** (`https://dominic.kim@bitbucket.org/...`) → **fetch 불가 상태.** SSH 전환이 선행 과제다. 동기화 절차는 [git-sync-routine.md](./git-sync-routine.md) 참조.
 
 ### 2-2. 토큰 저장 위치 (OS 병기)
 
@@ -85,12 +111,12 @@ security find-generic-password -a dominic.kim@spc.co.kr -s atlassian-api -w
 
 ## 3-1. 호출 속도 제한 (상시 규칙)
 
-> 🚦 **Bitbucket · Jira · Confluence API 는 초당 2회를 초과해 호출하지 않는다.**
-> 즉 **연속 호출 사이에 최소 0.5초 간격**을 둔다. 사람이 수동으로 부르든, 에이전트가 스크립트로 부르든 동일하게 적용한다.
+> 🚦 **Bitbucket · Jira · Confluence API 는 초당 1회를 초과해 호출하지 않는다.**
+> 즉 **연속 호출 사이에 최소 1초 간격**을 둔다. 사람이 수동으로 부르든, 에이전트가 스크립트로 부르든 동일하게 적용한다.
 
 ### 원칙
 
-1. **최소 간격 0.5초.** 루프 안에서 호출할 때는 매 반복마다 대기를 넣는다.
+1. **최소 간격 1초.** 루프 안에서 호출할 때는 매 반복마다 대기를 넣는다.
 2. **페이지네이션이 가장 위험하다.** `next` 를 따라가는 반복문은 순식간에 수십 회를 호출한다. 반드시 대기를 넣는다.
 3. **호출 횟수 자체를 줄인다.** 페이지 크기를 키우면(`pagelen=100` / `maxResults=100`) 같은 데이터를 더 적은 호출로 가져온다. 대기보다 이쪽이 우선이다.
 4. **필요한 필드만 요청한다.** `fields=` · `?fields=` 로 응답을 줄이면 재조회가 줄어든다.
@@ -100,13 +126,13 @@ security find-generic-password -a dominic.kim@spc.co.kr -s atlassian-api -w
 ### 구현 예시
 
 ```bash
-# bash/zsh — 페이지네이션 루프에 0.5초 대기
+# bash/zsh — 페이지네이션 루프에 1초 대기
 URL="https://api.bitbucket.org/2.0/repositories/sectanine?pagelen=100"
 while [ -n "$URL" ]; do
   RESP=$(curl -s -u "$E:$T" "$URL")
   # ... 처리 ...
   URL=$(echo "$RESP" | python3 -c "import json,sys;print(json.load(sys.stdin).get('next',''))")
-  sleep 0.5          # ← 필수
+  sleep 1            # ← 필수
 done
 ```
 
@@ -114,7 +140,7 @@ done
 # PowerShell
 foreach ($u in $urls) {
   Invoke-RestMethod -Uri $u -Headers $h
-  Start-Sleep -Milliseconds 500   # ← 필수
+  Start-Sleep -Seconds 1           # ← 필수
 }
 ```
 
@@ -160,6 +186,8 @@ foreach ($u in $urls) {
 6. **`accessible-resources` 로 스코프 조회 불가.** 그 엔드포인트는 OAuth 3LO 전용이라 API 토큰으로는 401. 스코프 확인은 **실제 엔드포인트를 호출해 보는 방식**으로 한다.
 
 ## 6. MCP 와의 관계
+
+> ⚠️ **정정(2026-08-02, Windows `JOON-DEV`)**: 이 PC의 Claude Code 세션에는 **Atlassian MCP 가 로드되어 있지 않다**(MCP 레지스트리 검색 결과 0건). 따라서 이 환경에서는 **Jira·Confluence 도 API 토큰 경로만 사용 가능**하며, 아래 "MCP 권장" 표가 적용되지 않는다. MCP 연결 여부는 **PC·세션마다 확인**할 것.
 
 Claude Code 에는 Atlassian MCP 가 OAuth 로 연결되어 있어 **Jira·Confluence 는 토큰 없이도** 조회·생성·수정이 된다. 단 MCP 로는 **첨부파일·스프린트·대량처리·삭제·Bitbucket 이 불가**하고, 백그라운드(cron) 실행에서는 인증이 없을 수 있다.
 
