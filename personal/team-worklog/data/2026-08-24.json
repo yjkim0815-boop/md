@@ -1,0 +1,32 @@
+{
+  "week": "2026-08-24",
+  "range": [
+    "2026-08-24",
+    "2026-08-30"
+  ],
+  "status": "부분",
+  "collected": "2026-08-05",
+  "collectedDays": [],
+  "count": 1,
+  "hours": 2.0,
+  "note": "오버플로 이슈 유입분만 — search 미실행",
+  "entries": [
+    {
+      "worklogId": "89953",
+      "date": "2026-08-26",
+      "dow": "수",
+      "startedAt": "2026-08-26T16:00:00",
+      "timeOfDay": "16:00",
+      "createdAt": "2026-07-01T17:48:18",
+      "author": "박수진",
+      "accountId": "712020:ddb57cd5-ac3d-447d-b165-b5c65555dcff",
+      "authorEmail": "sujin.park@spc.co.kr",
+      "seconds": 7200,
+      "hours": 2.0,
+      "issueKey": "WORK-16386",
+      "project": "WORK",
+      "summary": "[26년 하반기] 서비스개발팀 근태 관리",
+      "comment": "오후반반차"
+    }
+  ]
+}

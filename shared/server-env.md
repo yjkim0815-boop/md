@@ -123,7 +123,10 @@
 - [ ] 색인 배치 위치(이 서버 cron인지 배치서버인지)
 
 ## ELB/리버스 프록시 라우팅 (리뉴얼: 프론트+백엔드 한 도메인 분기)
-**3도메인**: 개발 `dev.happypointcard.com` · 스테이징 `stg.happypointcard.com` · 운영 `www.happypointcard.com`.
+**3도메인**: 개발 `dev-www.happypointcard.com` · 스테이징 `stg-www.happypointcard.com` · 운영 `www.happypointcard.com`.
+- ⚠️ **개발 도메인 변경(2026-08-05)**: `dev.happypointcard.com` → **`dev-www.happypointcard.com`**(프론트 `.env.dev`/`.env.local`·`legacy-http.ts`·`middleware.ts`·캐치올 `route.ts`, 백엔드 `application-dev.yml`/`application-local.yml`). `dev.happypointcard.com` 진입 시 **프론트 미들웨어가 `dev-www`로 307 리다이렉트**(경로·쿼리 유지). ※ 2026-07-29 `dev-www→dev` 통합의 역방향 재변경.
+  - 🐞 리다이렉트 1차 미동작 원인(2026-08-05): 게이트를 `process.env.APP_ENV === "dev"` 로 걸었으나 **Next Edge 미들웨어는 런타임 `process.env` 를 못 읽어**(빌드타임 인라인) 항상 false → 리다이렉트 안 됨. **수정**: APP_ENV 게이트 제거하고 **Host 헤더(`x-forwarded-host`/`host`)가 `dev.happypointcard.com` 일 때만** 동작(=자체적으로 dev 전용, stg-www/www 미매칭) + 명시적 `https://dev-www...` 절대경로 리다이렉트.
+  - ⚠️ 전제: `dev.happypointcard.com` 이 **신규 Next 프론트로 라우팅**되어야 미들웨어가 실행됨(레거시상 app-web 이었음 — 인프라 라우팅 확인 필요).
 앞단(ELB)이 **경로 prefix로 분기**(3도메인 공통):
 ```
 https://<도메인>/

@@ -2,9 +2,9 @@
 문서유형: INDEX
 프로젝트: ha-web-api
 작성일: 2026-07-16
-최종수정: 2026-07-26
+최종수정: 2026-08-04
 상태: 진행중
-요약: 신규 홈페이지 리뉴얼 Spring API 백엔드 — Java 21 / Spring 6 기반. Spring6/Jakarta/Tomcat10.1 세팅 완료(빌드·기동), 실검증 진행중. 코드베이스 구조 맵 반영(2026-07-22)
+요약: 신규 홈페이지 리뉴얼 Spring API 백엔드 — Java 21 / Spring 6 기반. Spring6/Jakarta/Tomcat10.1 세팅 완료(빌드·기동), 실검증 진행중. 코드베이스 구조 맵 반영(2026-07-22). 무상태 인증 `_HPC_AUT`(무활동 60분·슬라이딩 3분 게이트)·점유인증 nonce 상관키 확정(2026-08-04)
 ---
 
 # 📇 ha-web-api 문서 인덱스
@@ -92,6 +92,9 @@ VOC(homevoc-hpc) · Cloudflare Turnstile · GA4 · Amplitude · AWS(S3 · KMS ·
   - `POST /api/auth/logout` — 세션 무효화
   - `GET /api/auth/me` — 현재 사용자(미로그인 401)
 - **프론트 연동**: happypoint-web2가 BFF `app/api/login/route.ts`로 프록시해 JSESSIONID를 프론트 오리진으로 relay. 상세: [happypoint-web2 INDEX](../happypoint-web2/INDEX.md).
+- **무상태 인증 `_HPC_AUT` (라운드로빈 대응) — 2026-08-04 확정**: 로그인 시 `SessionUser`를 **AES-256-GCM(랜덤 IV prepend)** 로 암호화한 `_HPC_AUT` 쿠키 발급(`AuthCookieService`, 키=`kmsConfig.keysMap["sucToken.key"]`). 어느 인스턴스로 라운드로빈돼도 복호화로 세션 복원 → **ELB 세션 스티키 불필요**. 진입 필터 `AuthBootstrapFilter`가 복원·재발급 수행.
+  - **만료 정책 = 무활동 60분(슬라이딩)**: 페이로드에 `timestamp` 담음. `isExpired`=`now-timestamp > sso.timeout(분)*60s`(기본 60분) → 만료 시 복원 안 함 + 쿠키 삭제(로그아웃). `needsSlidingRefresh` 게이트 = **`min(3분, maxAge/2)`** (**2026-08-04 30분→3분**으로 낮춤: 기존엔 첫 30분 내 활동이 세션 연장에 미반영되는 구멍이 있었음). 게이트 경과 요청에서 `issue()` 재발급(새 랜덤 IV + `timestamp=now` + 쿠키 `maxAge` 60분 리셋) → **실효 만료 = 마지막 활동 + 60분(오차 ≤3분)**.
+- **점유인증(sucToken) 이력 조회 nonce 상관키 — 2026-08-04 수정**: `MEMBER_OWNERSHIP_HIST` 조회가 `APP_UUID = HttpSession.getId()` 기준이라, 프론트·백엔드 라운드로빈(세션 스티키/복제 없음)에서 검증(INSERT)·폼진입(SELECT) 세션ID 불일치로 "회원정보수정 진입 시 빠르면 실패/느리면 통과" 레이스 발생. → 조회 키를 **sucToken 평문 내 `nonce`**(발급 시 `HIST.NONCE`에 이미 적재, 토큰과 함께 왕복 → 세션 비의존)로 전환. 변경: `SmsService.fn_getNonceFromToken`(신규)·`checkMemberOwnershipHist`(param sessionId→nonce), `SmsRepository.xml`(select/update `APP_UUID`→`NONCE`), 호출부 4곳(`MemberInfoModelApiResource`·`BrandMemberModelApiResource`·레거시 `MemberInfoController`·`BrandMemberController`). INSERT의 APP_UUID는 유지(무해).
 - 예) `GET /api/alliance/corporation?category&onOff&page` — 제휴사 계약 API(`api/alliance/AllianceApiResource`).
 
 ## 현재 상태 / 핵심 메모

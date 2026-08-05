@@ -1,4 +1,4 @@
-﻿---
+---
 문서유형: INDEX
 프로젝트: 공통(지식 베이스 루트)
 작성일: 2026-07-21
@@ -12,6 +12,12 @@
 
 > 🚨 **[최우선 · 상시 규칙] md 현행화는 "작업할 때마다" 즉시 한다.**
 > 파일 생성·수정·명령 실행 등 **실제 작업을 수행하면, 그 즉시** 관련 프로젝트의 `INDEX.md`/`WORKLOG-*` 등 해당 문서를 갱신한다. 세션 끝까지 미루거나, 사용자가 "현행화 해"라고 말할 때까지 기다리지 않는다. **이 현행화는 별도 지시 없이 자동 수행하는 상시 작업**이다(실행 vs 확인 구분의 예외 — 프로토콜 6번 참조). 확정 사항·의사결정·미결 이슈도 그때그때 기록한다.
+
+> 🛑 **[최우선 · 강제 규칙] Atlassian 호출은 `3초에 1회` · `1일 통합 50회` 를 절대 넘기지 않는다.** (2026-08-05 30회→**50회** 상향)
+> **Bitbucket SSH · Bitbucket API · Confluence API · Jira API 4종이 하나의 쿼터를 공유**한다(MCP 도구 호출도 1회로 카운트). SSH fetch 를 20회 썼다면 그날 Jira·Confluence 는 **남은 30회**만 쓸 수 있다.
+> **50회 소진 시 즉시 작업을 중단하고 사용자에게 보고**한다 — 임의로 더 호출하지 않는다. 사용자가 **"20회 추가"** 를 승인하면 **당일에 한해** 연장되고, 다음 날 50회로 초기화된다.
+> ⚠️ **잔여는 암산하지 말고 기록으로 검산한다** (2026-08-05 회차 누락으로 오보고 사례 있음).
+> 규칙·사용 내역: [shared/atlassian-access.md §3-1·§3-2](./shared/atlassian-access.md#3-1--호출-제한-강제-규칙--2026-08-04-강화)
 
 > dominic 개인 지식 베이스. `happypointcard` **백엔드 / 앱서버 개발**의 공통 규칙·서버 환경·프로젝트별 진행 기록을 모아 **모든 채팅에서 공통 참조**한다.
 > 이 문서(`README.md`)는 지식 베이스의 **루트 허브**다. 하위 모든 문서가 `../README.md` / `../../README.md` 로 여기를 가리킨다.
@@ -93,6 +99,7 @@
 |---|---|
 | `spc_batch` | 상시 관리 대상 아님 (독립 스케줄러 묶음, 최근 커밋 2024-08) |
 | `spc_spring_batch` | 상시 관리 대상 아님 (Anyframe Batch, 저장소 2019년 이후 정지) |
+| `etc` | **미분류 인박스** — 프로젝트·태스크가 아님. 배정 대기용 |
 
 - 제외 항목은 목록 번호(`No`)에도 포함하지 않는다 → 현재 목록은 **태스크 4 + 프로젝트 11 = 총 15건**.
 - 제외 대상 추가·해제는 **사용자 지시로만** 변경한다.
@@ -140,6 +147,7 @@ md/
    ├─ gcs_fo/          기프트카드 프론트 FO (React18 / TypeScript / CRA+CRACO) ← 앱 안에서 뜨는 화면
    ├─ gcs/             기프트카드 백엔드 API 서버 (Spring Boot3.4 / Java21 / JPA+QueryDSL / PostgreSQL) ← gcs_fo의 서버 짝
    ├─ homepage-ai-renewal/    홈페이지 AI 리뉴얼 (엄브렐러) ⚠️ task/ 이관 예정
+   ├─ etc/                 📥 미분류 인박스 — 귀속처 불명 이력 임시 보관 (목록 미표시)
    └─ task/                ★ 태스크(저장소 아닌 과업) 전용 폴더 — 2026-08-03 신설
       ├─ event-template/         이벤트 템플릿 (INDEX + archive/ 정본허브+번들16)
       ├─ sms-agent-replacement/  SMS Agent 전환 (INDEX + WORKLOG + worklog/weekly)
@@ -154,6 +162,26 @@ md/
   - **대상 프로젝트(저장소)가 있는 태스크** → 작업로그는 **각 프로젝트 폴더**에 쌓고, 태스크 INDEX가 링크로 참조한다. (예: `homepage-ai-renewal` → `happypoint-web2`·`ha-web-api`의 `worklog/weekly/`)
   - **대상 저장소가 없는 태스크** → **태스크 폴더 안**에 `worklog/weekly/` 를 둔다. (예: `sms-agent-replacement` — 벤더 납품 바이너리라 저장소 없음)
 - **이관 현황(2026-08-03)**: `sms-agent-replacement` · `store-search-upgrade` · `event-template` **이관 완료**. `homepage-ai-renewal` 은 **작업 진행 후 이관 예정**(사용자 지시).
+
+### 🔗 연결 태스크 통합 관리 규칙 (2026-08-05 확정 · ECC 반영)
+> 여러 저장소(예: 프론트 `happypoint-web2` + 백엔드 `ha-web-api`)에 걸친 태스크는, **어느 대화방(저장소)에서 작업하든 한 곳에서 통합 파악**되어야 한다. 대화방 간 공유 누락(백엔드 투두를 프론트 방이 못 봄)·검증 누락(배포 후 확인 안 함) 재발 방지가 목적.
+
+- **역할 분리 (SSOT)**: 상세 작업로그는 **각 저장소 worklog**(영구 자산), 통합 관점은 **우산 태스크 INDEX**. 우산은 저장소 로그를 **복사하지 않고 링크로만** 참조한다(ECC everything-claude-code: 규칙은 저장소에, 중복 금지).
+- **우산 INDEX 필수 2섹션**:
+  - **통합 작업로그(연결)** — **마일스톤 단위**로 묶고 각 항목은 `[FE]`/`[BE]` 태그 + 저장소 worklog **링크**만(ECC strategic-compact: 논리 경계로 구획). 날짜 덤프 금지.
+  - **통합 TODO(SSOT)** — 프론트·백엔드 미결을 한 목록으로. 각 항목 **검증 상태 필드 필수**.
+- **검증 상태 필드 (완료 ≠ 검증완료, ECC verification-loop)**: 모든 통합 TODO·작업로그 항목에 상태를 명시한다 — `⏳배포대기` / `🧪스테이징확인` / `✅실기기·운영확인` / `❌실패`. 코드 완료만으로 `[x]` 처리 금지(배포·실기기 확인 안 된 건이 눈에 남도록).
+- **🚨 미검증도 "작업 즉시" 기록 (해제 불가)**: 배포·확인이 안 됐다는 이유로 기록을 미루지 않는다. 코드 수정을 한 순간 **바로 우산·worklog 에 `⏳배포대기` 로 남기고**, 이후 확인되면 **`✅` 로 승격**한다. "확인되면 나중에 기록"은 금지 — 그래야 세션이 끊겨 나중에 다시 와도 미검증 잔여가 보인다(사용자 지시, 2026-08-05).
+- **🧹 디버그·임시 코드는 "심는 즉시 제거 예약" (해제 불가)**: 진단용 alert·console.log·임시 로그·목업 등 **완료 후 지워야 할 코드를 심으면**, ① 그 자리에서 **"확인 끝나면 삭제하자"고 사용자에게 말하고**, ② 우산·worklog 에 **`🧹제거예정` 상태로 별도 TODO 를 남긴다**. 확인이 끝나면 **반드시 제거하고 그 TODO 를 닫는다.** 제거 전까지는 관련 작업을 완료(`✅`) 처리하지 않는다 — 임시 코드가 운영에 새어나가는 것을 막는다(사용자 지시, 2026-08-05).
+- **🚨 동시 갱신 강제**: 연결 저장소에서 실제 작업을 하면 **① 저장소 worklog + ② 우산 통합 작업로그·TODO 를 같은 타이밍에** 갱신한다(상단 🚨 현행화 상시 규칙의 연결 태스크판). 한쪽만 갱신 금지.
+- 🔄 **트리거: "투두 보여줘" · "작업내역 보여줘"** (연결 태스크 문맥) → **우산 INDEX 의 통합 TODO·통합 작업로그가 정본**. 여기서 제시한다(저장소별 개별 로그는 상세 확인용).
+- **참고**: 훅 `~/.claude/hooks/remind-worklog.js`(PostToolUse Edit/Write, 10분 쓰로틀)가 md/web2/ha-web-api 수정 시 위 3가지(worklog·우산·검증상태) 갱신 여부를 자동 넛지한다.
+
+### 📥 미분류 인박스 `projects/etc/` (2026-08-03 신설)
+- **프로젝트·태스크 어디에도 귀속되지 않는 작업 이력**은 `projects/etc/` 에 먼저 기록한다. **등록 시점에 귀속처를 고민하지 않는다.**
+- 파일 명명은 KB 규칙 그대로(`WORKLOG-<YYYYMMDD>-<주제>.md`).
+- 🔄 **트리거: "etc 내역 보여줘"** → [etc/INDEX.md](./projects/etc/INDEX.md) 의 **대기 목록**을 제시하고, 사용자가 지정한 프로젝트/태스크로 **`git mv` 이동 + 링크 갱신 + 대상 INDEX 등록 + 배정 이력 기록**까지 수행한다.
+- 🚫 **"프로젝트 목록" 표에 표시하지 않는다** (태스크도 프로젝트도 아님).
 > 📛 **폴더명 규칙(2026-07-22 변경 · 2026-08-03 예외 추가)**: `projects/` 하위 폴더명은 **Bitbucket 저장소명과 1:1로 일치**시킨다. ⚠️ **단 `projects/task/` 하위(태스크)는 예외** — 저장소가 없으므로 과업명 kebab-case 를 쓴다(위 [태스크 폴더 관리 규칙] 참조). 이전에는 로컬 임포트 폴더명 기반 `j-ha-*` slug를 썼으나, 머신마다 다를 수 있는 임포트명 대신 **원격 저장소라는 단일 기준**으로 통일했다. 신규 프로젝트 등록 시에도 `git remote get-url origin`의 저장소명을 그대로 쓴다.
 >
 > ⚠️ **저장소명 ≠ 로컬 폴더명.** 대부분 다르므로 아래 매핑표를 기준으로 삼는다. 문서 안에서 **KB 슬러그는 저장소명**, **`../` 상대경로는 로컬 폴더명**을 쓴다(경로는 실제 디스크를 따라가야 하므로).
@@ -175,6 +203,24 @@ md/
 > | `spc_spring_batch` | `spc_spring_batch` | ✅ 동일 (CodeCommit) |
 >
 
+## 🗓️ 일정 관리 규칙 (2026-08-03 확정, 상시)
+
+> 🔔 **[상시 규칙] 세션 시작 시 [personal/schedule.md](./personal/schedule.md) 를 확인하고, 사용자가 묻지 않아도 먼저 알린다.**
+> **🔴 지연·🟠 임박(D-1~D-day) 건은 첫 응답 최상단에 알린다.** 🟡 근접(D-3~D-2)은 응답 중 강조, ⚪ 예정(D-7~D-4)은 한 줄 안내.
+> **사용자가 "빼줘"·"완료"라고 할 때까지 계속 알린다. 임의로 중단하지 않는다.**
+
+- **날짜 2축 관리**: `등록일`(일정에 추가한 날) + `기준일`(일이 처음 발생·요청된 날). 경과도 두 축으로 표시한다 — **"요청 후 N일"**(외부 압박) / **"등록 후 N일"**(알고도 미룬 기간).
+- ⚠️ **경과일수는 문서에 숫자로 적지 않는다.** 날짜만 저장하고 **표시 시점에 계산**한다(박아두면 다음 날 틀린 값이 된다).
+- **기한 없는 건**은 `ASAP` 으로 두고 두 경과일을 모두 표시한다(방치 방지).
+- **등록 후 경과가 늘어나는데 진척이 없으면** 그 사실을 함께 지적한다.
+- **그룹핑**: 목록은 **프로젝트/태스크별로 묶어** 제시하고, 그룹 안에서 긴급도순으로 정렬한다. 귀속처가 없으면 **`📥 미정`** 그룹에 두고 나중에 배정한다(`projects/etc/` 와 동일 원리).
+- 알림 시에는 **태스크명을 앞에 붙인다** — `🔴 [SMS Agent 전환] S-002 벤더 회신 — 요청 후 N일 / 등록 후 N일`
+- 알림은 **간결하게** — 태스크 · 제목 · 양쪽 경과 · 다음 행동 1줄.
+- 🔒 **[해제 불가] 일정을 표시할 때마다 맨 아래에 미배정 현황을 무조건 붙인다.** ① 일정 `📥 미정` 그룹 ② [`projects/etc/`](./projects/etc/INDEX.md) 대기 목록. **각 1건 이상이면 건수·목록·등록 후 경과일을 표시**하며, 사용자가 "빼줘"라고 해도 끄지 않는다. **배정이 끝나 0건이 되어야 사라진다**(0건이면 표시 생략).
+- 🔄 **트리거**: `"일정 보여줘"` (태스크별 그룹) · `"<태스크> 일정 보여줘"` (해당 그룹만) · `"일정 추가해줘 …"` (등록) · `"S-00x 를 <태스크>로 옮겨줘"` (배정) · `"~ 일정에서 빼줘"`·`"~ 완료"` (완료 이력 이동·알림 중단) · `"~ 미뤄줘"` (기한 변경) · `"~ 보류"` (알림 중단·사유 기록)
+- 실제 작업이 발생해 일정에 영향이 생기면 **즉시 `schedule.md` 를 갱신**한다(md 현행화 상시 규칙과 동일).
+- ⚠️ 시각 기반 푸시 알림은 별도 외부 연동이 있어야 보장된다 → 현재는 **세션 시작 시 알림**이 기본 수단이다.
+
 ## ⏱️ 운영 규칙 — 성향·동향·작업내역 주기 (2026-07-26 확정, 최우선)
 
 > 🔴 **모든 작업 시작 전, 아래 "반영 범위"에 해당하는 문서를 먼저 읽고 맥락·성향을 반영한 뒤 진행한다.**
@@ -193,15 +239,26 @@ md/
 - **저장 시점**: 성향/동향은 주기 종료 시 또는 유의미한 변화 발생 시, 작업내역은 작업 수시 누적(주 단위 파일에 append).
 - 기존 `projects/<slug>/monthly/`·`weekly/` 문서는 이 규칙에 맞춰 `tendency/`·`worklog/`로 정리·이관(발생 시).
 
+### 📊 팀 워크로그 적재 (`personal/team-worklog/`)
+> 위 성향/동향(주관 기록)과 별개로, **Jira 워크로그 로우데이터**를 주 단위로 적재하는 영역이다.
+- 정본: [personal/team-worklog/INDEX.md](./personal/team-worklog/INDEX.md) — 모바일개발팀 **9명**, 월~일 7일 단위, 오늘부터 역순 1주씩 **51주(1년)**
+- 매칭 키는 **`accountId`** — 표시명 매칭 금지(사내 동일 이니셜 계정 실재)
+- 최근 2주는 **매 실행 시 재조회**(수정 반영). PK `worklogId` 라 중복이 쌓이지 않는다
+- 🚦 [호출 쿼터 50회](./shared/atlassian-access.md)를 나눠 쓴다 — 비트버켓 페치(12회)와 워크로그 수집(주당 6~10회)을 같은 날 돌려도 여유가 있다
+- 트리거: **"팀 워크로그 수집해"** · **"팀 워크로그 현황"**(호출 0) · **"팀 워크로그 집계"**(호출 0)
+
 ## 📄 공통 문서 (shared)
 | 문서 | 상태 | 요약 |
 |------|------|------|
 | [ecc-reference.md](./shared/ecc-reference.md) | 진행중 | ECC 정체·핵심 규칙·해피포인트 백엔드↔ECC 스킬/에이전트 매핑 (참조 전용 안내) |
 | [server-env.md](./shared/server-env.md) | 진행중 | 개발/스테이징 EC2·Tomcat 인스턴스·포트·DB(JNDI)·Scouter APM·배포 원칙 |
-| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) + **API 호출 속도 제한** + 🔴 **App password 폐기 → git은 SSH 필수**(2026-08-02) |
+| [atlassian-access.md](./shared/atlassian-access.md) | 진행중 | **Bitbucket·Jira·Confluence 접근 수단** — SSH 키(git)+API 토큰 2종의 저장 위치·조회법·엔드포인트·기능 범위·함정 (macOS/Windows 병기, 값은 미기록) + 🛑 **호출 제한(강제)** — `3초/회` · `1일 통합 50회`(SSH+API 4종 공유 · 2026-08-05 30→50 상향) · 소진 시 중단·보고 · 당일 +20 승인제 + **사용 내역 표**(2026-08-04) + 🔴 **App password 폐기 → git은 SSH 필수**(2026-08-02) |
+| [confluence-authoring.md](./shared/confluence-authoring.md) | 진행중 | 📝 **Confluence 작성 규격 + Atlassian 연동 구조** — 문서 골격 12절·톤 규칙 6종·**표 스타일 규약**(full-width·헤더옵션 해제·`#deebff`·열너비 비율)·ADF 제약·자리표시자/초안 원칙 + **연동 계층**(개발1건=컨플1+지라1 → 프로젝트=N+N → 대형=지라 필터·플랜). 트리거 **"컨플 작성해줘"**. ⏳ `jira-authoring.md` 추후 수립 |
 | [git-sync-routine.md](./shared/git-sync-routine.md) | 진행중 | 🔄 **"비트버켓 페치 받아줘" 트리거 루틴** — 전체 fetch + 안전조건 충족분만 `pull --ff-only`. 판정 기준 8종·실행 절차·함정 |
 
 > 🔄 **[트리거 규칙] "비트버켓 페치 받아줘"** → [shared/git-sync-routine.md](./shared/git-sync-routine.md) 절차를 수행한다. **먼저 전 저장소 fetch를 모두 완료하고, 그 결과를 기준으로 안전조건 충족분은 모든 로컬 추적 브랜치까지 fast-forward 반영**한다(현재 브랜치=`pull --ff-only`, 비체크아웃 브랜치=SSH refspec fetch). fetch 단계가 끝나기 전에는 브랜치 반영을 시작하지 않는다. 수정중·스테이징·**로컬 커밋(ahead>0)**·충돌·진행중작업·detached·upstream없음·diverged 는 **그냥 둔다**. 전제: **git 은 SSH 경로**(App password 폐기로 HTTPS 410).
+
+> 📝 **[트리거 규칙] "컨플 작성해줘" / "컨플에 보강해줘"** → [shared/confluence-authoring.md](./shared/confluence-authoring.md) 규격을 따른다. **기존 페이지는 먼저 읽고**(사용자가 직접 수정했을 수 있음), **초안은 초안으로 유지**(임의 발행 금지), **모르는 값은 지어내지 말고 `placeholder` 로 비워두고 보고**한다. 이미지는 업로드 도구가 없으므로 자리표시자만 배치한다.
 
 > 🚦 **[상시 규칙] Bitbucket · Jira · Confluence API 와 Bitbucket SSH Git 요청은 초당 1회를 초과해 호출하지 않는다.** 연속 호출 사이에 **최소 1초** 간격을 둔다. 페이지네이션·저장소 순회 루프에 반드시 `sleep 1` 을 넣고, 병렬 호출은 금지한다. 호출 횟수 자체를 줄이려면 `pagelen=100`/`maxResults=100` 으로 페이지 크기를 키운다. 429 수신 시 즉시 중단하고 지수 백오프(1s→2s→4s). 상세: [shared/atlassian-access.md §3-1](./shared/atlassian-access.md), [shared/git-sync-routine.md](./shared/git-sync-routine.md).
 | [conventions/api-response.md](./shared/conventions/api-response.md) | 진행중 | **전 프로젝트 공통** API 응답 표준 — 엔벨로프·code 대역(00/01/50/70/80/99)·detailCode 규칙 (+ha-web-api 참조 구현) |
@@ -211,7 +268,7 @@ md/
 ## ✅ 태스크 목록
 | 태스크 | 상태 | 대상 프로젝트 | 요약 |
 |--------|------|---------------|------|
-| [event-template](./projects/task/event-template/INDEX.md) | **완료(phase3 준비)** | [ha_api](./projects/ha_api/INDEX.md) + [ha_admin](./projects/ha_admin/INDEX.md) | **이벤트 템플릿** — 이벤트 개발을 개별 JSP에서 설정 기반 Campaign Builder로 전환. 1·2차(2025/2026 상반기) 완료, **Phase 3 준비 중**. 저장소 아님 |
+| [event-template](./projects/task/event-template/INDEX.md) | **완료(Phase.1·2)** | [ha_api](./projects/ha_api/INDEX.md) + [ha_admin](./projects/ha_admin/INDEX.md) | **이벤트 템플릿** — 이벤트 개발을 개별 JSP에서 설정 기반 Campaign Builder로 전환. 1·2차(2025/2026 상반기) 완료, **Phase 3 준비 중**. 저장소 아님 |
 | ⭐ [homepage-ai-renewal](./projects/homepage-ai-renewal/INDEX.md) | 진행중 | [happypoint-web2](./projects/happypoint-web2/INDEX.md) + [ha-web-api](./projects/ha-web-api/INDEX.md) | **홈페이지 AI 리뉴얼** — 프론트·백엔드를 함께 이행하는 과업. 저장소 아님 |
 | [sms-agent-replacement](./projects/task/sms-agent-replacement/INDEX.md) | 진행중(분석) | 배치 서버 `/app/ndsoft` + 섹타나인 Agent | **SMS Agent 전환** — 현행 NDSoft에서 신규 Agent v2.0.1로 전환. 저장소 아님 |
 | [store-search-upgrade](./projects/task/store-search-upgrade/INDEX.md) | 완료(잔여정리) | 검색 서버 Elasticsearch 8.19.12 | **매장검색엔진 고도화 (와이즈넛 -> 엘라스틱서치)** — SF-1 라이선스 만료 대응 전환. 저장소 아님 |

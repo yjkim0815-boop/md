@@ -1,0 +1,83 @@
+{
+  "week": "2026-06-22",
+  "range": [
+    "2026-06-22",
+    "2026-06-28"
+  ],
+  "status": "부분",
+  "collected": "2026-08-05",
+  "collectedDays": [],
+  "count": 4,
+  "hours": 13.0,
+  "note": "오버플로 이슈 유입분만 — search 미실행",
+  "entries": [
+    {
+      "worklogId": "89123",
+      "date": "2026-06-23",
+      "dow": "화",
+      "startedAt": "2026-06-23T14:30:00",
+      "timeOfDay": "14:30",
+      "createdAt": "2026-06-23T18:16:52",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 9900,
+      "hours": 2.75,
+      "issueKey": "WORK-15979",
+      "project": "WORK",
+      "summary": "해피앱 디바이스 푸시 설정 값 전달 JSIF",
+      "comment": "1. 요구 사항 분석 및 문서 작성 2. 인터페이스 문서 생성(고도화용) 3. 인터페이스 문서 수정(기존 문서)"
+    },
+    {
+      "worklogId": "89323",
+      "date": "2026-06-25",
+      "dow": "목",
+      "startedAt": "2026-06-25T17:00:00",
+      "timeOfDay": "17:00",
+      "createdAt": "2026-06-25T18:25:36",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 4500,
+      "hours": 1.25,
+      "issueKey": "WORK-15979",
+      "project": "WORK",
+      "summary": "해피앱 디바이스 푸시 설정 값 전달 JSIF",
+      "comment": "iOS JSIF 고도화 진행 중"
+    },
+    {
+      "worklogId": "89467",
+      "date": "2026-06-26",
+      "dow": "금",
+      "startedAt": "2026-06-26T09:00:00",
+      "timeOfDay": "09:00",
+      "createdAt": "2026-06-26T18:51:39",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 9000,
+      "hours": 2.5,
+      "issueKey": "WORK-15979",
+      "project": "WORK",
+      "summary": "해피앱 디바이스 푸시 설정 값 전달 JSIF",
+      "comment": "iOS JSIF(getDeviceSetting, openDeviceSetting) 생성 및 테스트"
+    },
+    {
+      "worklogId": "89468",
+      "date": "2026-06-26",
+      "dow": "금",
+      "startedAt": "2026-06-26T12:30:00",
+      "timeOfDay": "12:30",
+      "createdAt": "2026-06-26T18:51:40",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 23400,
+      "hours": 6.5,
+      "issueKey": "WORK-15979",
+      "project": "WORK",
+      "summary": "해피앱 디바이스 푸시 설정 값 전달 JSIF",
+      "comment": "1. AOS JSIF(getDeviceSetting, openDeviceSetting) 생성 및 테스트 2. 코드 정리 3. 단위 테스트"
+    }
+  ]
+}

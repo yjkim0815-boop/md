@@ -129,11 +129,22 @@
     - 참조 경로 전수 대조: 신규 계약 21개 전부 백엔드 엔드포인트와 **일치(불일치 0)**.
     - ✅ 정리완료: `interface/page/email/reject.ts` 의 구 `EmailUnsubscribeRequest/Response` 선언 제거 → 정본은 신규 `interface/page/email/unsubscribe.ts`(success/fail union). reject.ts 는 GET reject 전용으로 정리, [API] 주석에 unsubscribe 계약 위치 명시. `tsc` 0.
 
+### 🔧 후속 — DS팀 유입 트래킹 로그 개선 (2026-08-05)
+- 요구 3건 반영:
+  1. `/api/**` 유입 로깅 유지 — **단 `com.spc.hpc.api.model.*` 핸들러는 제외**(SSR 페이지 데이터 조회는 유입 로그 대상 아님). `TrackingInterceptor.afterCompletion`에서 `HandlerMethod.getBeanType()` 패키지 검사.
+  2. **`/api/auth/check` 는 프론트가 넘긴 원본 페이지 `url`/`params` 로 기록**: `AuthApiResource.check`가 바디 `ctx.url/params`를 request attribute(`TrackingInterceptor.TRK_URL/TRK_PARAMS`)로 전달 → 인터셉터가 `service_url`/`service_param`/`param_dict` override(없으면 현행 requestURI/getParameterMap).
+  3. **client_ip = 레거시 `WebUtil.getIp()`** 적용(XFF/Proxy 헤더 체인 → 첫 IP=클라이언트, 폴백 유지).
+- **서버-투-서버(Next→백엔드) 클라이언트 정보 유실 보완**: `/api/auth/check`는 SSR 호출이라 IP/UA/geo가 Next 서버값 → **프론트가 원요청 헤더를 forward**. `middleware.ts resolveAuth`(주 호출부) + `lib/auth-server.ts getCurrentUser`(폴백) 둘 다 `x-forwarded-for`(or x-real-ip)·`user-agent`·`latitude`/`longitude` 를 check fetch 헤더로 전달. 백엔드가 `WebUtil.getIp()`·`getHeader(User-Agent/latitude/longitude)` 로 읽음.
+- lat/long: 레거시에 geo 유틸 없음(웹 미사용, 앱 웹뷰만 헤더로 전송) → 헤더 기반 유지, 프론트가 있으면 forward.
+- 검증: 백엔드 `mvn compile` 0 / 프론트 `tsc --noEmit` 0.
+- **트래킹 로그 파일명 통일(2026-08-05)**: 프로파일별로 달랐음(dev·prod=`ha-web-yyyyMMdd_HH.log`, stage=`tracking.yyyyMMdd_HH.log`, local=미설정) → **dev·prod 를 stage 기준 `tracking/tracking.%d{yyyyMMdd_HH}.log` 로 통일**(1시간 롤오버·`maxFiles=200`≈8.3일 유지). local 은 원래 TrackingAppender 없음(로컬 트래킹 미사용). 인터셉터 javadoc 파일명도 실제 패턴(`_` 구분자 포함)으로 정정. compile 0.
+
 ## 검증
 - 각 flow 이식 후 `mvn compile` 통과 유지(현재 BACKEND OK).
 - 빌드/배포·실동작 테스트는 dominic 직접.
 
 ## TODO (잔여)
+- **프론트 서버 오류 시 정적 에러 페이지 랜딩(2026-08-05 추가)**: Next SSR/프론트 서버 오류(백엔드 타임아웃·5xx·unreachable, 렌더 예외) 시 무한대기/크래시 대신 **정적 에러 페이지 랜딩**. 특히 **계약 래퍼 미경유 직접 fetch** 는 현재 `AbortSignal.timeout` 없음(무한대기 위험) → 10s 타임아웃 + 에러 랜딩 연결: `page/join/{policy,form,optional-form,welcome}`, `page/brand/join/*`, `page/brand/common/alert`. (참고: 계약 래퍼 legacyGet/Post·로그인체크는 이미 타임아웃 10s/4s 보유)
 - 빌드/배포·실동작 통합 테스트(dominic 직접): B POST 액션(unsubscribe/agree-proc/qr-banner-count 등) 실연동, C 9라우트 SSR 렌더
 - 쿠키/토큰 브리지(미들웨어) 실연동 시 landingType↔프론트 화면 매핑 확정
 - 선행 이슈: `join/index/page.tsx` `reqPath` prop 타입에러(본 이관과 무관, 별도 처리 필요)

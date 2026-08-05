@@ -1,4 +1,4 @@
----
+﻿---
 문서유형: WORKLOG
 범위: 프로젝트(ha-web-api)
 주기: 주
@@ -12,7 +12,7 @@
 
 # 🛠️ ha-web-api 주간 작업내역 — 2026-W31 (프론트 happypoint-web2 연동)
 
-> 로컬 체크아웃 `j-ha-web-api`(브랜치 `dev-j`). 배포처 dev-www. 프론트 짝 = [happypoint-web2](../../happypoint-web2/INDEX.md).
+> 로컬 체크아웃 `j-ha-web-api`(브랜치 `dev-j`). 배포처 dev-www. 프론트 짝 = [happypoint-web2](../../../happypoint-web2/INDEX.md).
 
 ## 1. 인증 API
 - `AuthApiResource`: `GET /api/auth/me` → **`GET /api/auth/check`** 리네임. (login/logout/check 3종)

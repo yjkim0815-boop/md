@@ -13,6 +13,11 @@
 
 > **트리거**: 사용자가 **"비트버켓 페치 받아줘"** (또는 "비트버켓 페치", "페치 받아줘") 라고 말하면 이 문서의 절차를 그대로 수행한다.
 > 상위: [../README.md](../README.md) · 접근 수단: [atlassian-access.md](./atlassian-access.md)
+>
+> 🛑 **[강제] 이 루틴은 통합 호출 쿼터를 크게 소모한다.**
+> 저장소 12개 전체 fetch = **12회** (1일 통합 50회 중 **24%**). pull 이 붙으면 더 늘어난다.
+> **착수 전에 [atlassian-access §3-2 사용 내역](./atlassian-access.md#3-2--호출-사용-내역-매일-갱신)의 잔여 횟수를 먼저 확인**하고, 잔여가 대상 저장소 수보다 적으면 **실행하지 말고 사용자에게 보고**한다.
+> 저장소 사이 **3초 대기**는 필수다. 완료 후 사용 내역 표를 즉시 갱신한다.
 
 ## 1. 요구사항 (사용자 확정, 2026-08-02)
 
@@ -33,6 +38,8 @@
 
 ### 3-1. fetch
 **전 저장소 무조건 수행.** 꼬인 저장소도 원격 정보는 최신화해 두는 것이 이득이다.
+
+> 🛑 **단, 잔여 쿼터가 대상 저장소 수보다 적으면 "전부"가 아니다.** 이 경우 임의로 일부만 돌리지 말고 **중단하고 사용자에게 보고**한다 — 부분 fetch 는 판정을 왜곡시켜 SKIP/PULL 결정을 틀리게 만든다. 사용자가 대상을 좁혀주거나 +10 을 승인하면 진행한다.
 
 ### 3-2. pull — 아래 **하나라도** 걸리면 🟡 SKIP
 
@@ -143,6 +150,27 @@ git -C <repo> remote get-url origin
 - [Atlassian 접근 수단](./atlassian-access.md)
 
 ## 9. 실행 이력
+
+### 2026-08-05 Bitbucket fetch + pull
+
+- **대상**: 워크스페이스 루트에서 동적 수집한 Bitbucket `origin` 저장소 **12개** (§2 목록과 일치). GitHub(`md`·`ECC`)·CodeCommit(`spc_batch`·`spc_spring_batch`) 제외.
+- **사전 점검**: `ssh -T git@bitbucket.org` → `authenticated via ssh key.` 확인.
+- **fetch**: 12개 **전부 성공**. 원격 URL은 **변경하지 않고** HTTPS origin에서 변환한 SSH URL을 `git fetch <ssh-url>` 에 직접 지정했다. 저장소 간 **3초 대기** 준수(병렬 없음).
+- **판정** (fetch 후 재계산): PULL 2 · SKIP 3 · 최신 7.
+
+| 저장소 | 브랜치 | ahead | behind | 판정 | 사유 |
+|---|---|---:|---:|---|---|
+| `j-ha-api` | develop | 0 | 22 | 🟢 **PULL** | |
+| `j-ha-web` | develop | 0 | 9 | 🟢 **PULL** | |
+| `happypoint-web2` | dev-j | 0 | 0 | 🟡 SKIP | 수정중 1 |
+| `j-ha-admin` | develop | 0 | **86** | 🟡 SKIP | 수정중 3 · untracked 1 |
+| `j-ha-web-api` | dev-j | 0 | 0 | 🟡 SKIP | 수정중 2 |
+| `gcs` `gcs_fo` `ha-admin` `ha-api` `ha-batch` `ha-panel` `ha-web` | — | 0 | 0 | ✅ 최신 | |
+
+- **반영**: `j-ha-api/develop` **22커밋**(`edbc5c502` → `d1d065206`), `j-ha-web/develop` **9커밋**(`9c9b743b` → `601946fa`). 둘 다 `--ff-only`, 반영 후 `behind=0 ahead=0` 확인.
+- **안전 조치**: `stash`/`checkout`/`reset`/`--force`/브랜치 전환/원격 URL 변경 **미수행**. SKIP 3건은 손대지 않았다.
+- 🔴 **후속**: `j-ha-admin` 이 **behind 86** 으로 가장 뒤처져 있다. 작업 트리 변경 3건을 정리하면 반영 가능하다.
+- **쿼터**: SSH 인증 1 + fetch 12 = **13회** 사용.
 
 ### 2026-08-03 Bitbucket fetch
 - 대상: Bitbucket `origin` 저장소 12개 전체.

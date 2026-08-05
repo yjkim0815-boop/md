@@ -1,0 +1,49 @@
+{
+  "week": "2026-08-10",
+  "range": [
+    "2026-08-10",
+    "2026-08-16"
+  ],
+  "status": "부분",
+  "collected": "2026-08-05",
+  "collectedDays": [],
+  "count": 2,
+  "hours": 16.0,
+  "note": "오버플로 이슈 유입분만 — search 미실행",
+  "entries": [
+    {
+      "worklogId": "89952",
+      "date": "2026-08-10",
+      "dow": "월",
+      "startedAt": "2026-08-10T09:00:00",
+      "timeOfDay": "09:00",
+      "createdAt": "2026-07-01T17:48:00",
+      "author": "박수진",
+      "accountId": "712020:ddb57cd5-ac3d-447d-b165-b5c65555dcff",
+      "authorEmail": "sujin.park@spc.co.kr",
+      "seconds": 28800,
+      "hours": 8.0,
+      "issueKey": "WORK-16386",
+      "project": "WORK",
+      "summary": "[26년 하반기] 서비스개발팀 근태 관리",
+      "comment": "연차"
+    },
+    {
+      "worklogId": "91122",
+      "date": "2026-08-14",
+      "dow": "금",
+      "startedAt": "2026-08-14T09:00:00",
+      "timeOfDay": "09:00",
+      "createdAt": "2026-07-23T17:50:51",
+      "author": "김정윤",
+      "accountId": "712020:f4db57f9-66fd-49b7-b174-1155f96d35f7",
+      "authorEmail": "jeongyun.kim@spc.co.kr",
+      "seconds": 28800,
+      "hours": 8.0,
+      "issueKey": "WORK-16386",
+      "project": "WORK",
+      "summary": "[26년 하반기] 서비스개발팀 근태 관리",
+      "comment": "연차"
+    }
+  ]
+}

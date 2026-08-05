@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>모바일개발팀 워크로그</title>
+<script src="data.js"></script>
+<style>
+:root{
+  --bd:#dfe1e6; --bg:#fff; --hd:#deebff; --tx:#172b4d; --mut:#6b778c;
+  --acc:#0052cc; --warn:#ffab00; --bad:#de350b; --ok:#00875a; --band:#fffae6;
+}
+*{box-sizing:border-box}
+/* 나눔고딕 우선. PC 에 설치된 로컬 폰트를 쓰므로 CDN·인터넷이 필요 없다.
+   미설치 환경(맥·다른 PC)을 위해 Noto Sans KR → 시스템 고딕 순으로 대체한다. */
+body{margin:0;font:14px/1.6 "NanumGothic","Nanum Gothic","Noto Sans KR",
+     -apple-system,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",sans-serif;
+     color:var(--tx);background:#f4f5f7;-webkit-font-smoothing:antialiased}
+/* 나눔고딕은 등폭 숫자 지원이 약하다. 표·시각 표기는 자릿수가 흔들리지 않게 고정한다. */
+.num,.cal .lbl,.cal .tot,.blk .rng,#drill td,.team .u{
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+/* 좌우 여백 = 화면 폭에 따라 20~56px. clamp 라 좁은 화면에서도 최소 20px 는 남는다.
+   header 와 main 이 같은 값을 써야 컨트롤과 표의 왼쪽 끝이 맞는다. */
+:root{--pad:clamp(20px,3.5vw,56px)}
+header{background:#fff;border-bottom:1px solid var(--bd);padding:14px var(--pad);position:sticky;top:0;z-index:20}
+h1{font-size:17px;margin:0 0 8px;display:flex;align-items:center;gap:10px}
+h1 small{font-weight:400;color:var(--mut);font-size:13px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,select{font:inherit;padding:4px 10px;border:1px solid var(--bd);background:#fff;border-radius:3px;cursor:pointer;color:var(--tx)}
+button:hover{background:#f4f5f7}
+button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.sp{flex:1}
+main{padding:24px var(--pad) 64px}   /* 하단은 상세표가 바닥에 붙지 않게 넉넉히 */
+table{border-collapse:collapse;background:#fff;width:100%}
+th,td{border:1px solid var(--bd);padding:5px 8px}
+th{background:var(--hd);text-align:center;font-weight:600;white-space:nowrap}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.mut{color:var(--mut)}
+.badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:12px;border:1px solid var(--bd)}
+.b-확정{background:#e3fcef;border-color:#abf5d1;color:var(--ok)}
+.b-미완료{background:#fffae6;border-color:#ffe380;color:#974f0c}
+.b-진행중{background:#deebff;border-color:#b3d4ff;color:var(--acc)}
+.b-부분{background:#fff;border-color:#ffe380;color:#974f0c}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border:1px solid var(--bd);border-radius:12px;cursor:pointer;background:#fff;font-size:13px}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.note{background:#fffae6;border:1px solid #ffe380;padding:8px 12px;border-radius:3px;margin-bottom:12px}
+.note.bad{background:#ffebe6;border-color:#ffbdad}
+
+/* 캘린더 */
+.cal{display:grid;grid-template-columns:68px repeat(7,1fr);background:#fff;border:1px solid var(--bd)}
+.cal .hd{background:var(--hd);text-align:center;padding:8px 2px;font-weight:600;font-size:14px;border-bottom:1px solid var(--bd);border-left:1px solid var(--bd)}
+.cal .hd.today{background:#fff0b3}
+.cal .tot{text-align:center;padding:6px 4px;font-size:14px;border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);font-variant-numeric:tabular-nums;background:#fafbfc}
+.cal .lbl{text-align:right;padding-right:8px;color:var(--mut);font-size:13px;border-right:1px solid var(--bd)}
+.col{position:relative;border-left:1px solid var(--bd)}
+.col .slot{border-bottom:1px dotted #ebecf0}
+.col .slot.hh{border-bottom:1px solid var(--bd)}
+/* 00~24시를 다 그리면 업무시간 비중이 작아진다. 야간대를 옅게 깔아 시선을 모은다. */
+.col .slot.nt{background:#fafbfc}
+.cal .lbl.nt{color:#b3bac5}
+.blk{position:absolute;left:1px;right:1px;border-radius:3px;padding:2px 4px;overflow:hidden;font-size:13px;line-height:1.35;color:#fff;cursor:default}
+/* 블록 1행 = [태스크번호] [시간범위] · 2행 = 코멘트
+   ⚠️ 클래스명에 `hd` 를 쓰면 안 된다 — 블록이 `.cal` 안에 있어 `.cal .hd`(요일 헤더,
+   하늘색 배경)가 함께 걸린다. 실제로 2026-08-05 에 블록 첫 줄만 하늘색으로 뜨는 버그가 났다. */
+.blk .tk{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blk b{font-weight:600}
+.blk .rng{margin-left:6px;font-variant-numeric:tabular-nums;opacity:.85;font-size:12px;letter-spacing:-.2px}
+.blk .rng sup{font-size:10px}
+.blk .cm{display:block;opacity:.92}
+.band{grid-column:1/-1;background:var(--band);border-bottom:1px solid var(--bd);padding:5px 10px;font-size:13px}
+#tip{position:fixed;display:none;max-width:380px;background:#172b4d;color:#fff;padding:8px 10px;border-radius:4px;font-size:13px;z-index:99;white-space:pre-wrap;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.hm{text-align:right}
+tr.zero td{background:#fafbfc;color:var(--mut)}
+
+/* 팀 뷰 표 — 열 너비를 고정한다.
+   width:100% 만 두면 담당자 열이 남는 공간을 전부 먹어 표가 흉해진다. */
+/* width:100% + table-layout:fixed 조합이 핵심.
+   fixed 가 아니면 담당자 열이 남는 폭을 전부 먹고, width:auto 면 표가 왼쪽에 붙는다.
+   담당자만 200px 로 고정하고 나머지 8열(요일 7 + 합계)은 남는 폭을 균등 분배한다. */
+.team{table-layout:fixed;width:100%;min-width:680px}
+.team col.who{width:200px}
+.team th,.team td{padding:5px 6px}
+/* 수치는 오른쪽 정렬 + 여백을 둬서 테두리에 붙지 않게 한다 */
+.team td.num,.team th.num{padding-right:20px}
+.team td.who,.team th.who{text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.team td.who .z{color:var(--mut);font-size:12px;margin-left:4px}
+.team .u{font-size:11px;opacity:.6;margin-left:1px;font-weight:400}
+.team th.day span{font-weight:400;font-size:12px}
+.team th.wknd,.team td.wknd{background:#fafbfc}
+.team th.day.wknd{background:#eef0f3}
+.team tfoot th{background:var(--hd);position:relative}
+.team tfoot th.num{font-variant-numeric:tabular-nums}
+.tblwrap{overflow-x:auto}
+.legend{color:var(--mut);font-size:13px;margin:8px 0 0}
+.chip.none{opacity:.45;font-style:italic}
+#drill td{font-size:13px}
+/* 상세 내역 표 — 열 비율 고정. 코멘트가 제목보다 넓어야 읽힌다. */
+.dtl{table-layout:fixed;width:100%}
+.dtl col.t{width:17%}    /* 시간대 */
+.dtl col.k{width:12%}    /* JIRA TASK */
+.dtl col.s{width:29%}    /* TASK 제목 */
+.dtl col.c{width:42%}    /* WORKLOG 코멘트 — 가장 넓게 */
+.dtl td.t,.dtl th.t,.dtl td.k,.dtl th.k{text-align:center}
+.dtl td.t{white-space:nowrap}
+.dtl td.s,.dtl td.c{word-break:break-word}
+/* 셀 클릭 → 상세로 스크롤. header 가 sticky 라 그만큼 여백을 둬야 제목이 안 가린다. */
+#drill{scroll-margin-top:112px}
+#drill h3{scroll-margin-top:112px}
+td.sel{outline:2px solid var(--acc);outline-offset:-2px}
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 모바일개발팀 워크로그 <small id="meta"></small></h1>
+  <div class="bar">
+    <button id="prev">←</button>
+    <select id="week"></select>
+    <button id="next">→</button>
+    <button id="thisWk" title="이번주로 이동">이번주</button>
+    <span id="wkinfo" class="mut"></span>
+    <span class="sp"></span>
+    <button id="vTeam" class="on">팀 뷰</button>
+    <button id="vCal">캘린더</button>
+    <label class="mut">담당자
+      <select id="who"></select>
+    </label>
+  </div>
+  <div class="bar" id="chips" style="margin-top:8px"></div>
+</header>
+<main>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div id="drill"></div>
+</main>
+<div id="tip"></div>
+<script>
+const D = window.WL, F = {};
+D.fields.forEach((f,i)=>F[f]=i);
+const DOW = ["월","화","수","목","금","토","일"];
+const $ = s=>document.querySelector(s);
+const fmt = m => (m/60).toFixed(1);
+const hhmm = m => `${String(Math.floor(m/60)%24).padStart(2,"0")}:${String(m%60).padStart(2,"0")}`;
+const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
+// "10:00~10:30 (0.5h)" — 자정을 넘기면 +1d 를 붙인다
+function span(t,m){
+  if(!t) return `<span class="mut">시각 미상</span> (${fmt(m)}h)`;
+  const s=toMin(t), e=s+m;
+  return `${t}~${hhmm(e)}${e>=1440?"<sup>+1d</sup>":""} (${fmt(m)}h)`;
+}
+
+// ---- 상태 ----
+let weeks = D.weeks.slice().sort((a,b)=>b.week.localeCompare(a.week));
+
+// 진입 기본값 = **이번주 팀 뷰**.
+// ⚠️ toISOString() 은 UTC 로 바꿔 KST 에서 하루가 밀린다. 로컬 값으로 직접 계산한다.
+function thisMonday(){
+  const t = new Date();
+  const mon = new Date(t.getFullYear(), t.getMonth(), t.getDate() - ((t.getDay()+6)%7));
+  return `${mon.getFullYear()}-${String(mon.getMonth()+1).padStart(2,"0")}-${String(mon.getDate()).padStart(2,"0")}`;
+}
+function initialWeek(){
+  const cur = thisMonday();
+  let i = weeks.findIndex(w=>w.week===cur);
+  if(i>=0) return i;                                   // ① 이번주가 있으면 이번주
+  i = weeks.findIndex(w=>w.week<=cur);                 // ② 없으면 이번주 이전 중 최신
+  if(i>=0) return i;                                   //    (weeks 는 내림차순)
+  return weeks.length-1;                               // ③ 전부 미래면 가장 이른 주차
+}
+let wi = initialWeek();
+let mode = "team";                                     // 진입 시 팀 뷰
+let off = new Set();          // 숨긴 담당자
+let sel = null;               // 캘린더 대상 1인
+
+// 주차별 인덱스
+const byWeek = {};
+D.entries.forEach(e=>{ (byWeek[e[F.week]] ||= []).push(e); });
+
+$("#meta").textContent = `생성 ${D.generated} · ${D.entries.length.toLocaleString()}건 · 주차 ${D.weeks.length}개`;
+
+// ⚠️ toISOString() 은 UTC 로 바꿔 KST 에서 하루가 밀린다. 문자열로 직접 계산한다.
+function days(mon){
+  const [y,m,d] = mon.split("-").map(Number);
+  return [...Array(7)].map((_,i)=>{
+    const t = new Date(y, m-1, d+i);
+    return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
+  });
+}
+function dowOf(ymd){
+  const [y,m,d] = ymd.split("-").map(Number);
+  return DOW[(new Date(y,m-1,d).getDay()+6)%7];
+}
+// 해당 주차에 기록이 없어도 로스터 전원을 보여준다(0h 행으로 표시).
+function membersOf(){ return D.roster.map(r=>r.name); }
+function color(key){
+  let h=0; for(const c of key) h=(h*31+c.charCodeAt(0))%360;
+  return `hsl(${h} 55% 42%)`;
+}
+
+// ---- 컨트롤 ----
+function drawWeekSel(){
+  $("#week").innerHTML = weeks.map((w,i)=>{
+    const pct = w.count ? Math.round(w.timed/w.count*100) : 100;
+    return `<option value="${i}" ${i===wi?"selected":""}>${w.week} · ${w.status} · ${w.count}건 ${w.hours.toFixed(0)}h${pct<100?` · 시각 ${pct}%`:""}</option>`;
+  }).join("");
+}
+function drawChips(rows){
+  const ms = membersOf();
+  const has = new Set(rows.map(e=>e[F.author]));
+  $("#chips").innerHTML = `<span class="mut">담당자 ${ms.length}명 <span class="mut">(기록 ${[...has].length}명)</span></span>` +
+    ms.map(n=>`<span class="chip ${off.has(n)?"":"on"} ${has.has(n)?"":"none"}" data-n="${n}" title="${has.has(n)?"":"이 주차 기록 없음"}">${n}</span>`).join("") +
+    `<button id="allOn">전체</button><button id="allOff">해제</button>`;
+  $("#chips").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+    const n=c.dataset.n; off.has(n)?off.delete(n):off.add(n); render();
+  });
+  $("#allOn").onclick=()=>{off.clear();render()};
+  $("#allOff").onclick=()=>{membersOf().forEach(n=>off.add(n));render()};
+  $("#who").innerHTML = ms.map(n=>`<option ${n===sel?"selected":""}>${n}</option>`).join("");
+  if(!ms.includes(sel)) sel = ms[0];
+}
+
+// ---- 팀 뷰 ----
+function teamView(rows, ds){
+  const ms = membersOf().filter(n=>!off.has(n));
+  const cell = {}, colT = {}, rowT = {};
+  rows.forEach(e=>{
+    if(off.has(e[F.author])) return;
+    const k = e[F.author]+"|"+e[F.date];
+    cell[k]=(cell[k]||0)+e[F.min];
+    colT[e[F.date]]=(colT[e[F.date]]||0)+e[F.min];
+    rowT[e[F.author]]=(rowT[e[F.author]]||0)+e[F.min];
+  });
+  const mx = Math.max(1,...Object.values(cell));
+  const wknd = i => i>=5;                       // 토·일
+  let h = `<div class="tblwrap"><table class="team">`;
+  h += `<colgroup><col class="who">` + ds.map(()=>`<col>`).join("") + `<col></colgroup>`;
+  const hr = v => `${fmt(v)}<span class="u">h</span>`;   // 8.0h — 단위는 작고 흐리게
+  h += `<thead><tr><th class="who">담당자</th>`;
+  ds.forEach((d,i)=>h+=`<th class="day${wknd(i)?" wknd":""}">${DOW[i]}<br><span>${d.slice(5)}</span></th>`);
+  h += `<th>합계</th></tr></thead><tbody>`;
+  // 행 순서 = roster.json 배열 순서(사용자 지정). 실적순으로 재정렬하지 않는다.
+  ms.forEach(n=>{
+    const zero = !(rowT[n]>0);
+    h += `<tr class="${zero?"zero":""}"><td class="who" title="${n}${zero?" — 이 주차 기록 없음":""}">${n}</td>`;
+    ds.forEach((d,i)=>{
+      const v = cell[n+"|"+d]||0;
+      const a = v? (0.08+0.5*v/mx).toFixed(2) : 0;
+      const bg = v? `background:rgba(0,82,204,${a})` : "";
+      h += `<td class="num hm${wknd(i)&&!v?" wknd":""}" style="${bg};cursor:${v?"pointer":"default"}" ${v?`data-n="${n}" data-d="${d}"`:""}>${v?hr(v):"<span class=mut>·</span>"}</td>`;
+    });
+    h += `<td class="num"><b>${rowT[n]?hr(rowT[n]):"<span class=mut>0</span>"}</b></td></tr>`;
+  });
+  h += `</tbody><tfoot><tr><th class="who">합계</th>`;
+  ds.forEach((d,i)=>h+=`<th class="num${wknd(i)?" wknd":""}">${colT[d]?hr(colT[d]):"<span class=mut>·</span>"}</th>`);
+  const tot = Object.values(rowT).reduce((a,b)=>a+b,0);
+  h += `<th class="num">${hr(tot)}</th></tr></tfoot></table></div>`;
+  const rec = ms.filter(n=>rowT[n]>0).length;
+  h += `<p class="legend">인원 <b>${ms.length}명</b> (기록 ${rec}명) · 총 <b>${fmt(tot)}h</b> · 기록자 1인 평균 ${rec?fmt(tot/rec):0}h · 셀 클릭 시 상세</p>`;
+  return h;
+}
+
+// ---- 캘린더 뷰 ----
+function calView(rows, ds){
+  const mine = rows.filter(e=>e[F.author]===sel);
+  const timed = mine.filter(e=>e[F.time]);
+  const untimed = mine.filter(e=>!e[F.time]);
+  // 00:00~24:00 을 항상 전부 표기한다. 데이터 범위에 맞춰 잘라내면
+  // 주차마다 세로 길이가 달라져 비교가 어렵고, 화면이 답답해 보인다.
+  const lo=0, hi=24*60;
+  const rowsN=(hi-lo)/30, PX=28;   // 30분 = 28px → 하루 1,344px (세로 스크롤 허용)
+  const dayT={}; mine.forEach(e=>dayT[e[F.date]]=(dayT[e[F.date]]||0)+e[F.min]);
+
+  let h = `<div class="cal">`;
+  h += `<div class="hd" style="border-left:none">&nbsp;</div>`;
+  ds.forEach((d,i)=>h+=`<div class="hd">${DOW[i]}, ${d.slice(5)}</div>`);
+  h += `<div class="tot lbl" style="border-left:none"><b>total</b></div>`;
+  ds.forEach(d=>h+=`<div class="tot">${dayT[d]?"<b>"+fmt(dayT[d])+"</b>":"<span class=mut>-</span>"}</div>`);
+  if(untimed.length){
+    h += `<div class="band">⏱ <b>시간 미지정 ${untimed.length}건 / ${fmt(untimed.reduce((a,e)=>a+e[F.min],0))}h</b>
+      <span class="mut">— 원본 시각을 회수하지 못한 건. 아래 격자에는 표시되지 않습니다.</span></div>`;
+  }
+  // 시간 라벨
+  h += `<div style="grid-column:1;border-right:1px solid var(--bd)">`;
+  const night = m => m<8*60 || m>=19*60;      // 업무시간 밖
+  for(let i=0;i<rowsN;i++){
+    const m=lo+i*30;
+    h += `<div class="lbl${night(m)?" nt":""}" style="height:${PX}px">${m%60===0?String(m/60|0).padStart(2,"0")+":00":""}</div>`;
+  }
+  h += `</div>`;
+  // 요일 컬럼
+  ds.forEach(d=>{
+    const es = timed.filter(e=>e[F.date]===d)
+      .sort((a,b)=>a[F.time].localeCompare(b[F.time]));
+    // ── 겹침 → 좌우 분할 ─────────────────────────────────────────
+    // ① lane 배정: 앞 블록과 안 겹치면 왼쪽 lane 을 재사용한다.
+    //    1↔2 겹침, 2↔3 겹침, 1↔3 안 겹침 → 1:lane0, 2:lane1, 3:lane0
+    const lanes=[], items=[];
+    es.forEach(e=>{
+      const s=+e[F.time].slice(0,2)*60 + +e[F.time].slice(3), en=s+e[F.min];
+      let li=lanes.findIndex(L=>L.every(x=>x.en<=s||x.s>=en));
+      if(li<0){lanes.push([]);li=lanes.length-1;}
+      const it={e,s,en,li};
+      lanes[li].push(it); items.push(it);
+    });
+    // ② 분할 수는 **연쇄로 겹친 묶음(cluster)** 단위로 정한다.
+    //    하루 전체 lane 수로 나누면 겹치지 않는 블록까지 좁아진다.
+    items.sort((a,b)=>a.s-b.s || a.en-b.en);
+    const clusters=[]; let cEnd=-1;
+    items.forEach(it=>{
+      if(it.s>=cEnd) clusters.push([]);          // 앞 묶음과 끊김 → 새 묶음
+      cEnd = it.s>=cEnd ? it.en : Math.max(cEnd,it.en);
+      clusters[clusters.length-1].push(it);
+    });
+    clusters.forEach(C=>{
+      const n = Math.max(...C.map(x=>x.li)) + 1;  // 이 묶음이 실제로 쓴 lane 수
+      C.forEach(x=>x.n = n);
+    });
+    h += `<div class="col">`;
+    for(let i=0;i<rowsN;i++){
+      const m=lo+i*30;
+      h+=`<div class="slot ${m%60===0?"hh":""}${night(m)?" nt":""}" style="height:${PX}px"></div>`;
+    }
+    items.forEach(({e,s,en,li,n})=>{
+      const top=(s-lo)/30*PX, ht=Math.max(20,(Math.min(en,hi)-s)/30*PX-1);
+      const w=100/n, left=w*li;
+      const rng=`${e[F.time]}~${hhmm(en)}${en>=1440?" +1d":""}`;
+      const tip=`${e[F.issue]}  ${rng} (${fmt(e[F.min])}h)\n${e[F.summary]}\n\n${e[F.comment]||"(코멘트 없음)"}`;
+      h += `<div class="blk" style="top:${top}px;height:${ht}px;left:calc(${left}% + 1px);width:calc(${w}% - 2px);background:${color(e[F.issue])}"
+        data-tip="${tip.replace(/"/g,"&quot;")}"><span class="tk"><b>${e[F.issue]}</b><span class="rng">${rng} (${fmt(e[F.min])}h)</span></span><span class="cm">${e[F.comment]||e[F.summary]}</span></div>`;
+    });
+    h += `</div>`;
+  });
+  h += `</div>`;
+  if(untimed.length){
+    h += `<h3 style="margin:16px 0 6px">⏱ 시간 미지정 ${untimed.length}건</h3><table><tbody>`;
+    untimed.forEach(e=>h+=`<tr><td>${e[F.date]} (${e[F.dow]})</td><td style="white-space:nowrap">${span(null,e[F.min])}</td><td>${e[F.issue]}</td><td>${e[F.comment]||e[F.summary]}</td></tr>`);
+    h += `</tbody></table>`;
+  }
+  return h;
+}
+
+// ---- 드릴다운 ----
+function drill(n,d,rows,td){
+  const es = rows.filter(e=>e[F.author]===n && e[F.date]===d)
+    .sort((a,b)=>(a[F.time]||"~").localeCompare(b[F.time]||"~"));
+  $("#drill").innerHTML = `<h3 style="margin:18px 0 6px">${n} · ${d} (${dowOf(d)}) — ${es.length}건 / ${fmt(es.reduce((a,e)=>a+e[F.min],0))}h</h3>
+  <table class="dtl">
+  <colgroup><col class="t"><col class="k"><col class="s"><col class="c"></colgroup>
+  <thead><tr><th class="t">시간대</th><th class="k">JIRA TASK</th><th style="text-align:left">TASK 제목</th><th style="text-align:left">WORKLOG 코멘트</th></tr></thead><tbody>`
+  + es.map(e=>`<tr><td class="t">${span(e[F.time],e[F.min])}</td>
+    <td class="k">${e[F.issue]}</td><td class="s">${e[F.summary]}</td><td class="c">${e[F.comment]||""}</td></tr>`).join("")
+  + `</tbody></table>`;
+  // 선택 셀 표시
+  $("#view").querySelectorAll("td.sel").forEach(x=>x.classList.remove("sel"));
+  if(td) td.classList.add("sel");
+  // 상세로 스크롤. 렌더 직후라 다음 프레임에 호출한다.
+  requestAnimationFrame(()=>$("#drill").scrollIntoView({behavior:"smooth",block:"start"}));
+}
+
+// ---- 렌더 ----
+function render(){
+  const w = weeks[wi], rows = byWeek[w.week]||[], ds = days(w.week);
+  drawWeekSel(); drawChips(rows);
+  const isCur = w.week===thisMonday();
+  $("#wkinfo").innerHTML = `${ds[0]} ~ ${ds[6]} · <span class="badge b-${w.status}">${w.status}</span>`
+    + (isCur?` · <span class="badge b-진행중">이번주</span>`:"")
+    + (w.roster?` · <span class="mut">${w.roster}명 기준</span>`:"");
+  $("#thisWk").className = isCur?"on":"";
+  let warn = "";
+  if(w.status!=="확정") warn += `<div class="note">⚠️ <b>${w.status}</b> 주차입니다. ${w.status==="부분"?"오버플로 유입분만 있어 <b>실제보다 적습니다.</b>":"아직 확정되지 않아 값이 바뀔 수 있습니다."}</div>`;
+  if(w.timed<w.count) warn += `<div class="note bad">⏱ 시각 회수 <b>${w.timed}/${w.count}건 (${Math.round(w.timed/w.count*100)}%)</b> — 캘린더 격자에 <b>${w.count-w.timed}건이 빠집니다.</b> 팀 뷰 합계는 정확합니다.</div>`;
+  if(w.roster && w.roster<17) warn += `<div class="note">👥 이 주차는 <b>${w.roster}명 기준</b>으로 수집됐습니다. 17명 재수집 전이라 일부 인원이 빠져 있습니다.</div>`;
+  $("#warn").innerHTML = warn;
+  $("#view").innerHTML = mode==="team" ? teamView(rows,ds) : calView(rows,ds);
+  $("#drill").innerHTML = "";
+  if(mode==="team"){
+    $("#view").querySelectorAll("[data-n]").forEach(td=>td.onclick=()=>drill(td.dataset.n,td.dataset.d,rows,td));
+  }
+  $("#vTeam").className = mode==="team"?"on":"";
+  $("#vCal").className = mode==="cal"?"on":"";
+  $("#who").disabled = mode!=="cal";
+}
+
+$("#week").onchange = e=>{wi=+e.target.value;render()};
+$("#prev").onclick = ()=>{if(wi<weeks.length-1){wi++;render()}};
+$("#next").onclick = ()=>{if(wi>0){wi--;render()}};
+$("#thisWk").onclick = ()=>{wi=initialWeek();mode="team";render()};
+$("#vTeam").onclick = ()=>{mode="team";render()};
+$("#vCal").onclick = ()=>{mode="cal";render()};
+$("#who").onchange = e=>{sel=e.target.value;render()};
+document.addEventListener("mouseover",e=>{
+  const b=e.target.closest(".blk"); const t=$("#tip");
+  if(!b){t.style.display="none";return}
+  t.textContent=b.dataset.tip; t.style.display="block";
+  const r=b.getBoundingClientRect();
+  t.style.left=Math.min(r.left,innerWidth-400)+"px";
+  t.style.top=(r.bottom+6)+"px";
+});
+render();
+</script>
+</body>
+</html>
+

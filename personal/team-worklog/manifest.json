@@ -1,0 +1,273 @@
+{
+  "updated": "2026-08-05",
+  "resetAt": "2026-08-05",
+  "resetNote": "사용자 지시로 전체 초기화. data/·raw/·viewer/data.js·issue-cache.json·SUMMARY.md·_backup 삭제. 정책(policy)과 roster·tools·INDEX 는 유지",
+  "roster": 17,
+  "policy": {
+    "updated": "2026-08-05",
+    "split": [
+      "월",
+      "화",
+      "수",
+      "목",
+      "금",
+      "토일"
+    ],
+    "callsPerWeek": 6,
+    "targetRule": "W_now-2 이하 미확정 주차 중 최신",
+    "confirmLine": "W_now-2",
+    "recentWeeks": "명시 요청 시에만 (트리거 B). 자동 재조회 폐기",
+    "sizeGuard": "구간 응답 1,000KB 초과 시 추가 분할. 타임아웃 실측선 1,200KB",
+    "weekStatus": {
+      "진행": "확정선(W_now-2) 밖 — 2주 미경과",
+      "부분": "2주 경과했으나 데이터 부족",
+      "확정": "2주 경과 + 전 구간 수집 완료"
+    },
+    "monthStatus": {
+      "대기": "기본값",
+      "확정": "사용자가 명시적으로 월간 보정·확정 요청한 뒤",
+      "귀속규칙": "주차의 월요일이 속한 달",
+      "근거": "워크로그는 사후 수정이 가능하므로 월 단위 재보정 후 확정"
+    },
+    "확정조건": [
+      "W_now-2 이하",
+      "roster=17",
+      "collectedDays 7/7"
+    ],
+    "manualOverride": "manualOverride=true 인 주차는 자동 재판정으로 상태를 올리지 않는다. 사용자가 해제해야 한다.",
+    "batchLimit": {
+      "rule": "1회 실행 = 1주차. 명시적 수량·범위 지시가 없으면 한 주만 수집하고 멈춘다.",
+      "이어서진행해": "= 한 주 더. 쿼터 소진까지가 아니다.",
+      "예외": "'N주치 가져와' 등 수량 명시 / '잔여 쿼터 다 써' 등 범위 명시",
+      "금지": "잔여 쿼터가 넉넉하다는 이유로 여러 주차를 연속 처리",
+      "since": "2026-08-05"
+    },
+    "reproducibility": {
+      "규칙": "확정 3조건 = ①W_now-2 이하 ②roster 17 ③collectedDays 7/7",
+      "로우재현성": "확정 조건에서 제외 (2026-08-05). 로우는 보관하되 확정 판정과 분리",
+      "재수집방식": "삭제 후 재생성 금지. 항상 병합 — worklogId PK 로 멱등",
+      "since": "2026-08-05"
+    },
+    "rawStorage": {
+      "위치": "raw/<주차월요일>/{mon,tue,wed,thu,fri,weekend}.json · raw/_overflow/<이슈키>.json",
+      "압축": "하지 않는다 (2026-08-05 사용자 확정 · 최종). 평문 .json",
+      "근거": "git 이 커밋 시 zlib 자동 압축. 저장소 872KB·clone 전송량은 압축해도 동일. 차이는 작업트리(22.8MB vs 1.0MB)뿐이며 grep·직접열람을 잃는다",
+      "확정조건아님": "로우 보유 여부는 주차 확정 판정과 분리한다 (확정은 3조건)",
+      "목적": "스키마 변경 시 API 재호출 없이 data/*.json 재생성",
+      "주의": "수집 직후 즉시 rawstore.py put/putov 로 보관. 나중에 옮기면 임시폴더 정리로 잃는다",
+      "since": "2026-08-05",
+      "보존기간": "7일 (2026-08-05 사용자 확정)",
+      "삭제판정시점": "워크로그 수집이 완료된 직후 rawstore.py prune 실행. 별도 스케줄러 없음",
+      "기준날짜": "raw/_meta.json 에 기록한 보관일. 파일 mtime 은 이동 시 초기화되므로 쓰지 않는다",
+      "갱신": "같은 버킷에 다시 put 하면 보관일이 갱신되어 7일 연장",
+      "삭제후": "로우가 지워져도 주차 확정은 유지된다(확정 3조건과 무관)"
+    },
+    "viewer": {
+      "진입기본값": "이번주 · 팀 뷰 (없으면 이전 중 최신 주차로 폴백)",
+      "캘린더범위": "00:00~24:00 고정. 데이터 구간에 맞춰 자르지 않는다",
+      "캘린더눈금": "30분=28px (하루 1344px). 업무시간 밖 음영",
+      "겹침분할": "연쇄 겹침 묶음(cluster) 단위로 width 계산. 하루 전체 lane 수로 나누지 않는다",
+      "팀뷰표": "table-layout:fixed + width:100%. 담당자 200px 고정, 나머지 균등",
+      "폰트": "본문 14px · 나눔고딕(윈도우)→Noto Sans KR→Apple SD Gothic Neo(맥). CDN 미사용",
+      "열기": "기본 브라우저로 연다. 인앱 미리보기는 외부 data.js 를 못 읽는다",
+      "since": "2026-08-05"
+    }
+  },
+  "weeks": {
+    "2026-06-22": {
+      "status": "부분",
+      "count": 4,
+      "hours": 13.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-06-29": {
+      "status": "부분",
+      "count": 51,
+      "hours": 112.75,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-07-06": {
+      "status": "부분",
+      "count": 58,
+      "hours": 183.25,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-07-13": {
+      "status": "부분",
+      "count": 57,
+      "hours": 144.12,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-07-20": {
+      "status": "부분",
+      "count": 51,
+      "hours": 138.5,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-07-27": {
+      "status": "진행",
+      "count": 82,
+      "hours": 229.75,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-08-03": {
+      "status": "진행",
+      "count": 105,
+      "hours": 249.13,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": [
+        "2026-08-03",
+        "2026-08-04",
+        "2026-08-05"
+      ]
+    },
+    "2026-08-10": {
+      "status": "부분",
+      "count": 2,
+      "hours": 16.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-08-17": {
+      "status": "부분",
+      "count": 2,
+      "hours": 8.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-08-24": {
+      "status": "부분",
+      "count": 1,
+      "hours": 2.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-08-31": {
+      "status": "부분",
+      "count": 1,
+      "hours": 4.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    },
+    "2026-09-07": {
+      "status": "부분",
+      "count": 1,
+      "hours": 4.0,
+      "roster": 17,
+      "collected": "2026-08-05",
+      "collectedDays": []
+    }
+  },
+  "months": {
+    "2026-06": {
+      "status": "대기",
+      "weeks": [
+        "2026-06-22",
+        "2026-06-29"
+      ],
+      "weekCount": 2,
+      "count": 55,
+      "hours": 125.75,
+      "confirmedAt": null
+    },
+    "2026-07": {
+      "status": "대기",
+      "weeks": [
+        "2026-07-06",
+        "2026-07-13",
+        "2026-07-20",
+        "2026-07-27"
+      ],
+      "weekCount": 4,
+      "count": 248,
+      "hours": 695.62,
+      "confirmedAt": null
+    },
+    "2026-08": {
+      "status": "대기",
+      "weeks": [
+        "2026-08-03",
+        "2026-08-10",
+        "2026-08-17",
+        "2026-08-24",
+        "2026-08-31"
+      ],
+      "weekCount": 5,
+      "count": 111,
+      "hours": 279.13,
+      "confirmedAt": null
+    },
+    "2026-09": {
+      "status": "대기",
+      "weeks": [
+        "2026-09-07"
+      ],
+      "weekCount": 1,
+      "count": 1,
+      "hours": 4.0,
+      "confirmedAt": null
+    }
+  },
+  "runs": [
+    {
+      "run": 1,
+      "date": "2026-08-05",
+      "archive": [
+        "2026-08-03"
+      ],
+      "roster": 17,
+      "trigger": "초기화 후 첫 수집 — 이번주만",
+      "split": [
+        "월",
+        "화",
+        "수"
+      ],
+      "calls": {
+        "searchRest": 3,
+        "overflow": 6,
+        "total": 9
+      },
+      "note": "캐시 초기화로 오버플로 6종이 전부 신규 → 6회 소모. 다음 회차부터 캐시 적중"
+    }
+  ],
+  "events": [
+    {
+      "date": "2026-08-05",
+      "type": "전체초기화",
+      "삭제": "data 39주차 3369건 · raw 46개 · viewer/data.js · issue-cache · SUMMARY · _backup",
+      "유지": "policy · roster.json · tools/ · INDEX.md · dashboard.html",
+      "비고": "1343건(로우 없는 오버플로 16종 기여분)은 영구 복구 불가임을 사전 고지 후 사용자가 진행 확정"
+    },
+    {
+      "date": "2026-08-05",
+      "type": "뷰어개선",
+      "대상": "viewer/dashboard.html",
+      "내역": [
+        "진입=이번주 팀뷰",
+        "팀뷰 표 고정폭·정렬·h표기",
+        "상세 자동스크롤·열이름 변경",
+        "겹침 분할을 cluster 단위로",
+        "캘린더 00~24시 고정·눈금 28px",
+        "여백 clamp",
+        "폰트 14px 나눔고딕"
+      ]
+    }
+  ]
+}
