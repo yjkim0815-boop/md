@@ -47,13 +47,17 @@
 - [FE] process API(form+`backendApiUrl`) 통일, 탈퇴 흐름 레거시 정합. ✅ 탈퇴 dev 완주(08-03).
 - **미결**: `modify-info` 진입(ownership SMS 게이트) route handler 의존 → 수정 필요. change-pw 응답 shape dev 확인.
 
-### M3. 파바앱(OPBS) 회원가입 재설계 [FE+BE] — 검증 ⏳배포대기
+### M3. 파바앱(OPBS) 회원가입 재설계 [FE+BE] — 검증 ✅실기기확인(08-06)
 - [FE] URL 이관(`/page/brand/join/*` + POST 브리지), 공유 폼(Policy/JoinInfo/Referral), PC차단, alert 케이스별 버튼, 복귀버튼(웹홈 이동 없음), UA 포워딩.
 - [BE] 채널코드 **A005/30**(reqPath=instCd 존재 시), 브랜드 생성 API `/api/brand/join/joinProc` 통일.
 - [FE] (08-05) 본인인증 페이지 **일반과 레이아웃 통일**(타이틀 "해피포인트 생활 첫단계"·브레드크럼·Section 제거) + **아이핀 복원**. → [web2 W31](../happypoint-web2/worklog/weekly/WORKLOG-2026-W31.md)
 - [FE] (08-05) **임시 디버그 alert**(실제 유입 URL 확인용) — 파바앱이 일반 회원가입으로 유입되는 정황 → 브랜드에서 제거하고 **일반 `join/index/join-auth.tsx`로 이동**. 확인 후 제거 예정.
+- [FE] (08-06) **완료 "확인/시작하기" 버튼 무동작 — 근본 원인·정정**: 완료 CTA 는 **창 닫기가 아니라 `urlMap.attr_val`(브랜드 앱 콜백 URL)로 `code/message/id` form POST 복귀**가 정답(레거시 `opbs/*.jsp goHome()` = `submitBrandForm.submit()`, `window.close()` 는 submit 실패 시 폴백일 뿐 · CSP form-action 개방 · 완료 CTA form POST 앱복귀는 ✅기확인). ⇒ 앞서 `BrandReturnButton` 을 `window.close()`→`unvus.app` 브릿지 close 로 바꾼 것은 **오진(회귀)**. `unvus.app` 도 신규 웹뷰 미주입이라 무동작.
+  - **수정 완료(join)**: `brand/join/welcome/page.tsx` — `res.result.urlMap.attr_val` 로 `<form method=POST>`(code/message/id) 복귀, urlMap 없으면 홈(/). `tsc` 0. **⏳배포/실기기 확인**.
+  - **⚠️ 잔여 회귀(동일 close 버그, 미수정)**: `brand/member/{dormancy,modify-info,modify-pw,withdrawal}-complete`, `brand/member-info/find-id-pw-complete`, `brand/common/alert` — 전부 `BrandReturnButton`(close). 레거시는 이들도 `submitBrandForm`(urlMap) form POST → 동일하게 form POST 복귀로 전환 필요. (+ 앞서 close 로 바꾼 `close-app-webview.ts`·join `error.tsx` 5종은 에러 화면 성격상 별도 재검토)
 - [FE] (08-05) **파바앱 유입 rewrite 보강 + 헤더 감지** — dev 파바앱은 param 없이 `index.spc`로만 옴(UA 구분 불가). 운영 스카우터 로그로 확정: 파바앱은 **`x-requested-with=com.pb.android` 헤더**를 항상 실음(운영은 `/page/join/auth.spc?instCd=OPBS`). → `middleware.ts` OPBS 감지에 **instCd(주·iOS+Android 공통)·헤더 `com.pb.android`(Android 보조)·reqPath 3중 신호** + instCd 보강 → 브랜드 가로채기. ⚠️ iOS 파바앱은 `x-requested-with` 없음(instCd 파라미터에만 의존). → [web2 W31](../happypoint-web2/worklog/weekly/WORKLOG-2026-W31.md)
-- **남은 실검증**: 실기기 가입 완주(2100 헤더 A005/30), PC차단, alert 버튼, nonce 회귀, **본인인증 레이아웃/아이핀**, **유입 URL 확인**.
+- [BE] (08-06) **joinProc code=99 버그 수정** — 평문 `instCd` 를 AES 복호화 루프에서 제외(`BrandMemberResource`). 일반/레거시는 instCd 를 map 평문으로 안 받아 무사, 신규 브랜드만 결함. → [ha-web-api W31](../ha-web-api/worklog/weekly/WORKLOG-2026-W31.md)
+- **남은 실검증**: 실기기 가입 완주(2100 헤더 A005/30 + **joinProc 성공**), PC차단, alert 버튼, nonce 회귀, **본인인증 레이아웃/아이핀**, **유입 URL 확인**, **크롬 숨김/flash**.
 
 ### M4. 공지 상세 500 [FE] — 검증 ❌ 미해결
 - notice-view/voteView: Turbopack 프로덕션 빌드 external `sanitize-html` resolve 실패. → 클린 재빌드/웹팩 전환 검토.
@@ -61,18 +65,49 @@
 ### M5. Airbridge 가입완료 트래킹 [FE] — ⏸️ 보류(배포 실패로 롤백)
 - 확정값: channel `ha-web`·campaign `ha-web-sign-up`·deeplink napi event-view. 재적용 시 **pnpm add+lockfile 커밋** 필수(frozen-lockfile 교훈).
 
+### (소규모 FE) 로그인 페이지 "휴대폰번호 간편로그인" 유료광고 배너 이식 [FE] — 검증 ⏳배포대기 (2026-08-06)
+- 레거시 `sso/login.jsp`(PC 142행/모바일 216행) 이식: 회원가입 링크 하단, `https://m.site.naver.com/1LwwN`(새 탭) + 이미지 `front.happypointcard.com/.../{pc,mobile}/member/new-simple-login_250707.png`(유료광고 고지는 이미지 내장). `page/auth/login/page.tsx` 플레이스홀더 버튼("…광고AD" 텍스트) → `<picture>`(모바일 max-width:767px 분기) 배너로 교체. 기존 "또는" divider 제거(광고이지 로그인수단 아님). `tsc` 0.
+
 ## ✅ 통합 TODO (SSOT) — 프론트+백엔드 한 목록 · 검증상태 포함
 > 코드 완료만으론 `[x]` 금지. 배포·실기기 확인까지 되어야 검증완료. "투두 보여줘"의 정본.
 
 **M3 파바앱 (최우선)**
-- [ ] [FE+BE] 파바앱 가입 **실기기 완주** — 2100 헤더 A005/30 · PC차단 · alert 버튼 · nonce 회귀 | ⏳배포대기
-- [ ] [FE] 본인인증 페이지 일반과 레이아웃 통일 + 아이핀 복원 **실기기 확인** | ⏳배포대기
-- [ ] [FE] 파바앱(**OPBS만**) 크롬 숨김 — 헤더·브레드크럼(공백 유지)+푸터(제거), 모든 OPBS 페이지 자동적용 **실기기 확인** | ⏳배포대기
-- [ ] [FE] 파바앱 유입 rewrite(`x-requested-with=com.pb.android` 헤더 감지→브랜드) **실기기 확인** | ⏳배포대기
+- [x] [FE+BE] 파바앱 가입 **실기기 완주** — PC차단 · alert 버튼 · nonce 회귀 | ✅실기기확인(08-06)
+- [x] [BE] 파바앱 가입 **2100 전문 헤더 A005/30** 실측 확인 | ✅실기기확인(08-06)
+- [x] [FE] 본인인증 페이지 일반과 레이아웃 통일 + 아이핀 복원 | ✅실기기확인(08-06)
+- [x] [FE] 파바앱(**OPBS만**) 크롬 숨김 — 헤더·브레드크럼(공백 유지)+푸터·챗봇(제거), 모든 OPBS 페이지 | ✅실기기확인(08-06, 브레드크럼 셀렉터 `data-hp-breadcrumb` 로 교체 후 확인)
+- [x] [FE] 파바앱 가입 instCd URL 파라미터 관통 → 크롬 flash 제거 | ✅실기기확인(08-06)
+- [x] [BE] 파바앱 joinProc code=99 (1차) — 평문 instCd 복호화 제외(`BrandMemberResource`) | ✅가입성공(dev)
+- [x] [FE] 파바앱 joinProc code=99 (2차) — 약관 쿠키 `join_policy_info` 브라우저 복원(브랜드 `optional-form-bridge`) | ✅가입성공(dev, 08-06)
+- [x] [FE] 파바앱 완료 페이지 레거시 규격 맞춤(문구·아이디, QR제거, 앱복귀 CTA) | ✅화면확인(08-06)
+- [x] [FE] 파바앱 완료 "해피포인트 시작하기" 앱복귀 — CSP `form-action` 개방(레거시처럼) | ✅실기기확인(08-06)
+- [x] [FE] 파바앱 alert 크롬 숨김 — `x-requested-with` 헤더 판별 + 페이지 instCd URL 소비(form/optional) | ✅실기기확인(08-06)
+- [x] [FE] 파바앱 유입 rewrite(`x-requested-with=com.pb.android` 헤더 감지→브랜드) | ✅실기기확인(08-06)
 - [x] [FE] dev→dev-www 리다이렉트 **원복 완료**(08-05) — 임시 비활성 주석 해제 | ✅원복됨
 - [x] [FE] 임시 디버그 alert(유입 URL) **제거 완료**(08-05) — `join/index/join-auth.tsx` useEffect + `page.tsx` debugServer 삭제 | ✅제거됨
 - [ ] [FE] 브랜드 policy 이후(form/optional/welcome) instCd·authInfo 전파 검증(쿠키/API) | ⏳
 - [ ] [FE] 브랜드 raw fetch 4종(policy/form/optional/common-alert)에 `AbortSignal.timeout(10s)` + 정적 에러페이지 | ⏳
+
+**프론트 서버 오류 화면(정적 에러페이지)** (08-06)
+- [x] [FE] `app/global-error.tsx` 를 레거시 공용 에러화면 디자인(`.../common/error/common.css` "잠시 후 다시 확인해 주세요")으로 교체 — 세그먼트 error.tsx 조차 못 잡는 최후 오류(생짜 "Internal Server Error") 방어. `notice-view?seq=4235` 케이스 대응 | ✅배포대기
+- [x] [FE] `public/50x.html` 생성(동일 디자인, 순수 정적) — 앞단 프록시/CloudFront 붙일 때 재사용 | ✅
+- [ ] [INFRA] ELB 직결(중간 프록시 없음)이라 **Next 프로세스 다운(502/503/504) 시엔 ALB 기본 페이지**가 뜸. 진짜 정적 폴백 원하면 **CloudFront Custom Error Response(50x→S3 50x.html)** 또는 정적 폴백 타깃 필요 → 인프라 협의 | ⏳
+- 원본: `D:\400_다운로드\error.html` (front.happypointcard.com CSS/이미지 참조)
+
+**🔴 notice-view/voteView 생짜 500 — 진짜 원인 = sanitize-html 미설치 (에러페이지 문제 아니었음)** (08-06)
+- 증상: `customer/notice-view`, `donation/voteView` 만 `text/plain` "Internal Server Error"(21B). 백엔드 API는 200 정상, notice-list·faq·voteList 등은 정상.
+- 판별: 쿼리 무관/notFound 경로까지 전부 500 → **라우트 모듈 "로드" 단계 크래시**(page/not-found/error 어느 바운더리도 못 뜸 → global-error 로도 못 잡음). 두 라우트의 공통점 = **`lib/legacy-sanitize.ts`(→`sanitize-html`) import**.
+- 근본원인: `sanitize-html` 이 **`node_modules` 에 미설치**(transitive deps htmlparser2/postcss/… 전부 MISSING). `package.json`·`pnpm-lock.yaml`(8/6)엔 정상 등록됐으나 **배포가 `pnpm install` 을 안 태워** 실물 누락. `@types/sanitize-html`(devDep) 때문에 `tsc` 는 통과 → 런타임에만 사망. 재배포해도 동일했던 이유.
+- 조치①(배포): 빌드 전 **`pnpm install --frozen-lockfile` 필수** → `pnpm build` → `pm2 restart ha-web-fo`. (로컬 install 후 `require('sanitize-html')` 정상 확인)
+- 조치②(방어, 커밋): `lib/legacy-sanitize.ts` 를 **함수 내 지연 `require` + 실패 시 태그 제거 안전텍스트 폴백**으로 변경 — 모듈 누락 실패를 로드시점(바운더리 우회)에서 **렌더시점(error.tsx 가 잡는 계층)**으로 내리고 라우트 전체가 죽지 않게 함.
+- 교훈: **모듈-로드/메타데이터/미들웨어 크래시는 error.tsx·global-error 가 못 잡는다** → 무거운 서버 전용 dep 은 지연 로드 + 폴백. 배포 파이프라인에 `pnpm install` 검증 추가.
+
+**일반 회원가입**
+- [ ] [FE] 일반 exist-member → 비밀번호 재설정 **재인증 없이 진행**(reset-pw 쿠키재사용 + policy-bridge `_AUTH_INFO_TOKEN_` 브라우저 심기). 로컬 폴백만 탐 → **배포 후 안정화때 확인**(쿠키 유무/bridge 응답 rpsCd 진단) | ⏳배포후
+
+**Airbridge (일반 회원가입 완료)**
+- [ ] [FE] Airbridge createDeeplink(CDN) 실기기 딥링크 확인 (키 입력 완료) | ⏳배포대기
+- [ ] [FE] Airbridge 테스트 console.log(`[airbridge][TEST]`, 딥링크 URL 노출) **확인 후 제거** | 🧹제거예정
 
 **M2 회원정보수정**
 - [ ] [FE] `modify-info` 진입 게이트(ownership SMS + MODIFY_INFO_AUTH_COOKIE) route handler 의존 제거 | ⏳
@@ -87,6 +122,10 @@
 - [ ] [FE+BE] 로그인 남용 방지(nonce/CAPTCHA/rate limit) 구현 여부 결정 | —
 - [ ] [BE] KCB complete postMessage `targetOrigin` `'*'`→프론트 오리진 제한(운영 보안) | —
 - [ ] [FE] `/api/cert/log` 디버깅 로깅 제거(운영 전) · `/api/auth/*` 프록시 화이트리스트·로깅 점검 | —
+
+**DS팀 트래킹 로그 / 인프라**
+- [ ] [인프라] **트래킹로그 S3 업로드 IAM 권한 부여** — EC2(`ip-10-0-70-57`) 인스턴스 롤 `app-web-api-role`(계정 `807267097589`)에 `s3:PutObject`(`arn:aws:s3:::happy-tracker/extract/raw/*`) + `s3:ListBucket`(`arn:aws:s3:::happy-tracker`) 없음 → 업로드 `AccessDenied`(2026-08-06). 인프라/DS팀(버킷 소유자)에 역할 정책 추가 요청. ※ 버킷 타계정이면 버킷 정책, KMS 암호화면 kms 권한 추가. 부여 후 크론(매시5분) 자동 재시도(스크립트 멱등·작업물 보존). | ❌권한대기
+- [ ] [문서] DS팀에 트래킹로그 **서비스 URL별 설명** 전달(개인일정 S-015, 마감 2026-08-10) | ⏳
 
 **Airbridge(보류)**
 - [ ] [FE] 가입완료 Airbridge 재적용(pnpm add+lockfile+CSP) + userId SHA-512 해시 UTM | ⏸️보류

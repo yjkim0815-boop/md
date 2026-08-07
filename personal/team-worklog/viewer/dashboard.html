@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>모바일개발팀 워크로그</title>
+<title>개발실 워크로그</title>
 <script src="data.js"></script>
 <style>
 :root{
@@ -87,6 +87,8 @@ tr.zero td{background:#fafbfc;color:var(--mut)}
 .team th.day span{font-weight:400;font-size:12px}
 .team th.wknd,.team td.wknd{background:#fafbfc}
 .team th.day.wknd{background:#eef0f3}
+.team tr.tmrow td{background:#f4f5f7;border-top:2px solid var(--bd)}
+.team tr.tmrow td.who{text-align:center}
 .team tfoot th{background:var(--hd);position:relative}
 .team tfoot th.num{font-variant-numeric:tabular-nums}
 .tblwrap{overflow-x:auto}
@@ -105,12 +107,16 @@ tr.zero td{background:#fafbfc;color:var(--mut)}
 /* 셀 클릭 → 상세로 스크롤. header 가 sticky 라 그만큼 여백을 둬야 제목이 안 가린다. */
 #drill{scroll-margin-top:112px}
 #drill h3{scroll-margin-top:112px}
+/* 캘린더 진입 시 상단이 07:30 이 되도록.
+   앵커는 08:00 이고, scroll-margin-top 만큼 위쪽 여백이 생겨 그만큼 이전 시간이 보인다.
+   118px 일 때 상단이 08:20 이었으므로 50분(=50/30*28 ≈ 47px)을 더한다. */
+#h8{scroll-margin-top:165px}
 td.sel{outline:2px solid var(--acc);outline-offset:-2px}
 </style>
 </head>
 <body>
 <header>
-  <h1>📊 모바일개발팀 워크로그 <small id="meta"></small></h1>
+  <h1>📊 개발실 워크로그 <small id="meta"></small></h1>
   <div class="bar">
     <button id="prev">←</button>
     <select id="week"></select>
@@ -167,6 +173,7 @@ function initialWeek(){
 }
 let wi = initialWeek();
 let mode = "team";                                     // 진입 시 팀 뷰
+let calEnter = false;          // 캘린더 "진입" 순간에만 08:00 으로 스크롤
 let off = new Set();          // 숨긴 담당자
 let sel = null;               // 캘린더 대상 1인
 
@@ -190,6 +197,11 @@ function dowOf(ymd){
 }
 // 해당 주차에 기록이 없어도 로스터 전원을 보여준다(0h 행으로 표시).
 function membersOf(){ return D.roster.map(r=>r.name); }
+// 로스터는 3개 팀에 걸쳐 있다(2026-08-06 Jira 그룹 조회로 확정). 팀은 표시·집계에 쓴다.
+const TEAM = {}; D.roster.forEach(r=>TEAM[r.name]=r.team||"미상");
+const ROLE = {}; D.roster.forEach(r=>ROLE[r.name]=(r.roles||[]));
+const TEAM_ORDER = [...new Set(D.roster.map(r=>r.team||"미상"))];
+const teamColor = t => ({"모바일개발팀":"#0052cc","서비스개발팀":"#00875a","플랫폼개발팀":"#974f0c"}[t]||"#6b778c");
 function color(key){
   let h=0; for(const c of key) h=(h*31+c.charCodeAt(0))%360;
   return `hsl(${h} 55% 42%)`;
@@ -236,24 +248,35 @@ function teamView(rows, ds){
   h += `<thead><tr><th class="who">담당자</th>`;
   ds.forEach((d,i)=>h+=`<th class="day${wknd(i)?" wknd":""}">${DOW[i]}<br><span>${d.slice(5)}</span></th>`);
   h += `<th>합계</th></tr></thead><tbody>`;
-  // 행 순서 = roster.json 배열 순서(사용자 지정). 실적순으로 재정렬하지 않는다.
-  ms.forEach(n=>{
-    const zero = !(rowT[n]>0);
-    h += `<tr class="${zero?"zero":""}"><td class="who" title="${n}${zero?" — 이 주차 기록 없음":""}">${n}</td>`;
-    ds.forEach((d,i)=>{
-      const v = cell[n+"|"+d]||0;
-      const a = v? (0.08+0.5*v/mx).toFixed(2) : 0;
-      const bg = v? `background:rgba(0,82,204,${a})` : "";
-      h += `<td class="num hm${wknd(i)&&!v?" wknd":""}" style="${bg};cursor:${v?"pointer":"default"}" ${v?`data-n="${n}" data-d="${d}"`:""}>${v?hr(v):"<span class=mut>·</span>"}</td>`;
+  // 행 순서 = roster.json 배열 순서(사용자 지정)를 팀 단위로만 묶는다. 실적순 재정렬 안 함.
+  TEAM_ORDER.forEach(tm=>{
+    const mem = ms.filter(n=>TEAM[n]===tm);
+    if(!mem.length) return;
+    const tSum = mem.reduce((a,n)=>a+(rowT[n]||0),0);
+    const tRec = mem.filter(n=>rowT[n]>0).length;
+    h += `<tr class="tmrow"><td class="who" style="color:${teamColor(tm)}"><b>${tm}</b></td>`
+       + `<td class="mut" colspan="${ds.length}" style="text-align:left">${mem.length}명 · 기록 ${tRec}명</td>`
+       + `<td class="num"><b>${tSum?hr(tSum):"<span class=mut>0</span>"}</b></td></tr>`;
+    mem.forEach(n=>{
+      const zero = !(rowT[n]>0);
+      const role = (ROLE[n]||[]).length ? " 🏅" : "";
+      h += `<tr class="${zero?"zero":""}"><td class="who" title="${n} · ${TEAM[n]}${zero?" — 이 주차 기록 없음":""}">${n}${role}</td>`;
+      ds.forEach((d,i)=>{
+        const v = cell[n+"|"+d]||0;
+        const a = v? (0.08+0.5*v/mx).toFixed(2) : 0;
+        const bg = v? `background:rgba(0,82,204,${a})` : "";
+        h += `<td class="num hm${wknd(i)&&!v?" wknd":""}" style="${bg};cursor:${v?"pointer":"default"}" ${v?`data-n="${n}" data-d="${d}"`:""}>${v?hr(v):"<span class=mut>·</span>"}</td>`;
+      });
+      h += `<td class="num"><b>${rowT[n]?hr(rowT[n]):"<span class=mut>0</span>"}</b></td></tr>`;
     });
-    h += `<td class="num"><b>${rowT[n]?hr(rowT[n]):"<span class=mut>0</span>"}</b></td></tr>`;
   });
   h += `</tbody><tfoot><tr><th class="who">합계</th>`;
   ds.forEach((d,i)=>h+=`<th class="num${wknd(i)?" wknd":""}">${colT[d]?hr(colT[d]):"<span class=mut>·</span>"}</th>`);
   const tot = Object.values(rowT).reduce((a,b)=>a+b,0);
   h += `<th class="num">${hr(tot)}</th></tr></tfoot></table></div>`;
   const rec = ms.filter(n=>rowT[n]>0).length;
-  h += `<p class="legend">인원 <b>${ms.length}명</b> (기록 ${rec}명) · 총 <b>${fmt(tot)}h</b> · 기록자 1인 평균 ${rec?fmt(tot/rec):0}h · 셀 클릭 시 상세</p>`;
+  const byTeam = TEAM_ORDER.map(t=>{const mm=ms.filter(n=>TEAM[n]===t);const s=mm.reduce((a,n)=>a+(rowT[n]||0),0);return s?`<b style="color:${teamColor(t)}">${t}</b> ${fmt(s)}h`:null;}).filter(Boolean).join(" · ");
+  h += `<p class="legend">인원 <b>${ms.length}명</b> (기록 ${rec}명) · 총 <b>${fmt(tot)}h</b> · 기록자 1인 평균 ${rec?fmt(tot/rec):0}h<br>${byTeam} · 셀 클릭 시 상세</p>`;
   return h;
 }
 
@@ -282,7 +305,9 @@ function calView(rows, ds){
   const night = m => m<8*60 || m>=19*60;      // 업무시간 밖
   for(let i=0;i<rowsN;i++){
     const m=lo+i*30;
-    h += `<div class="lbl${night(m)?" nt":""}" style="height:${PX}px">${m%60===0?String(m/60|0).padStart(2,"0")+":00":""}</div>`;
+    // 08:00 에 앵커를 둔다 — 캘린더 진입 시 이 지점으로 스크롤한다(00~07시는 대개 비어 있다).
+    const anchor = m===8*60 ? ` id="h8"` : "";
+    h += `<div class="lbl${night(m)?" nt":""}"${anchor} style="height:${PX}px">${m%60===0?String(m/60|0).padStart(2,"0")+":00":""}</div>`;
   }
   h += `</div>`;
   // 요일 컬럼
@@ -377,6 +402,12 @@ function render(){
   $("#vTeam").className = mode==="team"?"on":"";
   $("#vCal").className = mode==="cal"?"on":"";
   $("#who").disabled = mode!=="cal";
+  // 캘린더로 "진입"할 때만 08:00 으로 스크롤한다.
+  // 매 render()마다 하면 담당자 칩을 눌러도 화면이 튄다.
+  if(mode==="cal" && calEnter){
+    calEnter = false;
+    requestAnimationFrame(()=>$("#h8")?.scrollIntoView({behavior:"smooth",block:"start"}));
+  }
 }
 
 $("#week").onchange = e=>{wi=+e.target.value;render()};
@@ -384,8 +415,8 @@ $("#prev").onclick = ()=>{if(wi<weeks.length-1){wi++;render()}};
 $("#next").onclick = ()=>{if(wi>0){wi--;render()}};
 $("#thisWk").onclick = ()=>{wi=initialWeek();mode="team";render()};
 $("#vTeam").onclick = ()=>{mode="team";render()};
-$("#vCal").onclick = ()=>{mode="cal";render()};
-$("#who").onchange = e=>{sel=e.target.value;render()};
+$("#vCal").onclick = ()=>{mode="cal";calEnter=true;render()};
+$("#who").onchange = e=>{sel=e.target.value;calEnter=true;render()};
 document.addEventListener("mouseover",e=>{
   const b=e.target.closest(".blk"); const t=$("#tip");
   if(!b){t.style.display="none";return}

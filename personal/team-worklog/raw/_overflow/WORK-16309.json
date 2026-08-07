@@ -1,5 +1,7 @@
 ﻿{
-    "total":  140,
+    "startAt":  0,
+    "maxResults":  1048,
+    "total":  155,
     "worklogs":  [
                      {
                          "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/90017",
@@ -8183,6 +8185,970 @@
                          "timeSpent":  "2h",
                          "timeSpentSeconds":  7200,
                          "id":  "92014",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92073",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "이벤트 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "추적로그 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:20:51.661+0900",
+                         "updated":  "2026-08-06T17:20:51.661+0900",
+                         "started":  "2026-08-06T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92073",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92074",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "이벤트 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "추적로그 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:20:52.238+0900",
+                         "updated":  "2026-08-06T17:20:52.238+0900",
+                         "started":  "2026-08-05T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92074",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92075",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "이벤트 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "추적로그 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:20:52.718+0900",
+                         "updated":  "2026-08-06T17:20:52.718+0900",
+                         "started":  "2026-08-04T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92075",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92076",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "이벤트 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "추적로그 모니터링"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:20:53.262+0900",
+                         "updated":  "2026-08-06T17:20:53.262+0900",
+                         "started":  "2026-08-03T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92076",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92077",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "서버파트 회의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:22:01.027+0900",
+                         "updated":  "2026-08-06T17:22:01.027+0900",
+                         "started":  "2026-08-06T16:00:00.000+0900",
+                         "timeSpent":  "45m",
+                         "timeSpentSeconds":  2700,
+                         "id":  "92077",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92078",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "해피포인트 홈페이지 QA 진행"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:25:46.800+0900",
+                         "updated":  "2026-08-06T17:25:46.800+0900",
+                         "started":  "2026-08-06T13:30:00.000+0900",
+                         "timeSpent":  "2h 30m",
+                         "timeSpentSeconds":  9000,
+                         "id":  "92078",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92080",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "모바일개발팀 위클리문서 작성"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:25:47.575+0900",
+                         "updated":  "2026-08-06T17:25:47.575+0900",
+                         "started":  "2026-08-06T12:30:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "92080",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92084",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "시스템 아키텍쳐 컨플에 작성"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:35:13.225+0900",
+                         "updated":  "2026-08-06T17:35:13.225+0900",
+                         "started":  "2026-08-04T12:30:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92084",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92093",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "서버파트 업무 및 이슈사항 공유 관련 회의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:48:50.784+0900",
+                         "updated":  "2026-08-06T17:48:50.784+0900",
+                         "started":  "2026-08-03T16:00:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "92093",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92095",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "엘포인트 최초 연동 카운트 체크 및 일별 카운트 체크"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:49:45.140+0900",
+                         "updated":  "2026-08-06T17:49:45.140+0900",
+                         "started":  "2026-08-03T15:00:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "92095",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92100",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                        "emailAddress":  "dh5.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                           "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                       },
+                                        "displayName":  "김동현",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ab57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "accountId":  "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
+                                              "emailAddress":  "dh5.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "24x24":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "16x16":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png",
+                                                                 "32x32":  "https://secure.gravatar.com/avatar/bb4857950e505e19397eb0ca10ca7904?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FD-5.png"
+                                                             },
+                                              "displayName":  "김동현",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "엘포인트 딥링크 추가 생성 및 담당자 공유"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "엘포인트 딥링크를 배너에 적용하는 방법 담당자 공유 완료"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:54:09.872+0900",
+                         "updated":  "2026-08-06T17:54:09.872+0900",
+                         "started":  "2026-08-03T09:30:00.000+0900",
+                         "timeSpent":  "45m",
+                         "timeSpentSeconds":  2700,
+                         "id":  "92100",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92117",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 크래시 문의 대응"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T18:36:03.718+0900",
+                         "updated":  "2026-08-06T18:36:03.718+0900",
+                         "started":  "2026-08-04T16:00:00.000+0900",
+                         "timeSpent":  "2h",
+                         "timeSpentSeconds":  7200,
+                         "id":  "92117",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92123",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 크래시 문의 대응"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T18:36:04.358+0900",
+                         "updated":  "2026-08-06T18:36:04.358+0900",
+                         "started":  "2026-08-05T14:00:00.000+0900",
+                         "timeSpent":  "2h",
+                         "timeSpentSeconds":  7200,
+                         "id":  "92123",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92127",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "일정 변경"
+                                                                             }
+                                                                         ]
+                                                         },
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "애드핏 이슈 확인 후 일정 재 확인"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T18:54:15.513+0900",
+                         "updated":  "2026-08-06T18:54:15.513+0900",
+                         "started":  "2026-08-06T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92127",
+                         "issueId":  "62517"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62517/worklog/92134",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3A8bcc2953-b84c-4890-bbf1-d300c7585b00",
+                                        "accountId":  "712020:8bcc2953-b84c-4890-bbf1-d300c7585b00",
+                                        "emailAddress":  "wanggi.lim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/32"
+                                                       },
+                                        "displayName":  "임왕기",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3A8bcc2953-b84c-4890-bbf1-d300c7585b00",
+                                              "accountId":  "712020:8bcc2953-b84c-4890-bbf1-d300c7585b00",
+                                              "emailAddress":  "wanggi.lim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:8bcc2953-b84c-4890-bbf1-d300c7585b00/8dd27dad-fcf7-4cdf-a274-ae10aa230030/32"
+                                                             },
+                                              "displayName":  "임왕기",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "앱파트 관리중인 문서 최신화 작업 완료"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T19:40:42.588+0900",
+                         "updated":  "2026-08-06T19:40:42.588+0900",
+                         "started":  "2026-08-06T09:45:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "92134",
                          "issueId":  "62517"
                      }
                  ]

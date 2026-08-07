@@ -1,0 +1,32 @@
+{
+  "week": "2025-06-02",
+  "range": [
+    "2025-06-02",
+    "2025-06-08"
+  ],
+  "status": "부분",
+  "collected": "2026-08-07",
+  "collectedDays": [],
+  "count": 1,
+  "hours": 1.0,
+  "note": "오버플로 이슈 유입분만 — search 미실행",
+  "entries": [
+    {
+      "worklogId": "54603",
+      "date": "2025-06-04",
+      "dow": "수",
+      "startedAt": "2025-06-04T12:30:00",
+      "timeOfDay": "12:30",
+      "createdAt": "2025-06-04T18:10:10",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 3600,
+      "hours": 1.0,
+      "issueKey": "WORK-7376",
+      "project": "WORK",
+      "summary": "[해피앱] SNS 연동 해제 로직 수정",
+      "comment": "SNS 연동 해제 태스크 생성 및 요구 사항 분석"
+    }
+  ]
+}

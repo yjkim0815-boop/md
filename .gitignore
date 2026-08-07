@@ -6,5 +6,13 @@ personal/team-worklog/issue-cache.json
 # 캘린더 뷰어 데이터 — 파생물. python tools/wl.py viewer 로 재생성
 personal/team-worklog/viewer/data.js
 
-# 로우 보관일 기록 — 로컬 상태(보존 7일 판정용)
+# 로우 보관일 기록 — 로컬 상태(보존 30일 판정용)
 personal/team-worklog/raw/_meta.json
+
+# Dominic Jarvis
+#  history.js 는 커밋한다 — 대화 원문이 들어 있으나 사용자가 추적 목적으로 보존을 지시(2026-08-07).
+#  나머지는 파생/임시라 제외.
+personal/jarvis/data.js
+personal/jarvis/hosts.json
+personal/jarvis/turns.json
+personal/jarvis/__pycache__/

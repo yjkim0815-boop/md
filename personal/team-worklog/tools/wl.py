@@ -15,6 +15,16 @@
 """
 import sys, os, json, collections, datetime
 
+# Windows 콘솔 기본 인코딩(cp949)에서는 이모지·일부 기호 출력이 UnicodeEncodeError 로 죽는다.
+# 실제로 2026-08-07 오버플로 안내(🔴) 출력에서 터졌다 — 저장은 끝난 뒤라 유실은 없었지만
+# 트레이스백이 남고 남은 안내가 잘린다. 표준출력을 UTF-8 로 바꾸고, 그래도 못 그리는 문자는
+# 대체 문자로 흘려보낸다(도구가 출력 때문에 멈추면 안 된다).
+for _s in ("stdout", "stderr"):
+    try:
+        getattr(sys, _s).reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 DOW = ["월", "화", "수", "목", "금", "토", "일"]
@@ -99,6 +109,40 @@ def save(weeks, meta):
                "note": m.get("note", ""), "entries": rows}
         with open(os.path.join(DATA, mon + ".json"), "w", encoding="utf-8") as f:
             json.dump(obj, f, ensure_ascii=False, indent=2)   # 정합성 ④
+    sync_manifest()
+
+
+def sync_manifest():
+    """data 정본을 현황판용 manifest 집계에 즉시 반영한다."""
+    path = os.path.join(ROOT, "manifest.json")
+    if not os.path.exists(path):
+        return
+
+    manifest = jload(path)
+    weeks = manifest.setdefault("weeks", {})
+    for fn in os.listdir(DATA):
+        d = jload(os.path.join(DATA, fn))
+        week = weeks.setdefault(d["week"], {})
+        week.update({"status": d["status"], "count": d["count"],
+                     "hours": d["hours"], "roster": len(BY_ID),
+                     "collected": d["collected"], "collectedDays": d["collectedDays"]})
+
+    months = manifest.setdefault("months", {})
+    grouped = collections.defaultdict(list)
+    for week, value in weeks.items():
+        grouped[week[:7]].append((week, value))
+    for month, items in grouped.items():
+        old = months.get(month, {})
+        months[month] = {"status": old.get("status", "대기"),
+                         "weeks": [week for week, _ in sorted(items)],
+                         "weekCount": len(items),
+                         "count": sum(item.get("count", 0) for _, item in items),
+                         "hours": round(sum(item.get("hours", 0) for _, item in items), 2),
+                         "confirmedAt": old.get("confirmedAt")}
+
+    manifest["updated"] = TODAY
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
 
 
 def ingest(nodes, lo, hi):
@@ -322,36 +366,74 @@ def cmd_status(today=None):
         y, w, _ = d.isocalendar()
         return "W%02d" % w if y == 2026 else "%d-W%02d" % (y, w)
 
-    print("%-12s %-9s %-7s %-7s %6s %9s %5s  %s"
-          % ("주차(월)", "주차", "주간", "월간", "건수", "시간", "인원", "비고"))
-    print("-" * 74)
+    # 🔴 표시 대상 = **확정 + 진행 주차만** (2026-08-06 사용자 확정)
+    # 수집·저장은 전부 유지하되(부분 주차 포함), 현황판에는 확정/진행만 올린다.
+    # 부분 주차는 오버플로 버킷이 과거·미래로 1~2건씩 흩뿌린 결과라 진척을 오독하게 만든다.
+    SHOW = ("확정", "진행")
+    shown, hidden = [], []
     for w in sorted(mf["weeks"]):
+        d = json.load(open(os.path.join(R, "data", w + ".json"), encoding="utf-8"))
+        cd = len(d.get("collectedDays", []))
+        (shown if d["status"] in SHOW else hidden).append((w, d, cd))
+
+    print("%-12s %-9s %-7s %-7s %6s %9s %5s %6s  %s"
+          % ("주차(월)", "주차", "주간", "월간", "건수", "시간", "인원", "수집", "비고"))
+    print("-" * 82)
+    for w, d, cd in shown:
         v = mf["weeks"][w]
         ms = mf["months"][w[:7]]["status"]
-        d = json.load(open(os.path.join(R, "data", w + ".json"), encoding="utf-8"))
         ppl = len({e["author"] for e in d["entries"]})
         note = "🔒 보류" if v.get("manualOverride") else ""
-        print("%-12s %-9s %s%-5s %s%-5s %5d %8.1fh %4d  %s"
+        print("%-12s %-9s %s%-5s %s%-5s %5d %8.1fh %4d %5s  %s"
               % (w, isolabel(w), WI[v["status"]], v["status"],
-                 MI[ms], ms, v["count"], v["hours"], ppl, note))
-    print("-" * 74)
-    c = collections.Counter(v["status"] for v in mf["weeks"].values())
-    mc = collections.Counter(v["status"] for v in mf["months"].values())
+                 MI[ms], ms, v["count"], v["hours"], ppl, "%d/7" % cd, note))
+    print("-" * 82)
+    if hidden:
+        hc = sum(d["count"] for _, d, _ in hidden)
+        hh = sum(d["hours"] for _, d, _ in hidden)
+        print("⚪ 미표시(부분) %d주 · %d건 · %.1fh — 데이터는 보관 중. 수집·확정되면 표에 올라온다"
+              % (len(hidden), hc, hh))
+    # 이하 집계는 **표시 대상(shown) 기준**이다. 유입·미래 주차를 섞으면 수치가 부풀려진다.
+    keys = [w for w, _, _ in shown]
+    c = collections.Counter(mf["weeks"][w]["status"] for w in keys)
     print("주간: " + " · ".join("%s%s %d주" % (WI[k], k, n) for k, n in c.most_common()))
-    print("월간: " + " · ".join("%s%s %d개월" % (MI[k], k, n) for k, n in mc.most_common()))
 
     print("\n=== 월간 ===")
-    for m, v in sorted(mf["months"].items()):
-        print("  %-9s %s%-4s %2d주 %5d건 %9.1fh"
-              % (m, MI[v["status"]], v["status"], v["weekCount"], v["count"], v["hours"]))
+    mo = collections.defaultdict(lambda: [0, 0, 0.0])
+    for w, d, _ in shown:
+        m = w[:7]
+        mo[m][0] += 1
+        mo[m][1] += d["count"]
+        mo[m][2] += d["hours"]
+    for m in sorted(mo):
+        wc, cc, hh = mo[m]
+        ms = mf["months"].get(m, {}).get("status", "대기")
+        print("  %-9s %s%-4s %2d주 %5d건 %9.1fh" % (m, MI[ms], ms, wc, cc, hh))
 
-    tot = sum(v["count"] for v in mf["weeks"].values())
-    hrs = sum(v["hours"] for v in mf["weeks"].values())
-    conf = sorted(w for w, v in mf["weeks"].items() if v["status"] == "확정")
-    print("\n전체 %d주 · %d건 · %.1fh" % (len(mf["weeks"]), tot, hrs))
+    tot = sum(d["count"] for _, d, _ in shown)
+    hrs = sum(d["hours"] for _, d, _ in shown)
+    conf = [w for w in keys if mf["weeks"][w]["status"] == "확정"]
+    print("\n수집 %d주 · %d건 · %.1fh" % (len(shown), tot, hrs))
     print("확정 %d주 · %d건 · %.1fh"
           % (len(conf), sum(mf["weeks"][w]["count"] for w in conf),
              sum(mf["weeks"][w]["hours"] for w in conf)))
+
+    # 팀별 집계 — 로스터는 3개 팀에 걸쳐 있다(2026-08-06 Jira 그룹 조회로 확인)
+    roster = json.load(open(os.path.join(R, "roster.json"), encoding="utf-8"))
+    TEAM = {m["name"]: (m.get("team") or "미상") for m in roster["members"]}
+    agg = collections.defaultdict(lambda: [0, 0.0, set()])
+    for _, d, _ in shown:
+        for e in d["entries"]:
+            t2 = TEAM.get(e["author"], "미상")
+            agg[t2][0] += 1
+            agg[t2][1] += e["hours"]
+            agg[t2][2].add(e["author"])
+    if agg:
+        print("\n=== 팀별 ===")
+        head = collections.Counter(TEAM.values())
+        for t2, (c2, h2, who) in sorted(agg.items(), key=lambda x: -x[1][1]):
+            print("  %-12s %4d건 %9.1fh · 기록 %2d명 / 로스터 %d명"
+                  % (t2, c2, h2, len(who), head.get(t2, 0)))
 
     t = datetime.date.fromisoformat(today) if today else datetime.date.today()
     nowmon = t - datetime.timedelta(days=t.weekday())
@@ -433,14 +515,20 @@ def cmd_viewer():
     mfp = os.path.join(ROOT, "manifest.json")
     mf = jload(mfp) if os.path.exists(mfp) else {"weeks": {}}
 
+    # 🔴 캘린더에는 **확정 + 진행 주차만** 내보낸다 (2026-08-06 사용자 확정).
+    # data/*.json 에는 부분 주차도 그대로 보관한다 — 여기서 걸러내기만 한다.
+    SHOW = ("확정", "진행")
+    keep = [mon for mon in weeks if meta[mon]["status"] in SHOW]
+    skipped = len(weeks) - len(keep)
+
     rows = []
-    for mon in sorted(weeks):
+    for mon in sorted(keep):
         for e in sorted(weeks[mon].values(), key=lambda r: (r["date"], r.get("timeOfDay") or "~", r["author"])):
             rows.append([mon, e["date"], e["dow"], e.get("timeOfDay"), e["seconds"] // 60,
                          e["author"], e["issueKey"], e["project"] or "",
                          e["summary"] or "", e["comment"] or ""])
     wk = []
-    for mon in sorted(weeks, reverse=True):
+    for mon in sorted(keep, reverse=True):
         m = mf.get("weeks", {}).get(mon, {})
         vals = weeks[mon].values()
         timed = sum(1 for r in vals if r.get("timeOfDay"))
@@ -451,7 +539,9 @@ def cmd_viewer():
                    "timed": timed})
     out = {"generated": TODAY,
            "fields": ["week", "date", "dow", "time", "min", "author", "issue", "project", "summary", "comment"],
-           "roster": [{"name": m["name"], "email": m["email"]} for m in ros["members"]],
+           "roster": [{"name": m["name"], "email": m["email"],
+                    "team": m.get("team") or "미상",
+                    "roles": m.get("roles", [])} for m in ros["members"]],
            "weeks": wk, "entries": rows}
     vdir = os.path.join(ROOT, "viewer")
     os.makedirs(vdir, exist_ok=True)
@@ -462,8 +552,11 @@ def cmd_viewer():
         f.write(";\n")
     print("viewer/data.js 생성 — %d건 / 주차 %d개 / %.0f KB"
           % (len(rows), len(wk), os.path.getsize(p) / 1024))
-    print("  시각 보유 %d건 (%.1f%%)"
-          % (sum(w["timed"] for w in wk), sum(w["timed"] for w in wk) / len(rows) * 100))
+    if rows:
+        print("  시각 보유 %d건 (%.1f%%)"
+              % (sum(w["timed"] for w in wk), sum(w["timed"] for w in wk) / len(rows) * 100))
+    if skipped:
+        print("  ⚪ 부분 주차 %d개 제외 (data/ 에는 보관)" % skipped)
 
 
 if __name__ == "__main__":
@@ -486,4 +579,3 @@ if __name__ == "__main__":
         cmd_status(sys.argv[2] if len(sys.argv) > 2 else None)
     else:
         print(__doc__); sys.exit(1)
-

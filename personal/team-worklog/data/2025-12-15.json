@@ -1,0 +1,32 @@
+{
+  "week": "2025-12-15",
+  "range": [
+    "2025-12-15",
+    "2025-12-21"
+  ],
+  "status": "부분",
+  "collected": "2026-08-07",
+  "collectedDays": [],
+  "count": 1,
+  "hours": 0.5,
+  "note": "오버플로 이슈 유입분만 — search 미실행",
+  "entries": [
+    {
+      "worklogId": "70193",
+      "date": "2025-12-17",
+      "dow": "수",
+      "startedAt": "2025-12-17T09:00:00",
+      "timeOfDay": "09:00",
+      "createdAt": "2025-12-17T19:00:34",
+      "author": "송현미",
+      "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+      "authorEmail": "hyunmi.song@spc.co.kr",
+      "seconds": 1800,
+      "hours": 0.5,
+      "issueKey": "WORK-7376",
+      "project": "WORK",
+      "summary": "[해피앱] SNS 연동 해제 로직 수정",
+      "comment": "각 SNS 연결 해제 사이트 조사"
+    }
+  ]
+}

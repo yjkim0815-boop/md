@@ -1,5 +1,7 @@
 ﻿{
-    "total":  67,
+    "startAt":  0,
+    "maxResults":  1048,
+    "total":  71,
     "worklogs":  [
                      {
                          "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62655/worklog/89971",
@@ -4233,6 +4235,238 @@
                          "timeSpent":  "1h",
                          "timeSpentSeconds":  3600,
                          "id":  "91993",
+                         "issueId":  "62655"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62655/worklog/92081",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ad204fc57-4869-4ceb-910b-ceff318e9317",
+                                        "accountId":  "712020:d204fc57-4869-4ceb-910b-ceff318e9317",
+                                        "emailAddress":  "siug.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/32"
+                                                       },
+                                        "displayName":  "김시욱",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Ad204fc57-4869-4ceb-910b-ceff318e9317",
+                                              "accountId":  "712020:d204fc57-4869-4ceb-910b-ceff318e9317",
+                                              "emailAddress":  "siug.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:d204fc57-4869-4ceb-910b-ceff318e9317/9649fb60-993f-4112-a479-29c07b4c9954/32"
+                                                             },
+                                              "displayName":  "김시욱",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "서비스개발팀 위클리 참석"
+                                                                             }
+                                                                         ],
+                                                             "attrs":  {
+                                                                           "localId":  "b57a0cb9a5cd"
+                                                                       }
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:27:57.398+0900",
+                         "updated":  "2026-08-06T17:27:57.398+0900",
+                         "started":  "2026-08-06T17:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92081",
+                         "issueId":  "62655"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62655/worklog/92098",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3A9ac15741-3f2a-4562-88ae-e8920035f874",
+                                        "accountId":  "712020:9ac15741-3f2a-4562-88ae-e8920035f874",
+                                        "emailAddress":  "yoonjung.park@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/32"
+                                                       },
+                                        "displayName":  "박윤정",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3A9ac15741-3f2a-4562-88ae-e8920035f874",
+                                              "accountId":  "712020:9ac15741-3f2a-4562-88ae-e8920035f874",
+                                              "emailAddress":  "yoonjung.park@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:9ac15741-3f2a-4562-88ae-e8920035f874/d734014b-a670-4534-865f-86ea1d0f76ef/32"
+                                                             },
+                                              "displayName":  "박윤정",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "서비스개발팀 위클리 참석"
+                                                                             }
+                                                                         ],
+                                                             "attrs":  {
+                                                                           "localId":  "8ba4d34bfd73"
+                                                                       }
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T17:52:29.674+0900",
+                         "updated":  "2026-08-06T17:52:29.674+0900",
+                         "started":  "2026-08-06T17:00:00.000+0900",
+                         "timeSpent":  "40m",
+                         "timeSpentSeconds":  2400,
+                         "id":  "92098",
+                         "issueId":  "62655"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62655/worklog/92109",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Aa53e8ed7-1a8d-41c5-864e-d22c74079537",
+                                        "accountId":  "712020:a53e8ed7-1a8d-41c5-864e-d22c74079537",
+                                        "emailAddress":  "hk.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/32"
+                                                       },
+                                        "displayName":  "이혜균",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Aa53e8ed7-1a8d-41c5-864e-d22c74079537",
+                                              "accountId":  "712020:a53e8ed7-1a8d-41c5-864e-d22c74079537",
+                                              "emailAddress":  "hk.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:a53e8ed7-1a8d-41c5-864e-d22c74079537/1f911885-de58-4260-8998-9014832a5247/32"
+                                                             },
+                                              "displayName":  "이혜균",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "[기타] 서비스개발팀 위클리 진행"
+                                                                             }
+                                                                         ],
+                                                             "attrs":  {
+                                                                           "localId":  "760f71257302"
+                                                                       }
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T18:02:22.234+0900",
+                         "updated":  "2026-08-06T18:02:22.234+0900",
+                         "started":  "2026-08-06T17:00:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "92109",
+                         "issueId":  "62655"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/62655/worklog/92138",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af4db57f9-66fd-49b7-b174-1155f96d35f7",
+                                        "accountId":  "712020:f4db57f9-66fd-49b7-b174-1155f96d35f7",
+                                        "emailAddress":  "jeongyun.kim@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/32"
+                                                       },
+                                        "displayName":  "김정윤",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af4db57f9-66fd-49b7-b174-1155f96d35f7",
+                                              "accountId":  "712020:f4db57f9-66fd-49b7-b174-1155f96d35f7",
+                                              "emailAddress":  "jeongyun.kim@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f4db57f9-66fd-49b7-b174-1155f96d35f7/9e7477c3-77b8-4f9a-bc5d-557609eab4fd/32"
+                                                             },
+                                              "displayName":  "김정윤",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "[기타] 서비스개발팀 위클리 참석"
+                                                                             }
+                                                                         ],
+                                                             "attrs":  {
+                                                                           "localId":  "bc9c9772944c"
+                                                                       }
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-08-06T19:41:49.606+0900",
+                         "updated":  "2026-08-06T19:41:49.606+0900",
+                         "started":  "2026-08-06T17:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "92138",
                          "issueId":  "62655"
                      }
                  ]

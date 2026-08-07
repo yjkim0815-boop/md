@@ -1,6 +1,6 @@
 {
-  "team": "모바일개발팀",
-  "updated": "2026-08-05",
+  "team": "개발실 (모바일·서비스·플랫폼개발팀)",
+  "updated": "2026-08-06",
   "source": "Jira worklog author 객체 (캐시 추출) + lookupJiraAccountId 1회(이희경)",
   "matchKey": "accountId",
   "members": [
@@ -8,114 +8,148 @@
       "name": "송현미",
       "email": "hyunmi.song@spc.co.kr",
       "accountId": "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "김영준",
       "email": "dominic.kim@spc.co.kr",
       "accountId": "641d4f497222b08f3e72e79f",
       "note": "본인 · 구형 accountId 형식",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "김동현",
       "email": "dh5.kim@spc.co.kr",
       "accountId": "712020:b57b21ed-8b26-4396-a7e7-3f07c5d6419d",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "이동수",
       "email": "dongsu.lee@spc.co.kr",
       "accountId": "712020:7e3cb519-f36f-4b79-91c3-739282844752",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "허다성",
       "email": "ds.hur@spc.co.kr",
       "accountId": "712020:fe94bbed-3f49-4057-a0c7-ae51275d1183",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "서비스개발팀",
+      "roles": [
+        "리더 (개발실 리더)"
+      ]
     },
     {
       "name": "석은지",
       "email": "ej.seok@spc.co.kr",
       "accountId": "712020:0b2eb264-64fc-4314-9fcc-a2042da8eab4",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "서비스개발팀"
     },
     {
       "name": "박수진",
       "email": "sujin.park@spc.co.kr",
       "accountId": "712020:ddb57cd5-ac3d-447d-b165-b5c65555dcff",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀"
     },
     {
       "name": "박진수",
       "email": "jinsoo.park@spc.co.kr",
       "accountId": "712020:32e94527-f2be-4e6a-b1df-994bca6dc813",
       "note": "팀장 대행",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀",
+      "roles": [
+        "리더 (개발실 리더)",
+        "리더 (전체 팀장)"
+      ]
     },
     {
       "name": "임왕기",
       "email": "wanggi.lim@spc.co.kr",
       "accountId": "712020:8bcc2953-b84c-4890-bbf1-d300c7585b00",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "이병훈",
       "email": "byeonghoon.lee@spc.co.kr",
       "accountId": "712020:f07f9237-e075-441e-898c-4876911c57d0",
-      "since": "2026-08-04"
+      "since": "2026-08-04",
+      "team": "모바일개발팀"
     },
     {
       "name": "이희경",
       "email": "hg.yi@spc.co.kr",
       "accountId": "712020:cf149c19-73f7-4ef8-9a9b-8469dbe6da7f",
       "since": "2026-08-04",
-      "note": "2차 추가 · lookupJiraAccountId 로 확보"
+      "note": "2차 추가 · lookupJiraAccountId 로 확보",
+      "team": "플랫폼개발팀"
     },
     {
       "name": "유지민",
       "email": "jimin.yu@spc.co.kr",
       "accountId": "712020:3e3c4a60-0e8a-4f54-a66e-5f20c6dd3e75",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "플랫폼개발팀"
     },
     {
       "name": "주용준",
       "email": "yongjun.ju@spc.co.kr",
       "accountId": "712020:bbe5aab8-a63a-4589-ad43-ace50c569451",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀",
+      "roles": [
+        "리더 (개발실 리더)",
+        "리더 (전체 팀장)"
+      ]
     },
     {
       "name": "정선영",
       "email": "sy.joung@spc.co.kr",
       "accountId": "712020:5a43cec7-62b1-4bb0-b87e-9efc73d3a809",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀"
     },
     {
       "name": "임정민",
       "email": "jeongmin.lim@spc.co.kr",
       "accountId": "712020:51b8c367-b201-4e1b-855c-2d312ef2f75f",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀"
     },
     {
       "name": "김정윤",
       "email": "jeongyun.kim@spc.co.kr",
       "accountId": "712020:f4db57f9-66fd-49b7-b174-1155f96d35f7",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀"
     },
     {
       "name": "박인욱",
       "email": "inuk.park@spc.co.kr",
       "accountId": "712020:721e8a5a-8e15-47a0-9bd6-a2cf5385227f",
       "since": "2026-08-04",
-      "note": "2차 추가"
+      "note": "2차 추가",
+      "team": "서비스개발팀"
     }
   ],
-  "orderNote": "사용자 지정 순서(2026-08-05 2차 조정): 송현미·김영준·김동현·이동수·허다성·석은지·박수진·박진수·임왕기·이병훈 → 이희경·유지민·주용준·정선영·임정민·김정윤·박인욱"
+  "orderNote": "사용자 지정 순서(2026-08-05 2차 조정): 송현미·김영준·김동현·이동수·허다성·석은지·박수진·박진수·임왕기·이병훈 → 이희경·유지민·주용준·정선영·임정민·김정윤·박인욱",
+  "teams": [
+    "모바일개발팀",
+    "서비스개발팀",
+    "플랫폼개발팀"
+  ],
+  "teamSource": "Jira 그룹 (GET /rest/api/3/user?expand=groups) · 2026-08-06 조회"
 }

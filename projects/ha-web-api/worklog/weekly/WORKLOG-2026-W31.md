@@ -78,6 +78,26 @@
 
 - `POST /api/member-info/confirm-pw-process`에서 비밀번호 불일치 시 기존 성공 응답 대신 `ApiError.AUTH`를 반환하도록 변경했다. 응답 `code`는 `40`이며, 비밀번호 확인 성공 시에만 확인 쿠키와 랜딩 정보를 반환한다. `mvn -o -DskipTests compile` BUILD SUCCESS로 검증했다.
 
+## (08-06, ⏳배포대기) 파바앱 회원가입 joinProc code=99 버그 — 평문 instCd 복호화 폭발
+- **증상**: 파바앱(OPBS) 회원가입 마지막 단계 `POST /api/brand/join/joinProc` 가 **항상 `code=99` "회원가입에 실패했습니다."**(dev 재현, 로컬 무관).
+- **원인**: `BrandMemberResource.joinProc` 복호화 루프(L183~187)가 `intrFildCd` 만 제외하고 **나머지 전 필드 AES 복호화**. 그런데 프론트(ReferralForm)는 body 에 **`instCd` 를 평문("OPBS")** 으로 실어 보냄 → `AES128Util.decrypt("OPBS")`(`throws Exception`, hex 아님) → **예외 → `catch(Exception)` → message 안 바꿈 → 기본값 99**. catch 가 `elog.info` 라 Spring DEBUG 로그엔 스택 안 보였음.
+- **대조**: 일반(`JoinResource.joinProc`)은 body 에 instCd 없음 → 무사. 레거시(`BrandMemberController.joinProc`)는 instCd 를 `@RequestParam` 으로 받아 joinInfo 맵과 분리 → 복호화 대상 아님. **신규 브랜드만 instCd 를 map 평문으로 받아 복호화에 태운 게 결함.**
+- **수정**: `BrandMemberResource.java` 복호화 루프 조건에 **`&& !"instCd".equals(key)` 추가**(instCd 는 평문 라우팅 코드, 암호화 PII 아님 · L162 에서 이미 평문 사용). 1줄.
+- **검증**: dev 재빌드 후 파바앱 가입 완주(2100 성공 + welcome) 확인 필요. → 프론트 [web2 W31](../../happypoint-web2/worklog/weekly/WORKLOG-2026-W31.md)
+
+## (08-06, ⏳배포대기) 파바앱 find 모델API URL 일반 미러링 통일
+- 프론트 find 페이지 URL 을 `/page/brand/member-info/find-id-pw-{form,process,complete}` 로 통일한 것에 맞춰, **모델API 엔드포인트도 미러링**.
+- `BrandMemberModelApiResource` @Mapping 3종 변경:
+  - `GET /api/brand/member/find-auth` → **`/api/brand/member-info/find-id-pw-form`** (:782)
+  - `POST /api/brand/member/find-view` → **`/api/brand/member-info/find-id-pw-process`** (:811)
+  - `POST /api/brand/member/find-complete` → **`/api/brand/member-info/find-id-pw-complete`** (:913)
+- 메서드 로직 무변경(문자열 매핑만). `RedirectUtil.java:49`(`/page/brand/member/find-auth.spc`)는 레거시 전용(신규는 미들웨어가 가로채 미도달)이라 유지.
+- ⚠️ **프론트 lib 엔드포인트와 커플링** → **프론트+백엔드 함께 배포 필수**(한쪽만 배포 시 404). → [web2 W31](../../happypoint-web2/worklog/weekly/WORKLOG-2026-W31.md)
+
+## (08-06, ⏳배포대기) 일반 휴면 auth-process 응답 필드 프론트 계약 정합
+- `DormancyModelApiResource.authProcess` 의 휴면회원(dormancy-view) 분기 응답을 **프론트 계약(camelCase)에 맞춤**: `RSLT_NAME/RSLT_BIRTHDAY/TEL_NO/TEL_COM_CD`(대문자) → `rsltName/rsltBirthday/telNo/telComCd` + **`mbrNo`·`userId` 추가**(해제 대상 식별자), `memberDetail/memberDetail2` 제거. 로직 무변경(필드명·추가만).
+- ⚠️ **프론트 dormancy 흐름과 커플링** → 함께 배포. → [web2 W31](../../happypoint-web2/worklog/weekly/WORKLOG-2026-W31.md)
+
 ## 다음 할 일 (TODO)
 - [ ] (07-31) 그룹2 신규 스텁 API 실로직 이식(레거시 컨트롤러 기반) 여부
 - [ ] (07-31) 그룹3(정적 page) 모델API 처리 방침

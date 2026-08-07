@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""로우 응답(원본 API 결과) 보관 · 7일 보존 후 삭제.
+"""로우 응답(원본 API 결과) 보관 · 30일 보존 후 삭제.
 
   python rawstore.py put   <주차월요일> <파일...>   # raw/<주차>/ 로 평문 보관
   python rawstore.py putov <파일...>                # raw/_overflow/ 로 평문 보관
@@ -10,8 +10,8 @@
 ⚠️ **압축하지 않는다 (2026-08-05 사용자 확정).** 평문 `.json` 그대로 둔다.
 git 이 커밋 시 zlib 으로 자동 압축하므로 저장소 크기·clone 전송량은 압축해도 거의 같다.
 
-🗑️ **보존 기간 7일 (2026-08-05 사용자 확정).**
-보관일로부터 **7일이 지나면 삭제**한다. 판정 시점은 **워크로그 수집이 완료된 직후**다
+🗑️ **보존 기간 30일 (2026-08-07 사용자 확정).**
+보관일로부터 **30일이 지나면 삭제**한다. 판정 시점은 **워크로그 수집이 완료된 직후**다
 (수집 루틴 마지막 단계에서 `prune` 을 부른다). 별도 스케줄러를 두지 않는다.
 
 보관일은 파일 mtime 이 아니라 `raw/_meta.json` 에 **명시 기록**한다.
@@ -28,7 +28,7 @@ import sys, os, glob, shutil, json, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "raw")
 META = os.path.join(RAW, "_meta.json")
-KEEP_DAYS = 7
+KEEP_DAYS = 30
 
 
 def human(n):

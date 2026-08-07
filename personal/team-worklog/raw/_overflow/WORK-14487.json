@@ -1,0 +1,1310 @@
+﻿{
+    "total":  23,
+    "worklogs":  [
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/84493",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "팀장님과 에어브릿지 도입 미팅"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-22T18:39:35.159+0900",
+                         "updated":  "2026-04-22T18:39:35.159+0900",
+                         "started":  "2026-04-22T09:15:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "84493",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/85111",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "검토 결과 문서 확인 및 수정"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-29T20:30:31.991+0900",
+                         "updated":  "2026-04-29T20:30:31.991+0900",
+                         "started":  "2026-04-28T09:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "85111",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/85120",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "1. 에어 브릿지 딥링크 확인"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "hardBreak"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "2. 에어 브릿지 검토 결과 공유 회의 참석"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-29T20:30:32.853+0900",
+                         "updated":  "2026-04-29T20:30:32.853+0900",
+                         "started":  "2026-04-28T10:15:00.000+0900",
+                         "timeSpent":  "1h 15m",
+                         "timeSpentSeconds":  4500,
+                         "id":  "85120",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/85123",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어 브릿지 딥링크 확인 및 수정"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-29T20:30:33.349+0900",
+                         "updated":  "2026-04-29T20:30:33.349+0900",
+                         "started":  "2026-04-28T12:30:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "85123",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/85124",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어 브릿지 멤버십 사업팀 요청 질의 응답 회의 참석"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-29T20:30:33.801+0900",
+                         "updated":  "2026-04-29T20:30:33.801+0900",
+                         "started":  "2026-04-29T14:00:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "85124",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/85259",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "테스트 딥링크 사업부에 재요청"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-04-30T18:26:28.958+0900",
+                         "updated":  "2026-04-30T18:26:28.958+0900",
+                         "started":  "2026-04-30T09:00:00.000+0900",
+                         "timeSpent":  "15m",
+                         "timeSpentSeconds":  900,
+                         "id":  "85259",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/86110",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "이벤트 로직 수정(안드로이드와 유사하게 수정)"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-05-14T18:20:25.103+0900",
+                         "updated":  "2026-05-14T18:20:25.103+0900",
+                         "started":  "2026-05-14T14:30:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "86110",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/87111",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "1. 에어브릿지 도메인 추가 및 처리 로직 수정"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "hardBreak"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "2. 앰플리튜드 수집 확인"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-05-27T18:16:05.030+0900",
+                         "updated":  "2026-05-27T18:16:05.030+0900",
+                         "started":  "2026-05-27T12:30:00.000+0900",
+                         "timeSpent":  "2h 15m",
+                         "timeSpentSeconds":  8100,
+                         "id":  "87111",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/87113",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "1. 어드민에 앰플리튜드 v1 연동"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "hardBreak"
+                                                                             },
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "2. 앰플리튜드 확인 및 코드 수정"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-05-27T18:16:05.690+0900",
+                         "updated":  "2026-05-27T18:16:05.690+0900",
+                         "started":  "2026-05-27T15:45:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "87113",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/87483",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "_bag 하드 코딩 구현 및 확인"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-06-01T18:39:02.652+0900",
+                         "updated":  "2026-06-01T18:39:02.652+0900",
+                         "started":  "2026-06-01T17:00:00.000+0900",
+                         "timeSpent":  "45m",
+                         "timeSpentSeconds":  2700,
+                         "id":  "87483",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/87948",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                        "emailAddress":  "hyunmi.song@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                       },
+                                        "displayName":  "송현미",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "accountId":  "712020:f145d587-a06b-4f6c-807c-69ba3aa74100",
+                                              "emailAddress":  "hyunmi.song@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f145d587-a06b-4f6c-807c-69ba3aa74100/be77cd21-8056-482e-bcac-3e3dca071f86/32"
+                                                             },
+                                              "displayName":  "송현미",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 킥오프 준비"
+                                                                             }
+                                                                         ]
+                                                         },
+                                                         {
+                                                             "type":  "bulletList",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "listItem",
+                                                                                 "content":  [
+                                                                                                 {
+                                                                                                     "type":  "paragraph",
+                                                                                                     "content":  [
+                                                                                                                     {
+                                                                                                                         "type":  "text",
+                                                                                                                         "text":  "체크 리스트 내용 전달"
+                                                                                                                     }
+                                                                                                                 ]
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-06-09T14:04:36.385+0900",
+                         "updated":  "2026-06-09T14:04:36.385+0900",
+                         "started":  "2026-06-09T13:00:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "87948",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/89135",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 적용중 문의 내역 정리 및 문의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-06-23T18:43:05.704+0900",
+                         "updated":  "2026-06-23T18:43:05.704+0900",
+                         "started":  "2026-06-23T15:45:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "89135",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/89449",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 회의 참석"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-06-26T18:01:14.866+0900",
+                         "updated":  "2026-06-26T18:01:14.866+0900",
+                         "started":  "2026-06-24T13:00:00.000+0900",
+                         "timeSpent":  "1h",
+                         "timeSpentSeconds":  3600,
+                         "id":  "89449",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/89550",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "이력 내역 컨플에 추가 정리"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-06-29T18:34:16.353+0900",
+                         "updated":  "2026-06-29T18:34:16.353+0900",
+                         "started":  "2026-06-29T10:30:00.000+0900",
+                         "timeSpent":  "1h 30m",
+                         "timeSpentSeconds":  5400,
+                         "id":  "89550",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/89838",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "airbridge_referrer 스펙 재 확인 사항, 앱 종료 후 재실행 시 Open 이벤트, 앰플리튜드 Airbridge 속성 태그 관련 문의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-01T09:06:14.311+0900",
+                         "updated":  "2026-07-01T09:06:14.311+0900",
+                         "started":  "2026-06-30T09:00:00.000+0900",
+                         "timeSpent":  "1h 30m",
+                         "timeSpentSeconds":  5400,
+                         "id":  "89838",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/89841",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "이벤트 - 프로퍼티 관련 요구사항 사항 확인 및 멤버십 사업팀 전달"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-01T09:06:15.182+0900",
+                         "updated":  "2026-07-01T09:06:15.182+0900",
+                         "started":  "2026-06-30T13:00:00.000+0900",
+                         "timeSpent":  "1h 30m",
+                         "timeSpentSeconds":  5400,
+                         "id":  "89841",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90128",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "에어브릿지 회의 관련 준비 회의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-03T18:17:32.616+0900",
+                         "updated":  "2026-07-03T18:17:32.616+0900",
+                         "started":  "2026-07-02T13:00:00.000+0900",
+                         "timeSpent":  "2h",
+                         "timeSpentSeconds":  7200,
+                         "id":  "90128",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90131",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "업체 메일 내역 확인 및 재문의"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-03T18:17:33.291+0900",
+                         "updated":  "2026-07-03T18:17:33.291+0900",
+                         "started":  "2026-07-02T10:30:00.000+0900",
+                         "timeSpent":  "1h 30m",
+                         "timeSpentSeconds":  5400,
+                         "id":  "90131",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90324",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "택소노미 관련 회의 진행 (정윤성 P)"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-07T18:25:10.697+0900",
+                         "updated":  "2026-07-07T18:25:10.697+0900",
+                         "started":  "2026-07-07T15:00:00.000+0900",
+                         "timeSpent":  "45m",
+                         "timeSpentSeconds":  2700,
+                         "id":  "90324",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90331",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "브랜치 최신화"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-07T18:25:11.362+0900",
+                         "updated":  "2026-07-07T18:25:11.362+0900",
+                         "started":  "2026-07-07T14:30:00.000+0900",
+                         "timeSpent":  "15m",
+                         "timeSpentSeconds":  900,
+                         "id":  "90331",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90858",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "PR 생성 및 머지 요청"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-16T17:51:35.113+0900",
+                         "updated":  "2026-07-16T17:51:35.113+0900",
+                         "started":  "2026-07-16T16:30:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "90858",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/90859",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "PR 코드 리뷰 진행"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-16T17:51:35.567+0900",
+                         "updated":  "2026-07-16T17:51:35.567+0900",
+                         "started":  "2026-07-16T17:30:00.000+0900",
+                         "timeSpent":  "30m",
+                         "timeSpentSeconds":  1800,
+                         "id":  "90859",
+                         "issueId":  "58345"
+                     },
+                     {
+                         "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/issue/58345/worklog/91000",
+                         "author":  {
+                                        "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                        "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                        "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                        "avatarUrls":  {
+                                                           "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                           "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                           "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                           "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                       },
+                                        "displayName":  "이병훈",
+                                        "active":  true,
+                                        "timeZone":  "Asia/Seoul",
+                                        "accountType":  "atlassian"
+                                    },
+                         "updateAuthor":  {
+                                              "self":  "https://api.atlassian.com/ex/jira/89ca5ed0-2672-496f-a295-17520dc2d02f/rest/api/3/user?accountId=712020%3Af07f9237-e075-441e-898c-4876911c57d0",
+                                              "accountId":  "712020:f07f9237-e075-441e-898c-4876911c57d0",
+                                              "emailAddress":  "byeonghoon.lee@spc.co.kr",
+                                              "avatarUrls":  {
+                                                                 "48x48":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/48",
+                                                                 "24x24":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/24",
+                                                                 "16x16":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/16",
+                                                                 "32x32":  "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:f07f9237-e075-441e-898c-4876911c57d0/467eb161-3a14-41cd-883e-8dfe6ba4c672/32"
+                                                             },
+                                              "displayName":  "이병훈",
+                                              "active":  true,
+                                              "timeZone":  "Asia/Seoul",
+                                              "accountType":  "atlassian"
+                                          },
+                         "comment":  {
+                                         "type":  "doc",
+                                         "version":  1,
+                                         "content":  [
+                                                         {
+                                                             "type":  "paragraph",
+                                                             "content":  [
+                                                                             {
+                                                                                 "type":  "text",
+                                                                                 "text":  "임시회원 상태에서 전체메뉴 항목 선택시 본인인증 화면으로 이동되는 현상 수정"
+                                                                             }
+                                                                         ]
+                                                         }
+                                                     ]
+                                     },
+                         "created":  "2026-07-21T18:34:45.374+0900",
+                         "updated":  "2026-07-21T18:34:45.374+0900",
+                         "started":  "2026-07-21T13:00:00.000+0900",
+                         "timeSpent":  "1h 30m",
+                         "timeSpentSeconds":  5400,
+                         "id":  "91000",
+                         "issueId":  "58345"
+                     }
+                 ]
+}

@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Dominic Jarvis</title>
+<style>
+:root{
+  --bg:#0b0e14; --panel:#131722; --line:#232838; --tx:#d7dce8; --dim:#7b849c;
+  --acc:#4da3ff; --ok:#3ddc97; --warn:#ffb454; --hot:#ff6b81; --vio:#b48cff;
+}
+*{box-sizing:border-box}
+/* 첫 화면은 뷰포트에 딱 맞춘다 — 페이지 스크롤 없음. 넘치는 건 패널 안에서만 스크롤. */
+html,body{height:100%;overflow:hidden}
+body{margin:0;padding:18px;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;
+  font:13px/1.55 "NanumGothic","Nanum Gothic","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+h1{margin:0;font-size:15px;letter-spacing:.5px}
+.mono{font-family:"Consolas","D2Coding","Menlo",monospace}
+
+header{display:flex;align-items:center;gap:18px;padding:12px 16px;margin-bottom:14px;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:7px;
+  animation:pulse 1.8s infinite}
+.dot.idle{background:var(--dim);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+header .sp{margin-left:auto}
+header b{color:#fff}
+
+/* 헤더 우측 ⋮ 메뉴 */
+.mwrap{position:relative;display:inline-block}
+.mbtn{background:none;border:0;color:var(--dim);font:inherit;font-size:17px;line-height:1;
+  cursor:pointer;padding:2px 6px;border-radius:6px}
+.mbtn:hover,.mbtn.on{background:#1b2030;color:var(--tx)}
+.menu{position:absolute;right:0;top:26px;min-width:180px;z-index:20;display:none;
+  background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:5px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.menu.on{display:block}
+.mitem{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+  background:none;border:0;color:var(--tx);font:inherit;font-size:12.5px;
+  padding:7px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.mitem:hover{background:#1b2030}
+.mitem .chk{width:12px;color:var(--ok);flex:0 0 12px}
+
+/* 남은 높이를 그리드가 전부 먹고, 각 패널이 자기 안에서만 스크롤한다. */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0}
+.p{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px;
+  min-width:0;min-height:0;display:flex;flex-direction:column}
+.p.scroll{overflow-y:auto}
+.p h2{margin:0 0 11px;font-size:12px;color:var(--dim);font-weight:700;letter-spacing:.4px;flex:0 0 auto}
+.empty{color:var(--dim);padding:14px 2px}
+
+/* 세션 표식 — 스트림·히스토리는 색 점, 헤더·카드는 이름표 */
+.sb{display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 auto;
+  position:relative;top:1px}
+.lbl{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:20px;
+  background:#1b2030;border:1px solid var(--line);font-size:11.5px;white-space:nowrap}
+.lbl i{width:8px;height:8px;border-radius:50%;display:inline-block;font-style:normal}
+header .lbl{margin-left:6px}
+
+/* 세션 카드 */
+.card{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-bottom:10px;background:#0f131d}
+.card.live{border-color:var(--acc);box-shadow:0 0 0 1px rgba(77,163,255,.15)}
+/* 완료된 카드도 흐리게 하지 않는다. 전체 투명도를 낮추면 클로드 별표 색까지 죽어
+   다른 아이콘처럼 보인다. 구분은 우측 "✅ 완료" 문구와 테두리(live)로 충분하다. */
+.card .fin{color:var(--ok);font-weight:700}
+.card .fin.off{color:var(--dim)}   /* Stop 없이 폴백으로 확정된 완료 */
+.card .top{display:flex;gap:8px;align-items:center;margin-bottom:7px}
+.card .sid{color:var(--dim);font-size:11px}
+.card .when{margin-left:auto;color:var(--dim);font-size:11px}
+.card .q{color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .cur{margin-top:6px;color:var(--dim);font-size:11.5px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .cur.on{color:var(--warn)}
+.card .ags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{background:#1b2030;border:1px solid var(--line);border-radius:20px;
+  padding:2px 9px;font-size:11px;color:var(--dim);white-space:nowrap}
+.chip.on{border-color:var(--warn);color:var(--warn)}
+/* 진행 중 턴 표시. 별표는 클로드앱 원본 SVG 자산이며, 앱처럼 돌면서 숨쉰다. */
+.card .turn{margin-top:9px;color:var(--tx);font-size:11.5px;display:flex;align-items:center;gap:7px}
+.card .turn .ast{color:#D97757;flex:0 0 auto;width:13px;height:13px;display:block}
+.card .turn .ast svg{width:13px;height:13px;display:block;transform-origin:50% 50%;
+  animation:ast-spin 2.4s linear infinite, ast-breathe 1.2s ease-in-out infinite}
+/* 대화 종료 — 별표는 "멈추기만" 한다. 흐리게 하면 색이 죽어 다른 아이콘처럼 보인다.
+   줄 자체는 남겨 카드 높이를 유지한다. */
+.card .turn.idle{min-height:13px}
+.card .turn.idle .ast svg{animation:none}
+@keyframes ast-spin{to{rotate:360deg}}
+@keyframes ast-breathe{
+  0%,100%{scale:.82; opacity:.75}
+  50%    {scale:1.06;opacity:1}
+}
+.card .meta{margin-top:8px;padding-top:7px;border-top:1px dashed var(--line);
+  color:var(--dim);font-size:11px;display:flex;gap:12px}
+
+/* 대화 히스토리 */
+.hf{width:100%;background:#0f131d;border:1px solid var(--line);border-radius:7px;
+  color:var(--tx);padding:7px 10px;font:inherit;margin-bottom:10px}
+.hf:focus{outline:0;border-color:var(--acc)}
+.hist{flex:1;min-height:0;overflow-y:auto}
+
+/* 대화 히스토리 — 중앙 팝업 */
+.modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);padding:24px}
+.modal.on{display:flex}
+.modal .box{width:min(1100px,94vw);height:min(760px,86vh);display:flex;flex-direction:column;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 17px;
+  box-shadow:0 18px 60px rgba(0,0,0,.6)}
+.modal .bar{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex:0 0 auto}
+.modal .bar h2{margin:0}
+.xbtn{margin-left:auto;background:none;border:0;color:var(--dim);font:inherit;font-size:18px;
+  line-height:1;cursor:pointer;padding:2px 8px;border-radius:6px}
+.xbtn:hover{background:#1b2030;color:var(--tx)}
+.hday{color:var(--vio);font-size:11.5px;font-weight:700;margin:12px 0 6px;
+  padding-bottom:4px;border-bottom:1px solid var(--line)}
+.hday:first-child{margin-top:0}
+.hrow{display:flex;gap:9px;padding:5px 0;align-items:baseline}
+.hrow .t{color:var(--dim);font-size:11.5px;flex:0 0 42px}
+.hrow .q{flex:1;min-width:0;white-space:pre-wrap;word-break:break-word}
+.hrow em{background:rgba(255,180,84,.22);font-style:normal;border-radius:2px}
+/* 맥락 칩 — 어느 호스트·저장소·브랜치·태스크에서 나온 말인지 */
+.hrow .tags{display:inline-flex;gap:5px;flex-wrap:wrap;margin-left:8px;vertical-align:1px}
+.tg{font-size:10.5px;line-height:1.5;padding:0 6px;border-radius:20px;white-space:nowrap;
+  background:#1b2030;border:1px solid var(--line);color:var(--dim)}
+.tg.rp{color:var(--acc);border-color:rgba(77,163,255,.35)}
+.tg.br{color:var(--ok);border-color:rgba(61,220,151,.35)}
+.tg.tk{color:var(--warn);border-color:rgba(255,180,84,.45)}
+
+.stream{flex:1;min-height:0;overflow-y:auto}
+.ln{display:flex;gap:8px;padding:3px 0;align-items:baseline;white-space:nowrap}
+.ln .t{color:var(--dim);font-size:11.5px;flex:0 0 42px}
+.ln .f{overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.ln .n{color:var(--dim);overflow:hidden;text-overflow:ellipsis;flex:1 1 0;min-width:0}
+.ln.fresh{animation:flash 1.4s ease-out}
+@keyframes flash{from{background:rgba(77,163,255,.22)}to{background:transparent}}
+.ln.pr{border-top:1px solid var(--line);margin-top:5px;padding-top:6px}
+.ln.pr .f{color:var(--acc);white-space:normal}
+.ln.run{color:var(--warn)}
+.ln.run .rd{width:7px;height:7px;border-radius:50%;background:var(--warn);display:inline-block;
+  animation:pulse 1s infinite}
+.ln.bad .f{color:var(--hot)}
+.ln.sys{color:var(--dim);font-size:11.5px}
+.ln.sys .f{color:var(--vio)}
+
+
+.rk{display:grid;grid-template-columns:26px 1fr;gap:9px;padding:3px 0}
+.rk .c{color:var(--warn);text-align:right}
+.rk .f{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 Dominic Jarvis</h1>
+  <span><span id="d" class="dot"></span><span id="act">—</span></span>
+  <span class="sp"></span>
+  <span id="ses" style="color:var(--dim)"></span>
+  <span id="clk" class="mono" style="color:var(--dim)"></span>
+  <span class="mwrap">
+    <button id="mbtn" class="mbtn" title="메뉴" aria-haspopup="true" aria-expanded="false">⋮</button>
+    <div id="mlist" class="menu" role="menu">
+      <button class="mitem" data-panel="hist" role="menuitem">
+        <span class="chk" id="chk-hist"></span>💬 대화 히스토리
+      </button>
+    </div>
+  </span>
+</header>
+
+<div class="grid">
+  <div class="p"><h2>📡 Live Feed</h2><div id="stream" class="stream mono"></div></div>
+  <div class="p scroll">
+    <h2>🎯 Active Session</h2><div id="now"></div>
+    <h2 style="margin-top:18px">🔥 많이 만진 파일 (오늘)</h2><div id="top"></div>
+  </div>
+</div>
+
+<div class="modal" id="histpanel">
+  <div class="box" id="histbox">
+    <div class="bar">
+      <h2>💬 대화 히스토리 <span id="hcnt" style="color:var(--dim);font-weight:400"></span></h2>
+      <button class="xbtn" id="hclose" title="닫기 (Esc)">✕</button>
+    </div>
+    <input id="hq" class="hf" placeholder="검색 — 단어를 입력하면 해당 대화만 남습니다" autocomplete="off">
+    <div id="hist" class="hist"></div>
+  </div>
+</div>
+
+<script>
+var COL = ["#4da3ff","#3ddc97","#ffb454","#ff6b81","#b48cff","#5ad8e6"];
+var ICON = {
+  Read:"👁", Grep:"🔍", Glob:"🔍",
+  Edit:"✏️", Write:"✏️", MultiEdit:"✏️", NotebookEdit:"✏️",
+  Bash:"▶", PowerShell:"▶",
+  Task:"🤝", Agent:"🤝", Workflow:"🕸",
+  WebFetch:"🌐", WebSearch:"🌐",
+  TodoWrite:"🧾", TaskCreate:"🧾", TaskUpdate:"🧾",
+  Skill:"🎛", ToolSearch:"🧰",
+  Artifact:"📄", SendUserFile:"📤", AskUserQuestion:"❓"
+};
+function icon(t){ return ICON[t] || (/^mcp__/.test(t||"") ? "🔌" : "·"); }
+/* 0→A, 1→B … 25→Z, 26→AA. 한 대화에서 띄운 에이전트 일련번호. */
+function agLetter(n){
+  var s="", x=(n|0)+1;
+  while(x>0){ var r=(x-1)%26; s=String.fromCharCode(65+r)+s; x=Math.floor((x-1)/26); }
+  return s;
+}
+function tname(t){ return /^mcp__/.test(t||"") ? "MCP" : t; }
+
+var seenTs = 0, first = true;
+function esc(s){ return String(s==null?"":s).replace(/[&<>]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]; }); }
+function z(n){ return String(n).padStart(2,"0"); }
+function hhmm(ts){ var d=new Date(ts); return z(d.getHours())+":"+z(d.getMinutes()); }
+function ago(ms){
+  var s=Math.floor(ms/1000);
+  if(s<10) return "방금";
+  if(s<60) return s+"초 전";
+  if(s<3600) return Math.floor(s/60)+"분 전";
+  if(s<86400) return Math.floor(s/3600)+"시간 전";
+  return Math.floor(s/86400)+"일 전";
+}
+function isToday(ts){ var d=new Date(ts), n=new Date();
+  return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate(); }
+
+var SMAP={}, SN=0, SLBL={};
+function sess(id){
+  if(!SMAP[id]) SMAP[id]={col:COL[SN++%COL.length]};
+  return SMAP[id];
+}
+/* 세션 이름 = 호스트(프로젝트). 훅이 CLAUDE_CODE_ENTRYPOINT 와 cwd 에서 뽑아 심는다.
+   소급 적재분처럼 정보가 없는 세션은 세션 ID 앞 8자로 대체한다. */
+function labelOf(id){ return SLBL[id] || id; }
+function dot(id){ return '<span class="sb" style="background:'+sess(id).col+'"></span>'; }
+function nameTag(id){
+  return '<span class="lbl"><i style="background:'+sess(id).col+'"></i>'+esc(labelOf(id))+'</span>';
+}
+
+/* 헤더 상태는 render 와 분리한다. 초 단위로 흐르는 표시를 render 로 갱신하면
+   0.1초마다 스트림 DOM 이 통째로 갈려 스크롤이 불가능해진다. 여기만 1초마다 다시 칠한다. */
+var RUN={on:false,since:0,done:0};
+function paintAct(){
+  var el=document.getElementById("act"), d=document.getElementById("d");
+  if(!el) return;
+  d.className="dot"+(RUN.on?"":" idle");
+  if(RUN.on){
+    var s=RUN.since?Math.floor((Date.now()-RUN.since)/1000):0;
+    el.innerHTML="<b>진행 중</b>"+(s>0?' <span style="color:var(--dim)">'+
+      (s<60?s+"초":Math.floor(s/60)+"분 "+(s%60)+"초")+'</span>':"");
+  } else {
+    el.innerHTML=RUN.done?"마지막 활동 <b>"+ago(Date.now()-RUN.done)+"</b>":"활동 없음";
+  }
+}
+
+/* 직전 턴 요약: 소요 시간 · 출력 토큰. 훅이 Stop 에서 트랜스크립트를 읽어 심는다.
+   Claude Code = assistant usage 합산, Codex = 누적 토큰 차분. 없으면 줄 자체를 생략. */
+function dur(ms){
+  var s=Math.round(ms/1000);
+  if(s<60) return s+"s";
+  var m=Math.floor(s/60);
+  if(m<60) return m+"m "+(s%60)+"s";
+  return Math.floor(m/60)+"h "+(m%60)+"m";
+}
+function tokfmt(n){ return n<1000 ? n+" tokens"
+  : (n<10000 ? (n/1000).toFixed(1) : Math.round(n/1000))+"k tokens"; }
+/* 클로드앱 원본 별표 자산.
+   출처: Claude 1.25927.0.0 → app/resources/ion-dist/assets/v1/cd02a42d9-Vq_H3mgS.svg
+   viewBox 248×248, 단일 path, 시그니처 컬러 #D97757. 색은 currentColor 로 바꿔 테마를 따르게 했다. */
+var ASTSVG='<svg viewBox="0 0 248 248" xmlns="http://www.w3.org/2000/svg" fill="currentColor">'
++'<path d="M52.4285 162.873L98.7844 136.879L99.5485 134.602L98.7844 133.334H96.4921L88.7237 132.862L62.2346 132.153L39.3113 131.207L17.0249 130.026L11.4214 128.844L6.2 121.873L6.7094 118.447L11.4214 115.257L18.171 115.847L33.0711 116.911L55.485 118.447L71.6586 119.392L95.728 121.873H99.5485L100.058 120.337L98.7844 119.392L97.7656 118.447L74.5877 102.732L49.4995 86.1905L36.3823 76.62L29.3779 71.7757L25.8121 67.2858L24.2839 57.3608L30.6515 50.2716L39.3113 50.8623L41.4763 51.4531L50.2636 58.1879L68.9842 72.7209L93.4357 90.6804L97.0015 93.6343L98.4374 92.6652L98.6571 91.9801L97.0015 89.2625L83.757 65.2772L69.621 40.8192L63.2534 30.6579L61.5978 24.632C60.9565 22.1032 60.579 20.0111 60.579 17.4246L67.8381 7.49965L71.9133 6.19995L81.7193 7.49965L85.7946 11.0443L91.9074 24.9865L101.714 46.8451L116.996 76.62L121.453 85.4816L123.873 93.6343L124.764 96.1155H126.292V94.6976L127.566 77.9197L129.858 57.3608L132.15 30.8942L132.915 23.4505L136.608 14.4708L143.994 9.62643L149.725 12.344L154.437 19.0788L153.8 23.4505L150.998 41.6463L145.522 70.1215L141.957 89.2625H143.994L146.414 86.7813L156.093 74.0206L172.266 53.698L179.398 45.6635L187.803 36.802L193.152 32.5484H203.34L210.726 43.6549L207.415 55.1159L196.972 68.3492L188.312 79.5739L175.896 96.2095L168.191 109.585L168.882 110.689L170.738 110.53L198.755 104.504L213.91 101.787L231.994 98.7149L240.144 102.496L241.036 106.395L237.852 114.311L218.495 119.037L195.826 123.645L162.07 131.592L161.696 131.893L162.137 132.547L177.36 133.925L183.855 134.279H199.774L229.447 136.524L237.215 141.605L241.8 147.867L241.036 152.711L229.065 158.737L213.019 154.956L175.45 145.977L162.587 142.787H160.805V143.85L171.502 154.366L191.242 172.089L215.82 195.011L217.094 200.682L213.91 205.172L210.599 204.699L188.949 188.394L180.544 181.069L161.696 165.118H160.422V166.772L164.752 173.152L187.803 207.771L188.949 218.405L187.294 221.832L181.308 223.959L174.813 222.777L161.187 203.754L147.305 182.486L136.098 163.345L134.745 164.2L128.075 235.42L125.019 239.082L117.887 241.8L111.902 237.31L108.718 229.984L111.902 215.452L115.722 196.547L118.779 181.541L121.58 162.873L123.291 156.636L123.14 156.219L121.773 156.449L107.699 175.752L86.304 204.699L69.3663 222.777L65.291 224.431L58.2867 220.768L58.9235 214.27L62.8713 208.48L86.304 178.705L100.44 160.155L109.551 149.507L109.462 147.967L108.959 147.924L46.6977 188.512L35.6182 189.93L30.7788 185.44L31.4156 178.115L33.7079 175.752L52.4285 162.873Z"/></svg>';
+
+/* 대화가 끝나도 이 줄은 자리를 지킨다 — 카드 높이가 들썩이지 않게.
+   다만 별표는 멈추고 오른쪽 텍스트(경과·토큰·상태)는 비운다. */
+function turnLine(b, busy, now){
+  if(!busy || !b.pTs) return '<div class="turn idle"><span class="ast">'+ASTSVG+'</span></div>';
+  var parts=[dur(now-b.pTs)];
+  if(b.liveTok>0) parts.push(tokfmt(b.liveTok));
+  parts.push(b.run ? tname(b.run.tool)+' 실행 중…' : '생각 중…');
+  return '<div class="turn"><span class="ast">'+ASTSVG+'</span>'+parts.join(" · ")+'</div>';
+}
+
+function render(EV){
+  EV=(EV||[]).slice().sort(function(a,b){ return a.ts-b.ts; });
+  var now=Date.now();
+
+  /* 세션 이름표 갱신: 호스트(프로젝트). 최신 이벤트 기준으로 덮어쓴다. */
+  EV.forEach(function(e){
+    var L = e.h ? (e.w ? e.h+" ("+e.w+")" : e.h) : e.w;
+    if(L) SLBL[e.s]=L;
+  });
+
+  /* PreToolUse(start) 는 "진행중" 표시용. 세션의 마지막 이벤트일 때만 살린다. */
+  var lastOf={};
+  EV.forEach(function(e,i){ lastOf[e.s]=i; });
+  var view=EV.filter(function(e,i){ return e.k!=="start" || lastOf[e.s]===i; });
+
+  var today=view.filter(function(e){ return isToday(e.ts); });
+  var tools=today.filter(function(e){ return e.k==="tool"; });
+
+  /* ── 헤더 ──
+     "마지막 활동" 은 턴이 끝난 시각 기준이다.
+     요청이 들어왔는데 아직 Stop(턴 종료)이 안 왔으면 = 처리 중 → 시간을 세지 않는다.
+     Stop 이 온 뒤부터 경과 시간을 센다. */
+  /* 턴 종료(Stop) 이후에 무언가 다시 움직였으면 그것도 진행 중이다.
+     요청 없이 재개되는 백그라운드 작업까지 잡으려면 prompt 만 보면 안 된다. */
+  /* 🔴 stop 계열은 "활동"이 아니다.
+     이 하네스는 턴 종료(Stop) 5~12초 뒤에 SubagentStop 을 한 번 더 쏜다.
+     그걸 활동으로 세면 "Stop 이후에 뭔가 움직였다"가 되어 영원히 진행 중이 된다. */
+  var aTs={}, sTs={}, pTs={};
+  EV.forEach(function(e){
+    if(e.k==="stop"){ if(e.n==="turn") sTs[e.s]=e.ts; return; }
+    aTs[e.s]=e.ts; if(e.k==="prompt") pTs[e.s]=e.ts;
+  });
+  /* Stop 없이 끊긴 세션(중간에 끊거나 창을 닫은 경우)이 영원히 진행 중으로 남지 않게
+     마지막 움직임이 STALE 을 넘으면 유휴로 본다. 임계값은 아래 한 곳에서만 정의한다. */
+  var running=false, lastDone=0, since=0;
+  Object.keys(aTs).forEach(function(s){
+    if(aTs[s]>(sTs[s]||0) && now-aTs[s]<STALE){
+      running=true;
+      var st=pTs[s]&&pTs[s]>(sTs[s]||0) ? pTs[s] : aTs[s];   // 이번 턴이 시작된 시각
+      if(!since||st>since) since=st;                          // 가장 최근에 시작된 턴 기준
+    }
+  });
+  Object.keys(sTs).forEach(function(s){ if(sTs[s]>lastDone) lastDone=sTs[s]; });
+  RUN={on:running,since:since,done:lastDone};
+  paintAct();
+
+  var act={}; EV.forEach(function(e){ if(now-e.ts<5*60*1000) act[e.s]=1; });
+  var ak=Object.keys(act);
+  document.getElementById("ses").innerHTML="활성 세션 "+(ak.length?ak.map(nameTag).join(" "):"<b>0</b>");
+
+  /* ── 지금 작업 중 (세션 카드 + 에이전트) ──
+     에이전트는 Task/Agent 도구 호출로 시작하고 SubagentStop 으로 끝난다.
+     끝나지 않은 것만 "실행 중" 칩으로 남긴다. */
+  var AG={Task:1,Agent:1};
+  var bySes={};
+  EV.forEach(function(e){
+    var b=bySes[e.s]||(bySes[e.s]={p:null,t:null,run:null,last:0,act:0,tools:0,turns:0,
+                                   since:e.ts,agents:[],done:[],agN:0,pTs:0,sTs:0,lastTurn:null,liveTok:0});
+    if(e.k==="prompt"){ b.p=e; b.turns++; b.pTs=e.ts; b.liveTok=0; }
+    else if(e.k==="start"){ b.run=e; }
+    else if(e.k==="tool"){
+      b.t=e; b.run=null; b.tools++;
+      if(e.tok) b.liveTok=e.tok;                 // 턴 도중 샘플링된 누적 토큰
+      /* 에이전트 번호는 이 대화에서 띄운 순서대로 A·B·C… 끝나도 번호를 재사용하지 않는다. */
+      if(AG[e.tool]) b.agents.push({name:e.f||"agent",desc:e.n||"",ts:e.ts,no:b.agN++});
+    }
+    else if(e.k==="stop"){
+      b.run=null;
+      /* ⚠ 이 하네스(클로드앱 child session)는 턴이 끝날 때 SubagentStop 도 같이 쏜다.
+         에이전트를 안 썼는데도 오므로, 대기 중인 에이전트가 있을 때만 "완료"로 친다.
+         그러지 않으면 실행 중 칩이 곧바로 사라지고 스트림이 유령 줄로 도배된다.
+         실제로 처리한 것만 e._ag 로 표시해 스트림에서 걸러낸다. */
+      if(e.n==="subagent"){ var a=b.agents.shift(); if(a){ b.done.push(a); e._ag=1; } }
+      else {
+        b.sTs=e.ts;                           // 턴 종료 시각 = 시간 카운트 시작점
+        b.lastTurn={ms:b.pTs?e.ts-b.pTs:0, tok:e.tok||0};   // 직전 턴 소요·토큰
+      }
+    }
+    if(e.ts>b.last) b.last=e.ts;
+    /* act = stop 을 제외한 "진짜 활동" 시각. 진행 중 판정은 이 값만 본다.
+       턴 종료 직후 따라오는 SubagentStop 에 속지 않기 위해서다. */
+    if(e.k!=="stop" && e.ts>b.act) b.act=e.ts;
+  });
+  /* 정렬·노출 기준은 "사용자가 문의한 시각". 최근에 말을 건 세션이 위로 온다.
+     문의 기록이 없는 세션(빈 세션 등)은 마지막 이벤트로 대신한다.
+     3시간 넘게 문의가 없으면 목록에서 뺀다. */
+  var askAt=function(id){ return bySes[id].pTs||bySes[id].last; };
+  var ids=Object.keys(bySes)
+            /* SessionStart 만 찍고 사라진 껍데기는 목록에서 뺀다.
+               보존 기간을 24시간으로 늘리면서 이런 빈 세션이 쌓이기 시작한다. */
+            .filter(function(id){ var b=bySes[id]; return b.turns>0 || b.tools>0; })
+            .filter(function(id){ return now-askAt(id)<DROP; })
+            .sort(function(a,b){ return askAt(b)-askAt(a); });
+  /* ── 실시간 스트림 ── */
+  /* 최신이 아래로 쌓인다(터미널·채팅과 같은 방향).
+     사용자가 위로 올려 과거를 보고 있으면 자동 스크롤을 하지 않는다 —
+     새 줄이 들어올 때마다 끌어내리면 읽던 자리를 잃는다. */
+  var recent=view.slice(-70);
+  var sEl=document.getElementById("stream");
+  var stick=sEl.scrollHeight-sEl.scrollTop-sEl.clientHeight<40 || sEl.scrollTop===0;
+  sEl.innerHTML=recent.length?recent.map(function(e){
+    var fr=(!first&&e.ts>seenTs)?" fresh":"";
+    var t='<span class="t">'+hhmm(e.ts)+'</span>';
+    if(e.k==="prompt")
+      return '<div class="ln pr'+fr+'">'+t+dot(e.s)+'<span class="f">💬 '+esc(e.n)+'</span></div>';
+    if(e.k==="start")
+      return '<div class="ln run'+fr+'">'+t+dot(e.s)+'<span class="rd"></span>'
+           +'<span class="f">'+icon(e.tool)+' '+esc(tname(e.tool))+' '+esc(e.f)+'</span></div>';
+    if(e.k==="stop"){
+      /* 실제 에이전트를 거둔 subagent stop 만 보여준다(위 bySes 에서 _ag 로 표시). */
+      if(e.n==="subagent" && !e._ag) return "";
+      return '<div class="ln sys'+fr+'">'+t+dot(e.s)+'<span class="f">⏹ '
+           +(e.n==="subagent"?"서브에이전트 종료":"턴 종료")+'</span></div>';
+    }
+    if(e.k==="session"){
+      /* resume·compact 는 "새 세션"이 아니라 같은 세션의 재개다. 오해 없게 풀어 쓴다. */
+      var SRC={startup:"세션 시작",resume:"세션 재개(같은 세션)",
+               compact:"컨텍스트 압축 후 재개(같은 세션)",clear:"대화 비움 → 새 세션"};
+      return '<div class="ln sys'+fr+'">'+t+dot(e.s)+'<span class="f">▶ '
+           +(SRC[e.n]||("세션 "+esc(e.n)))+'</span></div>';
+    }
+    if(e.k==="notify")
+      return '<div class="ln sys'+fr+'">'+t+dot(e.s)+'<span class="f">🔔 '+esc(e.n)+'</span></div>';
+    return '<div class="ln'+fr+(e.ok===false?" bad":"")+'">'+t+dot(e.s)
+         +'<span class="f">'+icon(e.tool)+' '+esc(e.f)+(e.ok===false?" ⚠":"")+'</span>'
+         +(e.n?'<span class="n">'+esc(e.n)+'</span>':'')+'</div>';
+  }).join(""):'<div class="empty">아직 기록이 없습니다.</div>';
+  if(stick) sEl.scrollTop=sEl.scrollHeight;      // 하단을 보고 있었으면 최신에 붙여둔다
+  if(EV.length) seenTs=EV[EV.length-1].ts;
+  first=false;
+
+  /* ── 많이 만진 파일 ── */
+  var fc={}; tools.forEach(function(e){ if(e.f) fc[e.f]=(fc[e.f]||0)+1; });
+  var fk=Object.keys(fc).sort(function(a,b){return fc[b]-fc[a];}).slice(0,8);
+  document.getElementById("top").innerHTML=fk.length?fk.map(function(k){
+    return '<div class="rk"><span class="c">'+fc[k]+'</span><span class="f mono">'+esc(k)+'</span></div>';
+  }).join(""):'<div class="empty">—</div>';
+
+  CARDS={bySes:bySes, ids:ids};
+  paintCards();
+}
+
+/* 카드는 1초마다 다시 칠한다. 경과 시간·토큰이 흘러야 하기 때문이다.
+   스트림(#stream)은 건드리지 않는다 — 매초 갈아엎으면 스크롤이 불가능해진다. */
+/* 세션 상태 — 임계값은 여기서만 정의한다(헤더·카드가 같은 값을 쓴다)
+
+   Stop 을 받으면 그게 확정 신호다 → 즉시 ✅ 완료.
+   문제는 Stop 이 끝내 안 오는 경우(중간에 끊음·창 닫음·프로세스 종료)다.
+   그래서 침묵 시간으로 3단계 폴백을 둔다. 한 번에 완료로 넘기지 않는 이유는,
+   도구 없이 긴 답변을 쓰는 동안에도 이벤트가 안 오기 때문이다.
+
+     Stop 수신                → ✅ 완료
+     Stop 없음 · ~20분(STALE)  → 진행 중
+     Stop 없음 · ~40분(IDLE)   → ⏳ 응답 없음
+     Stop 없음 · ~1시간(DONE)  → ⏳ 응답 없음 (유휴)
+     Stop 없음 · 1시간 초과     → ✅ 완료 (응답 없음) — 폴백 확정
+     마지막 문의 후 8시간(DROP) → 목록에서 제거                                   */
+var CARDS={bySes:{},ids:[]}, STALE=20*60*1000, IDLE=40*60*1000,
+    DONE=60*60*1000, DROP=8*60*60*1000;
+/* 세션의 진짜 시작·턴수는 history.js 가 안다.
+   data.js 는 자비스를 켠 시점부터라, 그 전에 시작한 세션이 새 세션처럼 보인다. */
+var HMETA={}, SFULL={};
+function buildHMeta(){
+  HMETA={};
+  HIST.forEach(function(h){
+    var m=HMETA[h.s]||(HMETA[h.s]={first:h.ts,turns:0});
+    if(h.ts<m.first) m.first=h.ts;
+    m.turns++;
+    if(h.sid) SFULL[h.s]=h.sid;          // 앞 8자 → 전체 UUID
+  });
+}
+function paintCards(){
+  var el=document.getElementById("now"); if(!el) return;
+  var bySes=CARDS.bySes, ids=CARDS.ids, now=Date.now();
+  el.innerHTML=ids.length?ids.map(function(id){
+    var b=bySes[id], s=sess(id);
+    /* 헤더와 같은 규칙: 턴 종료 이후에 무언가 움직였으면 아직 진행 중이다. */
+    /* SessionStart 만 찍고 사라진 껍데기 세션은 진행 중으로 보지 않는다.
+       실제로 문의를 받았거나 도구를 돌린 적이 있어야 한다. */
+    var real = b.turns>0 || b.tools>0;
+    /* Stop 수신이 최우선 확정 신호. 안 왔으면 침묵 시간으로 3단계 폴백. */
+    var pending = real && b.act>b.sTs;                  // Stop 을 아직 못 받은 상태(stop 이벤트는 제외)
+    var gap     = now-b.act;                            // 마지막 활동 이후 침묵
+    var busySes = pending && gap<STALE;
+    var when, done=false, live=busySes;
+    if(!pending){                                       // ── Stop 수신 = 정상 완료
+      when='<span class="fin">✅ 완료</span> <span style="color:var(--dim)">'+ago(now-(b.sTs||b.last))+'</span>';
+      done=true;
+    } else if(busySes){                                 // ── 아직 작업 중
+      when='<span style="color:var(--acc)">진행 중</span>';
+    } else if(gap<DONE){                                // ── Stop 없이 침묵 (20~60분)
+      when='<span style="color:var(--warn)">⏳ 응답 없음</span> <span style="color:var(--dim)">'+ago(gap)
+          +(gap>=IDLE?' (유휴)':'')+'</span>';
+    } else {                                            // ── 1시간 초과 → 폴백 확정
+      when='<span class="fin off">✅ 완료</span> <span style="color:var(--dim)">응답 없음 · '+ago(gap)+'</span>';
+      done=true;
+    }
+    /* 현재 대상 파일. 상태 문구(생각 중…/실행 중…)는 아래 turnLine 이 맡는다. */
+    var cur = b.run ? '<div class="cur on">'+icon(b.run.tool)+' '+esc(b.run.f)+'</div>'
+            : (b.t ? '<div class="cur">'+icon(b.t.tool)+' '+esc(b.t.f)+'</div>' : '');
+    /* 지금 돌고 있는 에이전트만 보여준다. 끝난 것과 누적 개수는 표시하지 않는다.
+       라벨은 이 대화에서 띄운 순서 — Agent A, B, C … */
+    var chips=!busySes ? [] : b.agents.map(function(a){
+      return '<span class="chip on" title="'+esc(a.name+(a.desc?' · '+a.desc:''))+'">'
+           + 'Agent '+agLetter(a.no)+(a.desc?' - '+esc(a.desc.slice(0,30)):'')+'</span>'; });
+    return '<div class="card'+(live?' live':'')+(done?' done':'')
+         +'" style="border-left:3px solid '+s.col+'">'
+      /* 화면엔 앞 8자만. 전체 UUID 는 마우스를 올리면 보인다(트랜스크립트 파일명과 동일). */
+      +'<div class="top">'+nameTag(id)
+      +'<span class="sid mono" title="'+esc(SFULL[id]||id)+'">'+esc(id)+'</span>'
+      +'<span class="when">'+when+'</span></div>'
+      +'<div class="q">'+(b.p?esc(b.p.n):'<span style=color:var(--dim)>요청 기록 없음</span>')+'</div>'
+      +cur
+      +(chips.length?'<div class="ags">'+chips.join("")+'</div>':'')
+      +turnLine(b, busySes, now)
+      /* 자비스 가동 전부터 살아 있던 세션은 history.js 로 보정한다. */
+      +(function(){
+         var hm=HMETA[id]||{}, first=Math.min(b.since, hm.first||b.since);
+         var turns=Math.max(b.turns, hm.turns||0);
+         var d=new Date(first), n=new Date();
+         var sameDay=d.toDateString()===n.toDateString();
+         return '<div class="meta"><span>턴 '+turns+'</span><span>도구 '+b.tools+'</span>'
+              +'<span>'+(sameDay?hhmm(first):(z(d.getMonth()+1)+'/'+z(d.getDate())+' '+hhmm(first)))
+              +' 시작</span></div>';
+       })()
+      +'</div>';
+  }).join(""):'<div class="empty">최근 8시간 내 세션이 없습니다.</div>';
+}
+
+/* ── 대화 히스토리 ──
+   history.js 는 회전하지 않는 원문 기록. data.js 의 160자 요약과 별개다. */
+var HIST=[];
+function renderHist(){
+  buildHMeta();                       // 카드가 쓰는 세션 메타는 패널이 닫혀 있어도 채운다
+  if(!histOpen()) return;             // 닫혀 있으면 300+행을 그릴 이유가 없다
+  HIST.forEach(function(h){ if(SLBL[h.s]) return;
+    var L = h.h ? (h.w ? h.h+" ("+h.w+")" : h.h) : h.w;
+    if(L) SLBL[h.s]=L; });
+  var q=(document.getElementById("hq").value||"").trim().toLowerCase();
+  /* 검색은 본문뿐 아니라 맥락(호스트·저장소·브랜치·태스크·날짜)까지 훑는다.
+     "WORK-16613", "happypoint-web2", "2026-08-06" 같은 걸로 바로 걸러낼 수 있어야 한다. */
+  var hay=function(h){ return [h.n,h.h,h.repo,h.br,h.task,h.d].join(" ").toLowerCase(); };
+  /* Live Feed 와 같은 방향 — 오래된 것이 위, 최신이 아래. */
+  var rows=HIST.slice().sort(function(a,b){ return a.ts-b.ts; })
+    .filter(function(h){ return !q || hay(h).indexOf(q)>=0; });
+
+  document.getElementById("hcnt").textContent=
+    q ? rows.length+" / "+HIST.length+"건" : HIST.length+"건";
+
+  if(!rows.length){
+    document.getElementById("hist").innerHTML=
+      '<div class="empty">'+(q?"일치하는 대화가 없습니다.":"아직 기록이 없습니다.")+'</div>';
+    return;
+  }
+  function mark(s){                       // 검색어 강조. esc 이후에만 호출한다.
+    if(!q) return s;
+    var i=s.toLowerCase().indexOf(q);
+    return i<0 ? s : s.slice(0,i)+"<em>"+s.slice(i,i+q.length)+"</em>"+s.slice(i+q.length);
+  }
+  var out=[], day="";
+  rows.forEach(function(h){
+    var d=new Date(h.ts);
+    var dk=d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate());
+    if(dk!==day){ day=dk; out.push('<div class="hday">'+dk+'</div>'); }
+    /* 맥락 칩: 호스트 · 저장소 · 브랜치 · 태스크. 없는 값은 칩 자체를 만들지 않는다. */
+    var tags=[];
+    if(h.h)    tags.push('<span class="tg">'+esc(h.h)+'</span>');
+    if(h.repo) tags.push('<span class="tg rp">'+esc(h.repo)+'</span>');
+    if(h.br)   tags.push('<span class="tg br">'+esc(h.br)+'</span>');
+    if(h.task) tags.push('<span class="tg tk">'+esc(h.task)+'</span>');
+    out.push('<div class="hrow"><span class="t">'+hhmm(h.ts)+'</span>'+dot(h.s)
+           +'<span class="q">'+mark(esc(h.n))
+           +(tags.length?'<span class="tags">'+tags.join("")+'</span>':'')
+           +'</span></div>');
+  });
+  /* 최신이 아래에 있으므로, 하단을 보고 있었으면 계속 하단에 붙여둔다.
+     위로 올려 과거를 읽는 중이면 건드리지 않는다. */
+  var hEl=document.getElementById("hist");
+  var stick=hEl.scrollHeight-hEl.scrollTop-hEl.clientHeight<40 || hEl.scrollTop===0;
+  hEl.innerHTML=out.join("");
+  if(stick) hEl.scrollTop=hEl.scrollHeight;
+}
+document.getElementById("hq").addEventListener("input",renderHist);
+
+/* ── 헤더 ⋮ 메뉴 ──
+   대화 히스토리는 기본으로 접어둔다. 300행짜리 패널이 늘 펼쳐져 있으면
+   Live Feed·카드가 밀려 내려가고, 그릴 이유도 없다. */
+function histOpen(){ return document.getElementById("histpanel").classList.contains("on"); }
+function menuOpen(on){
+  document.getElementById("mlist").classList.toggle("on",on);
+  document.getElementById("mbtn").classList.toggle("on",on);
+  document.getElementById("mbtn").setAttribute("aria-expanded",on?"true":"false");
+}
+function toggleHist(show){
+  var p=document.getElementById("histpanel");
+  if(show===undefined) show=!histOpen();
+  p.classList.toggle("on",show);
+  document.getElementById("chk-hist").textContent=show?"✔":"";
+  if(show){
+    renderHist();                                  // 닫혀 있는 동안 안 그렸으므로 지금 채운다
+    var hEl=document.getElementById("hist");
+    if(hEl) hEl.scrollTop=hEl.scrollHeight;        // 열면 최신(맨 아래)부터 보인다
+    var q=document.getElementById("hq"); if(q) q.focus();
+  }
+}
+document.getElementById("hclose").addEventListener("click",function(){ toggleHist(false); });
+/* 배경(어두운 영역)을 누르면 닫는다. 팝업 안쪽 클릭은 통과시킨다. */
+document.getElementById("histpanel").addEventListener("click",function(e){
+  if(e.target.id==="histpanel") toggleHist(false);
+});
+document.getElementById("mbtn").addEventListener("click",function(e){
+  e.stopPropagation();
+  menuOpen(!document.getElementById("mlist").classList.contains("on"));
+});
+document.getElementById("mlist").addEventListener("click",function(e){
+  var it=e.target.closest(".mitem"); if(!it) return;
+  if(it.dataset.panel==="hist") toggleHist();
+  menuOpen(false);
+});
+document.addEventListener("click",function(){ menuOpen(false); });
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Escape") return;
+  menuOpen(false);
+  if(histOpen()) toggleHist(false);
+});
+
+/* ── 갱신 ──
+   data.js 를 초당 4회 다시 꽂는다. 각 파일 첫 줄의 var EV=[] / var HS=[] 가
+   매번 배열을 초기화하므로 중복 누적이 없다.
+   file:// 에서 fetch 는 CORS 로 막히지만 <script src> 는 통과한다.
+
+   낭비는 세 겹으로 막는다.
+     ① 이벤트 수·마지막 시각이 그대로면 다시 그리지 않는다
+     ② history.js 는 사용자가 말할 때만 바뀌므로, prompt 최신 시각이
+        달라질 때만 다시 읽는다. 매 프레임 파싱하지 않는다
+     ③ 데이터가 멈춰 있어도 5초마다 한 번은 다시 그려 "n초 전" 표기를 갱신한다
+
+   ※ 대시보드 자체(HTML/CSS/로직)가 바뀌어도 자동 새로고침은 하지 않는다.
+     보고 있던 팝업·검색어·스크롤을 뺏는 대가가 커서 뺐다. 갱신은 F5. */
+var POLL_MS = 250;
+function inject(name, done){
+  var s=document.createElement("script");
+  s.src=name+"?t="+Date.now();
+  s.onload=function(){ s.remove(); done(true); };
+  s.onerror=function(){ s.remove(); done(false); };
+  document.body.appendChild(s);
+}
+function loadHist(){
+  inject("history.js",function(ok){
+    HIST=(ok&&window.HS)?window.HS:[];
+    renderHist();
+  });
+}
+var evSig="", lastPrompt=-1, drawnAt=0, busy=false;
+function load(){
+  if(busy) return;                       // 앞선 요청이 아직 안 끝났으면 건너뛴다
+  busy=true;
+  inject("data.js",function(ok){
+    busy=false;
+    var A=(ok&&window.EV)?window.EV:[];
+    var sig=A.length+"|"+(A.length?A[A.length-1].ts:0);
+    var now=Date.now();
+    if(sig!==evSig || now-drawnAt>5000){
+      evSig=sig; drawnAt=now;
+      try{ render(A); }catch(e){}
+    }
+    var lp=0;
+    for(var i=A.length-1;i>=0;i--){ if(A[i].k==="prompt"){ lp=A[i].ts; break; } }
+    if(lp!==lastPrompt){ lastPrompt=lp; loadHist(); }
+  });
+}
+setInterval(load,POLL_MS); load();
+setInterval(function(){
+  var d=new Date();
+  document.getElementById("clk").textContent=z(d.getHours())+":"+z(d.getMinutes())+":"+z(d.getSeconds());
+  paintAct(); paintCards();   // 경과·토큰은 여기서만 흐른다(스트림 DOM 은 건드리지 않는다)
+},1000);
+</script>
+</body>
+</html>
